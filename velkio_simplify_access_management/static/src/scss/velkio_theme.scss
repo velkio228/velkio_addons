@@ -1,0 +1,820 @@
+/*
+ * ─────────────────────────────────────────────────────────────────────────────
+ *  Velkio · Access Studio — premium backend theme
+ * ─────────────────────────────────────────────────────────────────────────────
+ *  A scoped, self-contained restyle of the Simplify Access Management screens.
+ *
+ *  Everything below is namespaced under `.velkio_access_studio`, the class that
+ *  is set on the <tree> and <form> arch roots (see access_management_view.xml).
+ *  Odoo copies that class onto the view's root element together with
+ *  `o_list_view` / `o_form_view`, so `.o_list_view.velkio_access_studio` /
+ *  `.o_form_view.velkio_access_studio` wrap the control panel, the search panel
+ *  and the renderer — nothing here can leak into other apps.
+ */
+
+// ───────────────────────────── Design tokens ─────────────────────────────────
+
+$vk-ink:            #1e1b2e;
+$vk-ink-soft:       #6a6280;
+$vk-ink-faint:      #9a92ad;
+
+$vk-primary:        #6d28d9;
+$vk-primary-strong: #5b21b6;
+$vk-primary-bright: #8b5cf6;
+$vk-accent:         #06b6d4;
+
+$vk-surface:        #fbfaff;
+$vk-surface-sunk:   #f3f0fc;
+$vk-card:           #ffffff;
+$vk-border:         #e9e3f7;
+$vk-border-strong:  #dbd1f1;
+
+$vk-success:        #0f9d6b;
+$vk-danger:         #e11d48;
+
+$vk-radius-xl: 18px;
+$vk-radius-lg: 14px;
+$vk-radius-md: 10px;
+$vk-radius-sm: 8px;
+
+$vk-shadow-xs: 0 1px 2px rgba(30, 27, 46, .06);
+$vk-shadow-sm: 0 1px 2px rgba(30, 27, 46, .05), 0 2px 6px rgba(30, 27, 46, .05);
+$vk-shadow-md: 0 8px 20px -6px rgba($vk-primary-strong, .16), 0 3px 8px -4px rgba(30, 27, 46, .08);
+$vk-shadow-lg: 0 28px 60px -18px rgba($vk-primary-strong, .28), 0 10px 24px -12px rgba(30, 27, 46, .14);
+
+$vk-gradient: linear-gradient(135deg, #7c3aed 0%, #6d28d9 55%, #5b21b6 100%);
+$vk-ease:     cubic-bezier(.4, .14, .18, 1);
+
+@mixin vk-ring($color: $vk-primary, $spread: 3px) {
+    outline: none;
+    border-color: $color;
+    box-shadow: 0 0 0 $spread rgba($color, .2);
+}
+
+@mixin vk-scrollbar {
+    &::-webkit-scrollbar { width: 10px; height: 10px; }
+    &::-webkit-scrollbar-thumb {
+        background: rgba($vk-primary, .22);
+        border: 2px solid transparent;
+        background-clip: content-box;
+        border-radius: 999px;
+    }
+    &::-webkit-scrollbar-thumb:hover { background: rgba($vk-primary, .4); background-clip: content-box; }
+    &::-webkit-scrollbar-track { background: transparent; }
+}
+
+// ═══════════════════════════ Shared shell ════════════════════════════════════
+
+.o_list_view.velkio_access_studio,
+.o_form_view.velkio_access_studio {
+    background: $vk-surface;
+    color: $vk-ink;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    // ── Control panel ───────────────────────────────────────────────────────
+    .o_control_panel {
+        background: $vk-card;
+        border-bottom: 1px solid $vk-border;
+    }
+
+    .o_control_panel .o_breadcrumb {
+        .breadcrumb-item a,
+        .o_back_button {
+            color: $vk-ink-soft;
+            font-weight: 600;
+            transition: color .15s $vk-ease;
+            &:hover { color: $vk-primary; }
+        }
+    }
+
+    // Current view title — "Access Management"
+    .o_last_breadcrumb_item.active > span,
+    .o_last_breadcrumb_item.active {
+        position: relative;
+        font-weight: 750;
+        font-size: 1.16rem;
+        letter-spacing: -.012em;
+        color: $vk-ink;
+    }
+    .o_control_panel_breadcrumbs .o_last_breadcrumb_item.active::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 4px;
+        align-self: stretch;
+        min-height: 1.1em;
+        margin-right: .6rem;
+        border-radius: 999px;
+        background: $vk-gradient;
+    }
+
+    // "Settings / duplicate view" cog beside the title
+    .o_control_panel_breadcrumbs_actions .btn,
+    .o_cp_action_menus .dropdown-toggle {
+        border-radius: $vk-radius-sm;
+        color: $vk-ink-soft;
+        transition: background-color .15s $vk-ease, color .15s $vk-ease;
+        &:hover { background: rgba($vk-primary, .1); color: $vk-primary; }
+    }
+
+    // ── Primary action button ("New") ───────────────────────────────────────
+    .o_control_panel_main_buttons {
+        .btn-primary,
+        .o_list_button_add,
+        .o_form_button_create {
+            border: 0;
+            border-radius: $vk-radius-md;
+            padding-inline: 1.05rem;
+            font-weight: 650;
+            letter-spacing: .005em;
+            color: #fff;
+            background: $vk-gradient;
+            background-size: 140% 140%;
+            box-shadow: 0 6px 16px -5px rgba($vk-primary-strong, .55), inset 0 1px 0 rgba(#fff, .18);
+            transition: transform .16s $vk-ease, box-shadow .16s $vk-ease, background-position .35s $vk-ease;
+
+            &:hover {
+                background-position: 100% 0;
+                transform: translateY(-1px);
+                box-shadow: 0 12px 24px -8px rgba($vk-primary-strong, .6), inset 0 1px 0 rgba(#fff, .22);
+            }
+            &:active { transform: translateY(0); }
+            &:focus-visible { @include vk-ring(#fff, 3px); }
+        }
+        // secondary create (form view) stays ghosted but on-brand
+        .btn-secondary.o_form_button_create {
+            background: rgba($vk-primary, .08);
+            color: $vk-primary-strong;
+            box-shadow: none;
+            &:hover { background: rgba($vk-primary, .14); }
+        }
+    }
+
+    // ── Search view ─────────────────────────────────────────────────────────
+    .o_cp_searchview {
+        .o_searchview {
+            background: $vk-card;
+            border: 1px solid $vk-border-strong;
+            border-radius: 999px;
+            padding-inline: .85rem;
+            min-height: 2.35rem;
+            box-shadow: $vk-shadow-xs;
+            transition: border-color .16s $vk-ease, box-shadow .16s $vk-ease, background-color .16s $vk-ease;
+
+            .o_searchview_icon { color: $vk-ink-faint; }
+
+            &:focus-within {
+                background: #fff;
+                @include vk-ring($vk-primary, 4px);
+                .o_searchview_icon { color: $vk-primary; }
+            }
+        }
+        .o_searchview_input::placeholder { color: $vk-ink-faint; }
+
+        // active filter facets ("All")
+        .o_searchview_facet {
+            border-radius: 999px !important;
+            overflow: hidden;
+            .o_searchview_facet_label {
+                background: $vk-gradient;
+                color: #fff;
+            }
+            .o_facet_value { color: $vk-ink; font-weight: 600; }
+            + .o_searchview_facet { margin-left: .3rem; }
+        }
+    }
+
+    // dropdown toggler that opens the filters menu
+    .o_searchview_dropdown_toggler,
+    .o_control_panel_navigation .dropdown-toggle {
+        border-radius: $vk-radius-sm;
+        &:hover { background: rgba($vk-primary, .1); color: $vk-primary; }
+    }
+
+    // ── Pager ───────────────────────────────────────────────────────────────
+    .o_pager {
+        .o_pager_counter { color: $vk-ink-soft; font-variant-numeric: tabular-nums; }
+        .o_pager_value { border-radius: $vk-radius-sm; }
+        button:hover { color: $vk-primary; }
+    }
+}
+
+// ═══════════════════════════ Search panel ════════════════════════════════════
+
+.o_list_view.velkio_access_studio .o_search_panel,
+.o_form_view.velkio_access_studio .o_search_panel {
+    background: linear-gradient(180deg, $vk-surface, $vk-card 40%);
+    border-right: 1px solid $vk-border;
+    padding-inline: .35rem .75rem;
+    @include vk-scrollbar;
+
+    .o_search_panel_section {
+        border: 0;
+        + .o_search_panel_section { border-top: 1px solid $vk-border; }
+    }
+
+    .o_search_panel_section_header {
+        color: $vk-ink-soft;
+        font-weight: 700;
+        font-size: .68rem;
+        letter-spacing: .09em;
+        .o_search_panel_section_icon { color: $vk-primary !important; }
+    }
+
+    .o_search_panel_category_value > header,
+    .o_search_panel_filter_value label {
+        border-radius: $vk-radius-sm;
+        padding: .3rem .55rem !important;
+        color: $vk-ink-soft;
+        transition: background-color .13s $vk-ease, color .13s $vk-ease;
+
+        &:hover { background: rgba($vk-primary, .07); color: $vk-primary-strong; }
+    }
+
+    .o_search_panel_category_value > header.active {
+        background: rgba($vk-primary, .12);
+        color: $vk-primary-strong !important;
+        box-shadow: inset 0 0 0 1px rgba($vk-primary, .16);
+    }
+
+    .o_search_panel_counter {
+        background: rgba($vk-primary, .1);
+        color: $vk-primary-strong !important;
+        border-radius: 999px;
+        padding: .05rem .45rem;
+        font-size: .68rem !important;
+        font-weight: 700 !important;
+    }
+
+    .o_search_panel_filter_value .form-check-input:checked {
+        background-color: $vk-primary;
+        border-color: $vk-primary;
+    }
+}
+
+// ═══════════════════════════ List view ═══════════════════════════════════════
+
+.o_list_view.velkio_access_studio {
+
+    .o_content { background: $vk-surface; }
+
+    // Floating card around the records table.
+    // Scoped to the top-level renderer only — inner x2many grids in the form
+    // keep their native horizontal scrolling (see form section below).
+    .o_content > .o_list_renderer {
+        margin: 14px 16px 18px;
+        background: $vk-card;
+        border: 1px solid $vk-border;
+        border-radius: $vk-radius-xl;
+        box-shadow: $vk-shadow-md;
+        overflow: hidden;
+        animation: vk-rise .32s $vk-ease both;
+        @include vk-scrollbar;
+    }
+
+    .o_list_table {
+        border-collapse: separate;
+        border-spacing: 0;
+
+        // Header
+        thead th {
+            background: linear-gradient(180deg, $vk-surface-sunk, rgba($vk-surface-sunk, .6));
+            color: $vk-ink-soft;
+            font-weight: 700;
+            font-size: .72rem;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            border-bottom: 1px solid $vk-border-strong !important;
+            padding-top: .85rem;
+            padding-bottom: .85rem;
+
+            &.o_column_sortable:hover { color: $vk-primary; }
+            &.o_column_sortable.o_sorted { color: $vk-primary-strong; }
+        }
+        thead .o_list_record_selector .form-check-input,
+        tbody .o_list_record_selector .form-check-input {
+            border-radius: 5px;
+            border-color: $vk-border-strong;
+            &:checked { background-color: $vk-primary; border-color: $vk-primary; }
+        }
+
+        // Body — kill Bootstrap striping in favour of clean rows + hover
+        &.table-striped > tbody > tr > * { background: transparent !important; }
+
+        tbody tr.o_data_row {
+            transition: background-color .12s $vk-ease, box-shadow .12s $vk-ease;
+
+            > .o_data_cell {
+                padding-top: .72rem;
+                padding-bottom: .72rem;
+                border-top: 1px solid rgba($vk-border, .8);
+                color: $vk-ink;
+            }
+            &:first-child > .o_data_cell { border-top: 0; }
+
+            &:hover > td {
+                background: linear-gradient(90deg, rgba($vk-primary, .07), rgba($vk-accent, .05)) !important;
+            }
+            // accent bar on hover / selection
+            &:hover > td:first-child,
+            &.o_data_row_selected > td:first-child {
+                box-shadow: inset 3px 0 0 $vk-primary;
+            }
+            &.o_data_row_selected > td {
+                background: rgba($vk-primary, .09) !important;
+            }
+        }
+
+        // The first cell of the name column, a touch stronger
+        .o_data_row td.o_field_cell:first-of-type,
+        .o_data_row td[name="name"] { font-weight: 620; color: $vk-ink; }
+
+        // Filler / empty rows
+        tbody tr:not(.o_data_row):not(.o_group_header) td {
+            border-top: 1px solid rgba($vk-border, .5);
+        }
+
+        // Inline tags in cells — brand tint only for un-coloured tags
+        // (`o_tag_color_0`); tags given a real colour keep it.
+        .o_field_many2many_tags .o_tag.o_tag_color_0 {
+            background: rgba($vk-primary, .1);
+            color: $vk-primary-strong;
+        }
+        .o_field_many2many_tags .o_tag { border-radius: 999px; font-weight: 600; }
+
+        // "Active" boolean toggle
+        .o_boolean_toggle .form-check-input:checked,
+        .form-switch .form-check-input:checked {
+            background-color: $vk-success;
+            border-color: $vk-success;
+        }
+
+        // numeric "Access Rules" count
+        td.o_list_number { font-variant-numeric: tabular-nums; color: $vk-ink-soft; }
+
+        // muted (archived) rows
+        .o_data_row.text-muted,
+        tr.o_data_row.o_list_row_muted { opacity: .55; }
+
+        // Optional-columns dropdown handle (top-right sliders icon)
+        .o_optional_columns_dropdown .dropdown-toggle {
+            color: $vk-ink-faint;
+            &:hover { color: $vk-primary; }
+        }
+    }
+
+    // ── Empty state ─────────────────────────────────────────────────────────
+    .o_view_nocontent {
+        .o_nocontent_help {
+            max-width: 480px;
+            margin-inline: auto;
+            padding: 2.4rem 2rem;
+            background: $vk-card;
+            border: 1px solid $vk-border;
+            border-radius: $vk-radius-xl;
+            box-shadow: $vk-shadow-md;
+            text-align: center;
+            animation: vk-rise .3s $vk-ease both;
+        }
+        .o_view_nocontent_smiling_face,
+        .o_view_nocontent_empty_folder {
+            &::before {
+                content: "\f21b"; // fa-user-secret — an "access" motif
+                font: normal normal normal 1.7rem/68px "FontAwesome";
+                -webkit-font-smoothing: antialiased;
+                display: block;
+                width: 68px;
+                height: 68px;
+                margin: 0 auto .9rem;
+                text-align: center;
+                color: #fff;
+                border-radius: 20px;
+                background: $vk-gradient;
+                box-shadow: $vk-shadow-md;
+            }
+        }
+        p { color: $vk-ink-soft; }
+        p:first-of-type { color: $vk-ink; font-size: 1.05rem; font-weight: 700; }
+    }
+}
+
+// ═══════════════════════════ Form view ═══════════════════════════════════════
+
+.o_form_view.velkio_access_studio {
+
+    .o_form_view_container, .o_content { background: $vk-surface; }
+
+    // ── Full-screen sheet ───────────────────────────────────────────────────
+    // Core caps `.o_form_sheet_bg` at 1534px and left-aligns it (margin-right:auto),
+    // which leaves the empty band on the right. Release the cap and let the flex
+    // chain stretch the sheet to fill the viewport both ways.
+    .o_content { display: flex; flex-direction: column; }
+    .o_form_renderer {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        max-width: none;
+    }
+    .o_form_sheet_bg {
+        background: $vk-surface;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 12px clamp(12px, 2vw, 26px) clamp(14px, 2vw, 26px);
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+    }
+
+    .o_form_sheet {
+        position: relative;
+        max-width: 100% !important;
+        width: 100%;
+        flex: 1 1 auto;               // fill the remaining vertical space
+        border: 1px solid $vk-border;
+        border-radius: $vk-radius-xl;
+        box-shadow: $vk-shadow-md;
+        background: $vk-card;
+        // NB: no `overflow: hidden` / `transform` here — it would break the
+        // fixed-positioned autocomplete dropdowns of the m2o/m2m fields.
+        animation: vk-fade .3s $vk-ease both;
+
+        // gradient top edge, radius-matched so no clipping is required
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            border-radius: $vk-radius-xl $vk-radius-xl 0 0;
+            background: $vk-gradient;
+        }
+    }
+
+    // ── Button box / stat buttons ───────────────────────────────────────────
+    .oe_button_box {
+        .oe_stat_button {
+            border: 1px solid $vk-border;
+            border-radius: $vk-radius-md;
+            background: $vk-card;
+            transition: border-color .15s $vk-ease, box-shadow .15s $vk-ease, transform .15s $vk-ease, background-color .15s $vk-ease;
+
+            .o_button_icon, .fa { color: $vk-primary; }
+            .o_stat_value { color: $vk-primary-strong; font-weight: 750; }
+            .o_stat_text  { color: $vk-ink-soft; }
+
+            &:hover {
+                border-color: rgba($vk-primary, .5);
+                background: rgba($vk-primary, .04);
+                box-shadow: $vk-shadow-sm;
+                transform: translateY(-1px);
+            }
+        }
+    }
+
+    // ── Field groups ────────────────────────────────────────────────────────
+    .o_group .o_horizontal_separator,
+    .o_horizontal_separator {
+        color: $vk-primary-strong;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        font-size: .72rem;
+        font-weight: 750;
+        padding-bottom: .35rem;
+        border-bottom: 1px solid $vk-border;
+        margin-bottom: .5rem;
+    }
+
+    .o_form_label { color: $vk-ink-soft; font-weight: 600; }
+
+    // Inputs
+    .o_field_widget input.o_input,
+    .o_field_widget textarea.o_input,
+    .o_field_widget .o_input {
+        border-radius: $vk-radius-sm;
+        transition: border-color .15s $vk-ease, box-shadow .15s $vk-ease;
+    }
+    .o_field_widget:not(.o_field_boolean):focus-within input.o_input,
+    .o_field_widget:not(.o_field_boolean):focus-within .o_input {
+        @include vk-ring($vk-primary, 3px);
+    }
+    // the subtle underline Odoo draws under editable cells / fields
+    .o_field_widget .o_input:focus { border-bottom-color: $vk-primary; }
+
+    // Checkboxes / switches on-brand
+    .o_field_boolean .form-check-input:checked,
+    .form-switch .form-check-input:checked {
+        background-color: $vk-primary;
+        border-color: $vk-primary;
+    }
+
+    // Many2many / many2one tags — brand tint only for un-coloured tags
+    // (`o_tag_color_0`); a tag given a real colour via the colour widget keeps it.
+    .o_field_many2many_tags .o_tag.o_tag_color_0,
+    .o_field_tags .o_tag.o_tag_color_0 {
+        background: rgba($vk-primary, .1);
+        color: $vk-primary-strong;
+    }
+    .o_field_many2many_tags .o_tag,
+    .o_field_tags .o_tag {
+        border-radius: 999px;
+        font-weight: 600;
+        .o_delete:hover { color: $vk-danger; }
+        .o_tag_badge_text { color: inherit; }
+    }
+
+    // ── Notebook ────────────────────────────────────────────────────────────
+    .o_notebook {
+        .o_notebook_headers {
+            border-bottom: 1px solid $vk-border;
+
+            .nav-link {
+                position: relative;
+                border: 0;
+                margin: 0 .1rem -1px 0;
+                padding: .6rem .95rem;
+                color: $vk-ink-soft;
+                font-weight: 620;
+                border-radius: $vk-radius-sm $vk-radius-sm 0 0;
+                transition: color .15s $vk-ease, background-color .15s $vk-ease;
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    left: .6rem; right: .6rem; bottom: 0;
+                    height: 2.5px;
+                    border-radius: 999px 999px 0 0;
+                    background: transparent;
+                    transition: background-color .18s $vk-ease;
+                }
+
+                &:hover:not(.active) {
+                    color: $vk-primary-strong;
+                    background: rgba($vk-primary, .05);
+                }
+                &.active {
+                    color: $vk-primary-strong;
+                    background: transparent;
+                    &::after { background: $vk-gradient; }
+                }
+            }
+        }
+        .o_notebook_content .tab-pane { padding-top: 1rem; }
+    }
+
+    // ── Inner editable x2many grids (Model / Field / Chatter … tabs) ─────────
+    .o_field_x2many {
+        .o_list_renderer {
+            border: 1px solid $vk-border;
+            border-radius: $vk-radius-lg;
+            overflow: auto;                 // keep native horizontal scroll
+            box-shadow: $vk-shadow-xs;
+            @include vk-scrollbar;
+        }
+        .o_list_table thead th {
+            background: $vk-surface-sunk;
+            color: $vk-ink-soft;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            font-size: .68rem;
+            font-weight: 700;
+            border-bottom: 1px solid $vk-border-strong !important;
+        }
+        .o_list_table tbody tr.o_data_row:hover > td {
+            background: rgba($vk-primary, .05) !important;
+        }
+        .o_list_table .o_data_row.o_selected_row > td {
+            background: rgba($vk-primary, .06) !important;
+            box-shadow: inset 0 0 0 1px rgba($vk-primary, .2);
+        }
+        .o_field_x2many_list_row_add a {
+            color: $vk-primary;
+            font-weight: 650;
+            &:hover { color: $vk-primary-strong; text-decoration: underline; }
+        }
+    }
+
+    // ── Info callouts (<p role="alert" class="fa fa-info-circle alert alert-info">) ──
+    // The markup puts `.fa` on the <p> itself, which forces the FontAwesome
+    // font onto the body copy (garbled text). Restore a real UI font here and
+    // keep FontAwesome only for the ::before icon.
+    .alert.alert-info {
+        position: relative;
+        display: block;
+        margin-top: 1.1rem;
+        padding: 1rem 1.1rem 1rem 3rem;
+        color: $vk-ink;
+        background: linear-gradient(180deg, rgba($vk-accent, .09), rgba($vk-primary, .05));
+        border: 1px solid rgba($vk-primary, .16);
+        border-left: 3px solid $vk-primary;
+        border-radius: $vk-radius-md !important;
+        font-family: inherit !important;
+        font-size: .9rem !important;
+        font-weight: 400;
+        letter-spacing: normal !important;
+        line-height: 1.55;
+        box-shadow: $vk-shadow-xs;
+
+        &.fa::before,
+        &.fa-info-circle::before {
+            position: absolute;
+            left: 1rem; top: 1rem;
+            font-family: "FontAwesome" !important;
+            color: $vk-primary;
+            font-size: 1rem;
+        }
+        a {
+            color: $vk-primary-strong;
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            &:hover { color: $vk-primary; }
+        }
+        .btn-close { top: .55rem; right: .6rem; }
+    }
+
+    // Status text helpers used in the button box
+    .text-success { color: $vk-success !important; }
+    .text-danger  { color: $vk-danger  !important; }
+}
+
+// ═══════════════════════ Wizard / picker dialogs ════════════════════════════
+//
+// `.o_velkio_studio_dialog` is added to `.modal-content` for every
+// SelectCreateDialog / FormViewDialog opened from an Access Studio record
+// (the `velkio_studio` context flag rides down from the action context; a
+// template extension turns it into this class). Everything here is therefore
+// still fully scoped to this app.
+
+.o_velkio_studio_dialog.modal-content {
+    background: $vk-card;
+    border: 1px solid $vk-border-strong;
+    border-radius: $vk-radius-lg;
+    box-shadow: $vk-shadow-lg;
+    // no `overflow: hidden` — the header/footer carry matching radii instead,
+    // so the modal-body's own scroll container is never touched.
+    animation: vk-fade .2s $vk-ease both;
+
+    // ── Header ──────────────────────────────────────────────────────────────
+    > .modal-header {
+        padding: 1rem 1.15rem;
+        border-radius: $vk-radius-lg $vk-radius-lg 0 0;
+        background:
+            radial-gradient(120% 180% at 0% 0%, rgba($vk-primary-bright, .16), rgba($vk-primary-bright, 0) 60%),
+            $vk-card;
+        border-bottom: 1px solid $vk-border;
+
+        .modal-title {
+            font-weight: 750;
+            letter-spacing: -.01em;
+            color: $vk-ink;
+        }
+        .o_clear_button { color: $vk-primary; font-weight: 600; }
+        .btn-close:focus-visible { @include vk-ring($vk-primary, 3px); }
+    }
+
+    // ── Body ────────────────────────────────────────────────────────────────
+    > .modal-body {
+        background: $vk-surface;
+
+        // control panel inside the dialog (search bar lives here)
+        .o_control_panel {
+            background: transparent;
+            border-bottom: 1px solid $vk-border;
+        }
+        .o_cp_searchview .o_searchview {
+            background: $vk-card;
+            border: 1px solid $vk-border-strong;
+            border-radius: 999px;
+            padding-inline: .8rem;
+            box-shadow: $vk-shadow-xs;
+            &:focus-within { @include vk-ring($vk-primary, 4px); }
+        }
+
+        // the embedded list — themed even though it has no `.velkio_access_studio`
+        .o_list_renderer {
+            margin: 12px;
+            border: 1px solid $vk-border;
+            border-radius: $vk-radius-md;
+            background: $vk-card;
+            box-shadow: $vk-shadow-xs;
+            overflow: auto;
+            @include vk-scrollbar;
+        }
+        .o_list_table {
+            thead th {
+                background: $vk-surface-sunk;
+                color: $vk-ink-soft;
+                text-transform: uppercase;
+                letter-spacing: .06em;
+                font-size: .7rem;
+                font-weight: 700;
+                border-bottom: 1px solid $vk-border-strong !important;
+            }
+            &.table-striped > tbody > tr > * { background: transparent !important; }
+            tbody tr.o_data_row {
+                transition: background-color .12s $vk-ease;
+                > td { border-top: 1px solid rgba($vk-border, .8); }
+                &:hover > td {
+                    background: linear-gradient(90deg, rgba($vk-primary, .07), rgba($vk-accent, .05)) !important;
+                }
+                &:hover > td:first-child { box-shadow: inset 3px 0 0 $vk-primary; }
+            }
+            .o_list_record_selector .form-check-input:checked,
+            .o_list_record_selector .form-check-input:indeterminate {
+                background-color: $vk-primary;
+                border-color: $vk-primary;
+            }
+        }
+
+        // Domain-Access sub-record form (FormViewDialog / X2ManyFieldDialog)
+        // — flatten the inner sheet so it sits flush in the modal body and
+        //   drop the full-screen flex-fill used on the main form.
+        .o_content, .o_form_renderer, .o_form_sheet_bg, .o_form_sheet {
+            flex: 0 1 auto;
+        }
+        .o_form_sheet {
+            max-width: 100% !important;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            animation: none;
+            &::before { display: none; }
+        }
+        .o_form_renderer, .o_form_sheet_bg { background: $vk-surface; }
+    }
+
+    // ── Footer ──────────────────────────────────────────────────────────────
+    > .modal-footer {
+        padding: .8rem 1.15rem;
+        border-radius: 0 0 $vk-radius-lg $vk-radius-lg;
+        background: $vk-card;
+        border-top: 1px solid $vk-border;
+
+        .btn-primary,
+        .o_select_button,
+        .o_create_button,
+        .o-default-button {
+            border: 0;
+            border-radius: $vk-radius-sm;
+            padding-inline: 1.1rem;
+            font-weight: 650;
+            color: #fff;
+            background: $vk-gradient;
+            background-size: 140% 140%;
+            box-shadow: 0 6px 15px -6px rgba($vk-primary-strong, .5);
+            transition: transform .15s $vk-ease, box-shadow .15s $vk-ease, background-position .3s $vk-ease;
+
+            &:hover:not(:disabled) {
+                background-position: 100% 0;
+                transform: translateY(-1px);
+                box-shadow: 0 12px 22px -8px rgba($vk-primary-strong, .55);
+            }
+            &:disabled { opacity: .5; }
+        }
+        .o_form_button_cancel,
+        .btn-secondary {
+            border-radius: $vk-radius-sm;
+            border-color: $vk-border-strong;
+            color: $vk-ink-soft;
+            font-weight: 600;
+            &:hover { background: rgba($vk-primary, .07); color: $vk-primary-strong; }
+        }
+    }
+}
+
+// widen the picker modal so long menu / model paths fit comfortably
+.modal-dialog:has(> .o_velkio_studio_dialog) {
+    max-width: 1120px;
+    width: 94vw;
+}
+
+// ═══════════════════════════ App launcher icon ══════════════════════════════
+
+.o_app[data-menu-xmlid="velkio_simplify_access_management.main_menu_velkio_simplify_access_management"] {
+    .o_app_icon, .o_web_client_icon {
+        border-radius: 22%;
+        box-shadow: 0 6px 18px -6px rgba($vk-primary-strong, .5);
+    }
+    .o_caption { font-weight: 650; }
+}
+
+// ═══════════════════════════ Motion ═════════════════════════════════════════
+
+@keyframes vk-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vk-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .o_list_view.velkio_access_studio,
+    .o_form_view.velkio_access_studio {
+        *, *::before, *::after {
+            animation-duration: .001ms !important;
+            transition-duration: .001ms !important;
+        }
+    }
+}

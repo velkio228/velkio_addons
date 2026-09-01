@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="access_management_form_view_ah" model="ir.ui.view">
+            <field name="name">access_management_form_view_ah</field>
+            <field name="groups_id" eval="[(4, ref('group_access_management_spt'))]"/>
+            <field name="model">access.management</field>
+            <field name="arch" type="xml">
+                <form context="{'buypass_access':True}" class="velkio_access_studio">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <field name="active" invisible="1"/>
+                            <button invisible="active == False" class="oe_stat_button"
+                                    name="toggle_active_value" type="object" icon="fa-stop">
+                                <div class="o_stat_info o_form_field">
+                                    <span style="font-weight: bold;" class="text-danger">Deactivate Rule</span>
+                                </div>
+                            </button>
+                            <button invisible="active == True" class="oe_stat_button"
+                                    name="toggle_active_value" type="object" icon="fa-play">
+                                <div class="o_stat_info o_form_field">
+                                    <span style="font-weight: bold;" class="text-success">Activate Rule</span>
+                                </div>
+                            </button>
+                            <button name="action_show_rules" type="object" class="oe_stat_button" icon="fa-list-ul">
+                                <div class="o_stat_info">
+                                    <field name="total_rules" class="o_stat_value"/>
+                                    <span class="o_stat_text">Access Rules</span>
+                                </div>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" default_focus="1" required='1'/>
+                                <field name="readonly"/>
+                                <field name="company_ids" options="{'no_create': True}" widget="many2many_tags"
+                                       groups="base.group_multi_company"/>
+                                <!-- <field name="self_model_ids" widget="many2many_tags" invisible="1"/> -->
+                                <field name="total_rules" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="user_ids" widget='many2many_tags'
+                                       options="{'no_create': True, 'color_field': 'velkio_access_tag_color', 'no_edit_color': True}"
+                                       domain="[('share','=',False)]"/>
+                                <field name="disable_debug_mode"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="create_uid"/>
+                                <field name="write_uid"/>
+                            </group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="write_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string='Hide Menu'>
+                                <field name="self_module_menu_ids" widget="many2many_tags" invisible="1"/>
+                                <field name='hide_menu_ids' domain="[('menu_id','not in',self_module_menu_ids)]"/>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Hide Menu</b> — hide application menus and sub-menus from the selected user(s).
+                                    <br/>
+                                    <br/>
+                                    Add every menu / sub-menu you want to hide to the list above. Those users will no
+                                    longer see them in the apps bar or in any menu dropdown, and the menu's own screen
+                                    can no longer be opened by them. All other users are unaffected.
+                                    <br/>
+                                    <br/>
+                                    <b>Tip:</b> hiding a parent menu also hides everything under it.
+                                </p>
+                            </page>
+                            <page string='Model Access'>
+                                <field name='remove_action_ids'>
+                                    <tree editable='bottom'>
+                                        <field name="model_id" context="{'is_access_rights': True}"
+                                               options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
+                                               width='13' required='1'
+                                               domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"/>
+                                        <field name="report_action_ids" width='13' widget="many2many_tags"
+                                               options="{'no_create': True}"/>
+                                        <field name="server_action_ids" width='13' widget="many2many_tags"
+                                               options="{'no_create': True}"/>
+                                        <field name="view_data_ids" width='8' widget="many2many_tags"
+                                               options="{'no_create': True}"/>
+                                        <field name="restrict_create" width='10'/>
+                                        <field name="restrict_edit" width='10'/>
+                                        <field name="restrict_delete" width='10'/>
+                                        <field name="restrict_archive_unarchive" width='10'/>
+                                        <field name="restrict_duplicate" width='10'/>
+                                        <!--                                        <field name="restrict_chatter" width='10' attrs="{'column_invisible' : [('parent.hide_chatter','=',True)]}"/>-->
+                                        <!-- <field name="readonly" invisible="1"
+                                               column_invisible="parent.readonly == True"/> -->
+                                        <field name="restrict_import" width='10'/>
+                                        <field name="restrict_export" width='10'/>
+                                        <field name="restrict_spreadsheet" width='10'/>
+                                    </tree>
+                                </field>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Model Access</b> — for a chosen model, hide its reports, actions, whole views and
+                                    toolbar buttons. Add one row per model.
+                                    <br/>
+                                    <br/>
+                                    <b>Model:</b> the model / app this row applies to.
+                                    <br/>
+                                    <b>Hide Reports:</b> print-menu entries to remove for this model.
+                                    <br/>
+                                    <b>Hide Actions:</b> "Action" menu entries (server actions) to remove.
+                                    <br/>
+                                    <b>Hide Views:</b> view types to drop from the view switcher — List, Kanban, Pivot,
+                                    Graph, Calendar, Activity, etc.
+                                    <br/>
+                                    <b>Hide Create / Edit / Delete / Archive-Unarchive / Duplicate / Import / Export /
+                                    Spreadsheet:</b> tick a box to remove that button or menu entry for the selected
+                                    user(s).
+                                    <br/>
+                                    <br/>
+                                    <b>Note:</b> this only hides things on the screen. The same operations still run from
+                                    automated actions, imports, Point of Sale and the API, so nothing breaks in the
+                                    background. To actually <i>block</i> an operation everywhere, use the
+                                    <b>Domain Access</b> tab.
+                                </p>
+                            </page>
+                            <page string='Field Access'>
+                                <field name='hide_field_ids'>
+                                    <tree editable='bottom'>
+                                        <!-- <field name="model_id" options="{'no_create': True}" domain="[('id','not in',parent.self_model_ids),('abstract','=',False)]" /> -->
+                                        <field name="model_id" context="{'is_access_rights': True}"
+                                               options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
+                                               required='1' domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"/>
+                                        <field name="field_id" context="{'is_access_rights': True}"
+                                               options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
+                                               widget='many2many_tags' domain="[('model_id','=',model_id)]"/>
+                                        <field name="invisible" width='1'/>
+                                        <field name="readonly" width='1' column_invisible="parent.readonly == True "/>
+                                        <field name="required" width='1'/>
+                                        <field name="external_link" width='1'/>
+                                    </tree>
+                                </field>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Field Access</b> — control individual fields of any model for the selected
+                                    user(s). Add one row per model.
+                                    <br/>
+                                    <br/>
+                                    <b>Model:</b> the model the fields belong to.
+                                    <br/>
+                                    <b>Field:</b> the field(s) this row affects (choose the model first).
+                                    <br/>
+                                    <b>Invisible:</b> hide the field from every view.
+                                    <br/>
+                                    <b>Read-Only:</b> show the field but stop the user from changing it.
+                                    <br/>
+                                    <b>Required:</b> force the user to fill the field before the record can be saved.
+                                    <br/>
+                                    <b>Remove External Link:</b> for relational fields, remove the small arrow that
+                                    opens the linked record.
+                                    <br/>
+                                    <br/>
+                                    <b>Note:</b> this changes what is shown on screen only; the field value can still be
+                                    read through the API.
+                                </p>
+                            </page>
+                            <page string='Domain Access'>
+                                <field name='access_domain_ah_ids'>
+                                    <form class="velkio_access_studio">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="model_id" context="{'is_access_rights': True}"
+                                                           options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
+                                                           domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data']),('abstract','=',False)]"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="read_right"/>
+                                                    <field name="create_right"/>
+                                                </group>
+                                                <group>
+                                                    <field name="write_right" string="Update"/>
+                                                    <field name="delete_right"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="apply_domain" invisible="read_right == False"/>
+                                                <field name="model_name"
+                                                       invisible="apply_domain != True  or read_right == False"/>
+                                                <field name="domain" widget="velkio_domain"
+                                                       options="{'model': 'model_name'}"
+                                                       invisible="apply_domain != True  or read_right == False"/>
+                                            </group>
+
+                                        </sheet>
+                                    </form>
+                                    <tree>
+                                        <field name="model_id"/>
+                                        <field name="domain"/>
+                                        <field name="read_right"/>
+                                        <field name="create_right"/>s
+                                        <field name="write_right"/>
+                                        <field name="delete_right"/>
+                                    </tree>
+                                </field>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Domain Access</b> — set real, enforced access rights for a model and, if needed,
+                                    limit which records the user may see. Add one row per model.
+                                    <br/>
+                                    <br/>
+                                    <b>How the check-boxes work:</b> tick a right to <b>allow</b> it, leave it un-ticked
+                                    to <b>block</b> it for the selected user(s).
+                                    <br/>
+                                    <b>Read:</b> see records. If left un-ticked the user sees <b>no record</b> of this
+                                    model at all (Create / Update / Delete are then switched off too).
+                                    <br/>
+                                    <b>Create:</b> add new records. &#160;<b>Update:</b> edit existing records.
+                                    &#160;<b>Delete:</b> delete records.
+                                    <br/>
+                                    <b>Apply Filter + Filter:</b> when Read is allowed, show only the records that match
+                                    this filter (for example, only records of the user's own company).
+                                    <br/>
+                                    <br/>
+                                    <b>Use with care.</b> Unlike the other tabs this is a genuine security rule — it
+                                    applies <b>everywhere</b>: the interface, automated actions, imports, the API and
+                                    Point of Sale. Removing a right that a background process needs (e.g. POS creating
+                                    orders) will cause errors. If you only want to hide buttons for a back-office user,
+                                    use the <b>Model Access</b> tab instead.
+                                </p>
+                            </page>
+                            <page string='Button/Tab Access'>
+                                <field name='hide_view_nodes_ids'>
+                                    <tree editable="bottom">
+                                        <field name="model_id" context="{'is_access_rights': True}"
+                                               options="{'no_open': True, 'nos_create': True, 'no_create_edit': True}"
+                                               domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"/>
+                                        <!-- <field name="model_name" invisible="1"/> -->
+                                        <!-- <field name="model_name"/> -->
+                                        <field name="btn_store_model_nodes_ids" widget="many2many_tags"
+                                               domain="[('model_id','=',model_id),('node_option','=','button')]"
+                                               options="{'no_create': True}"/>
+                                        <field name="page_store_model_nodes_ids" widget="many2many_tags"
+                                               domain="[('model_id','=',model_id),('node_option','=','page')]"
+                                               options="{'no_create': True}"/>
+                                        <field name="link_store_model_nodes_ids" widget="many2many_tags"
+                                               domain="[('model_id','=',model_id),('node_option','=','link')]"
+                                               options="{'no_create': True}"/>
+                                    </tree>
+                                </field>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Button/Tab Access</b> — hide individual buttons, form tabs and Kanban links of a
+                                    model for the selected user(s). Add one row per model.
+                                    <br/>
+                                    <br/>
+                                    <b>Model:</b> the model to act on (choose it first).
+                                    <br/>
+                                    <b>Hide Button:</b> action and object buttons to hide — e.g. "Confirm", "Create
+                                    Invoice", smart buttons.
+                                    <br/>
+                                    <b>Hide Tab/Page:</b> notebook tabs to hide on the form view.
+                                    <br/>
+                                    <b>Hide Kanban Link:</b> the action links shown on Kanban cards to hide.
+                                    <br/>
+                                    <br/>
+                                    Once the model is set, each field lists only the buttons / tabs / links the app has
+                                    detected on that model's views, so you just pick from the list.
+                                </p>
+                            </page>
+                            <page string='Hide Filter/Group By'>
+                                <field name="hide_filters_groups_ids">
+                                    <tree editable="bottom">
+                                        <field name="model_id" context="{'is_access_rights': True}"
+                                               options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
+                                               domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"/>
+                                        <!-- <field name="model_name" invisible="1"/> -->
+                                        <field name="filters_store_model_nodes_ids" widget="many2many_tags"
+                                               domain="[('model_id','=',model_id),('node_option','=','filter')]"
+                                               options="{'no_create': True}"/>
+                                        <field name="groups_store_model_nodes_ids" widget="many2many_tags"
+                                               domain="[('model_id','=',model_id),('node_option','=','group')]"
+                                               options="{'no_create': True}"/>
+                                    </tree>
+                                </field>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Hide Filter / Group By</b> — hide specific search options of a model for the
+                                    selected user(s). Add one row per model.
+                                    <br/>
+                                    <br/>
+                                    <b>Model:</b> the model to act on (choose it first).
+                                    <br/>
+                                    <b>Hide Filters:</b> predefined filters to remove from the search box.
+                                    <br/>
+                                    <b>Hide Groups:</b> "Group By" entries to remove from the search box.
+                                    <br/>
+                                    <br/>
+                                    Once the model is set, each field lists only the filters and group-by options found
+                                    on that model's search view.
+                                </p>
+                            </page>
+                            <page string='Chatter'>
+                                <field name="hide_chatter_ids">
+                                    <tree editable="bottom">
+                                        <field name="model_id" context="{'is_access_rights': True}"
+                                               options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"
+                                               width="20" domain="[('model','not in',['access.management', 'access.domain.ah', 'action.data', 'hide.field', 'hide.view.nodes', 'store.model.nodes', 'remove.action', 'view.data'])]"
+                                               required="1"/>
+                                        <field name="hide_chatter" width="20"/>
+                                        <field name="hide_send_mail" width="20"/>
+                                        <field name="hide_log_notes" width="20"/>
+                                        <field name="hide_schedule_activity" width="20"/>
+
+                                    </tree>
+                                </field>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Chatter</b> — hide the chatter (the message &amp; activity panel on a form) per
+                                    model, for the selected user(s). Add one row per model.
+                                    <br/>
+                                    <br/>
+                                    <b>Model:</b> the model to act on.
+                                    <br/>
+                                    <b>Chatter:</b> hide the whole chatter panel.
+                                    <br/>
+                                    <b>Send Message / Log Notes / Schedule Activity:</b> keep the chatter but remove
+                                    just that button.
+                                    <br/>
+                                    <br/>
+                                    To apply this to every model in one click, use the <b>Global</b> tab.
+                                </p>
+                            </page>
+                            <page string='Global'>
+                                <group>
+                                    <group string="Chatter">
+                                        <field name="hide_chatter"/>
+                                        <field name="hide_send_mail"/>
+                                        <field name="hide_log_notes"/>
+                                        <field name="hide_schedule_activity"/>
+                                    </group>
+                                    <group string="Import &amp; Export">
+                                        <field name="hide_import"/>
+                                        <field name="hide_export"/>
+                                        <field name="hide_spreadsheet"/>
+                                        <field name="hide_add_property"/>
+                                    </group>
+
+                                </group>
+                                <group string="Others">
+                                    <field name="disable_login"/>
+                                    <field name="disable_relational_create_edit"/>
+                                </group>
+                                <p role="alert"
+                                   class="fa fa-info-circle  alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                                    <b>Global</b> — these options apply the rule to <b>every model at once</b>, for the
+                                    selected user(s). No per-model setup is needed.
+                                    <br/>
+                                    <br/>
+                                    <b>Chatter:</b> hide the chatter everywhere, or keep it and remove just the
+                                    "Send Message", "Log Note" or "Schedule Activity" buttons.
+                                    <br/>
+                                    <b>Import &amp; Export:</b> hide the Import, Export, Insert-in-Spreadsheet and
+                                    "Add Property" actions everywhere.
+                                    <br/>
+                                    <b>Disable Login:</b> block the selected user(s) from signing in.
+                                    <br/>
+                                    <b>Disable Relational Create/Edit:</b> on every Many2one / Many2many field of every
+                                    screen, remove the "Create", "Create and edit…" and quick-create options from the
+                                    dropdown and hide the arrow that opens the linked record. Use it to stop users from
+                                    creating or editing linked records (customers, products, tags, etc.) while still
+                                    letting them pick from the existing ones.
+                                </p>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="access_management_search_view" model="ir.ui.view">
+            <field name="name">access.management.search.view</field>
+            <field name="model">access.management</field>
+            <field name="arch" type="xml">
+                <search string="Access Management">
+                    <field name="name" string="Name"/>
+                    <field name="user_ids"/>
+                    <field name="active"/>
+                    <field name="create_uid"/>
+                    <separator/>
+                    <filter string="All" name="all" domain="['|', ('active', '=', False), ('active', '=', True)]"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Created By" name="created_by" domain="[]" context="{'group_by': 'create_uid'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="user_ids" select="multi" string="Users" enable_counters="1"/>
+                        <field name="company_ids" select="multi" string="Companies" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="access_management_tree_view_ah" model="ir.ui.view">
+            <field name="name">access_management_tree_view_ah</field>
+            <field name="groups_id" eval="[(4, ref('group_access_management_spt'))]"/>
+            <field name="model">access.management</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="(not active)" class="velkio_access_studio">
+                    <field name="name"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                    <field name="user_ids" widget="many2many_tags" options="{'color_field': 'velkio_access_tag_color', 'no_edit_color': True}"/>
+                    <field name="total_rules"/>
+                    <field name="active" invisible="0" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_access_management_ah" model="ir.actions.act_window">
+            <field name="name">Access Management</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">access.management</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_all': 1, 'velkio_studio': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Design your first access rule</p>
+                <p>
+                    Bundle menus, models, fields, buttons and record domains into one
+                    reusable rule, then assign it to the users or companies that need it.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="main_menu_velkio_simplify_access_management" name="Access Studio" action="action_access_management_ah"
+                  groups="group_access_management_spt"
+                  web_icon="velkio_simplify_access_management,static/description/icon.png"/>
+
+    </data>
+</odoo>
