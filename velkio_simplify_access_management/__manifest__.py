@@ -73,7 +73,7 @@ multi company access, Odoo 17 security.
         'static/description/screenshot_form.png',
         'static/description/icon.png',
     ],
-    'price': 370.99,
+    'price': 22.22,
     'currency': 'USD',
 
     'depends': [
