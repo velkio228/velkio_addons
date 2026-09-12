@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+<menuitem id="menu_velkio_root"
+          name="Notifications"
+          web_icon="velkio_reminders_notification,static/description/icon.png"
+          sequence="86"/>
+
+<menuitem id="menu_velkio_dashboard"
+          name="Dashboard"
+          parent="menu_velkio_root"
+          action="action_velkio_dashboard"
+          sequence="5"/>
+
+<menuitem id="menu_velkio_calendar"
+          name="Calendar"
+          parent="menu_velkio_root"
+          action="action_velkio_calendar"
+          sequence="8"/>
+
+<menuitem id="menu_velkio_reminders"
+          name="My Reminders"
+          parent="menu_velkio_root"
+          action="action_velkio_reminders"
+          sequence="10"/>
+
+<menuitem id="menu_velkio_inbox"
+          name="Sent to Me"
+          parent="menu_velkio_root"
+          action="action_velkio_my_notifications"
+          sequence="20"/>
+
+<menuitem id="menu_velkio_templates"
+          name="Templates"
+          parent="menu_velkio_root"
+          action="action_velkio_templates"
+          sequence="30"/>
+
+<menuitem id="menu_velkio_all"
+          name="All Notifications"
+          parent="menu_velkio_root"
+          action="action_velkio_all_notifications"
+          groups="velkio_reminders_notification.group_velkio_manager"
+          sequence="40"/>
+
+<!-- CONFIGURATION -->
+<menuitem id="menu_velkio_config"
+          name="Configuration"
+          parent="menu_velkio_root"
+          groups="velkio_reminders_notification.group_velkio_manager"
+          sequence="100"/>
+
+<menuitem id="menu_velkio_styles"
+          name="Popup Styles"
+          parent="menu_velkio_config"
+          action="action_velkio_popup_styles"
+          sequence="10"/>
+
+<menuitem id="menu_velkio_delivery"
+          name="Delivery Log"
+          parent="menu_velkio_config"
+          action="action_velkio_recipients"
+          sequence="20"/>
+
+</data>
+</odoo>

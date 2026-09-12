@@ -1,0 +1,1251 @@
+// ════════════════════════════════════════════════════
+// Velkio — floating popup
+// Everything an administrator can change arrives as a CSS custom property
+// (--v-a, --v-radius, --v-shadow, --v-width), so a style change takes effect
+// on the next popup without recompiling anything.
+// ════════════════════════════════════════════════════
+
+$v-edge: 22px;
+$v-gap: 14px;
+$v-navbar: 46px;
+// Above Odoo's dialogs, so a notice is never buried behind a form.
+$v-z: 1080;
+$v-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+$v-ink: #0f172a;
+$v-muted: #64748b;
+
+// ── LAYER ────────────────────────────────────────────
+// Fixed and click-through, so work carries on behind it. Only the cards
+// themselves take the mouse.
+.velkio-layer {
+    position: fixed;
+    inset: 0;
+    z-index: $v-z;
+    pointer-events: none;
+}
+
+.velkio-stack {
+    --v-width: 400px;
+
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: $v-gap;
+    width: var(--v-width);
+    max-width: calc(100vw - #{$v-edge * 2});
+    max-height: calc(100vh - #{$v-edge * 2} - #{$v-navbar});
+
+    &.velkio-at-top-right    { top: calc(#{$v-edge} + #{$v-navbar}); right: $v-edge; }
+    &.velkio-at-top-left     { top: calc(#{$v-edge} + #{$v-navbar}); left: $v-edge; }
+    &.velkio-at-top-center   { top: calc(#{$v-edge} + #{$v-navbar}); left: 50%; transform: translateX(-50%); }
+    &.velkio-at-bottom-right { bottom: $v-edge; right: $v-edge; flex-direction: column-reverse; }
+    &.velkio-at-bottom-left  { bottom: $v-edge; left: $v-edge; flex-direction: column-reverse; }
+    &.velkio-at-center       { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+}
+
+// ── CARD ─────────────────────────────────────────────
+.velkio-popup {
+    --v-a: #2563eb;
+    --v-radius: 16px;
+    --v-shadow: 0 1px 2px rgba(15, 23, 42, 0.06),
+                0 12px 24px -8px rgba(15, 23, 42, 0.18),
+                0 32px 56px -16px rgba(15, 23, 42, 0.22);
+    --v-surface: rgba(255, 255, 255, 0.88);
+    --v-border: rgba(255, 255, 255, 0.72);
+    --v-title: #{$v-ink};
+    --v-text: #334155;
+    --v-soft: rgba(15, 23, 42, 0.055);
+
+    position: relative;
+    pointer-events: auto;
+    display: flex;
+    border-radius: var(--v-radius);
+    background: var(--v-surface);
+    border: 1px solid var(--v-border);
+    box-shadow: var(--v-shadow);
+    transform-origin: top right;
+    transition: transform 0.25s $v-ease, box-shadow 0.25s $v-ease;
+
+    &:hover { transform: translateY(-2px); }
+
+    &.is-leaving {
+        animation: velkioOut 0.22s cubic-bezier(0.4, 0, 1, 1) forwards;
+        pointer-events: none;
+    }
+
+    // ── surfaces the administrator can pick ──
+    &.velkio-surface-glass {
+        backdrop-filter: blur(22px) saturate(180%);
+        -webkit-backdrop-filter: blur(22px) saturate(180%);
+    }
+    &.velkio-surface-solid {
+        --v-surface: #ffffff;
+        --v-border: rgba(15, 23, 42, 0.08);
+    }
+    &.velkio-surface-gradient {
+        --v-surface: linear-gradient(135deg,
+            color-mix(in srgb, var(--v-a) 10%, #fff) 0%, #fff 62%);
+        --v-border: color-mix(in srgb, var(--v-a) 22%, transparent);
+    }
+
+    // ── entrance animations ──
+    &.velkio-anim-slide  { animation: velkioSlide 0.44s $v-ease both; }
+    &.velkio-anim-fade   { animation: velkioFade 0.32s ease both; }
+    &.velkio-anim-zoom   { animation: velkioZoom 0.36s $v-ease both; }
+    &.velkio-anim-bounce { animation: velkioBounce 0.62s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+    &.velkio-anim-none   { animation: none; }
+
+    // ── dark, chosen explicitly by the style ──
+    &.velkio-dark {
+        --v-surface: rgba(23, 31, 46, 0.94);
+        --v-border: rgba(255, 255, 255, 0.09);
+        --v-title: #f1f5f9;
+        --v-text: #cbd5e1;
+        --v-soft: rgba(255, 255, 255, 0.08);
+
+        &.velkio-surface-solid { --v-surface: #171f2e; }
+        &.velkio-surface-gradient {
+            --v-surface: linear-gradient(135deg,
+                color-mix(in srgb, var(--v-a) 26%, #171f2e) 0%, #171f2e 62%);
+        }
+        .velkio-x:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+        .velkio-snooze-menu { background: #1b2333; border-color: rgba(255, 255, 255, 0.1); }
+        .velkio-snooze-option { color: #cbd5e1; }
+        .velkio-progress { background: rgba(255, 255, 255, 0.1); }
+    }
+
+    // ── denser layout ──
+    &.velkio-compact {
+        .velkio-main { padding: 10px 11px 8px 10px; }
+        .velkio-badge { flex-basis: 26px; height: 26px; font-size: 12px; border-radius: 8px; }
+        .velkio-title { font-size: 13px; }
+        .velkio-body { margin: 6px 0 0 0; font-size: 12px; max-height: 130px; }
+        .velkio-foot { margin: 8px 0 0 0; }
+        .velkio-ack-note { margin: 6px 0 0 0; }
+        .velkio-btn { padding: 4px 10px; font-size: 11px; }
+    }
+}
+
+// Only "auto" leaves both classes off, so the device decides.
+@media (prefers-color-scheme: dark) {
+    .velkio-popup:not(.velkio-light):not(.velkio-dark) {
+        --v-surface: rgba(23, 31, 46, 0.94);
+        --v-border: rgba(255, 255, 255, 0.09);
+        --v-title: #f1f5f9;
+        --v-text: #cbd5e1;
+        --v-soft: rgba(255, 255, 255, 0.08);
+
+        .velkio-snooze-menu { background: #1b2333; border-color: rgba(255, 255, 255, 0.1); }
+        .velkio-snooze-option { color: #cbd5e1; }
+        .velkio-progress { background: rgba(255, 255, 255, 0.1); }
+    }
+}
+
+// The coloured edge. It rounds itself, because clipping the whole card would
+// cut off the snooze menu.
+.velkio-edge {
+    flex: 0 0 4px;
+    border-radius: var(--v-radius) 0 0 var(--v-radius);
+    background: linear-gradient(180deg, var(--v-a),
+        color-mix(in srgb, var(--v-a) 45%, #fff));
+}
+
+.velkio-main {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 14px 10px 13px;
+}
+
+// ── HEAD ─────────────────────────────────────────────
+.velkio-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.velkio-badge {
+    flex: 0 0 34px;
+    height: 34px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 15px;
+    background: linear-gradient(135deg, var(--v-a),
+        color-mix(in srgb, var(--v-a) 55%, #fff));
+    box-shadow: 0 4px 12px -3px var(--v-a);
+
+    .velkio-level-urgent & { animation: velkioGlow 1.8s ease-in-out infinite; }
+}
+
+.velkio-heading {
+    flex: 1;
+    min-width: 0;
+    padding-top: 1px;
+
+    .velkio-from {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: $v-muted;
+    }
+
+    .velkio-chip {
+        padding: 1px 7px;
+        border-radius: 999px;
+        font-size: 9px;
+        letter-spacing: 0.05em;
+        color: var(--v-a);
+        background: color-mix(in srgb, var(--v-a) 12%, transparent);
+        border: 1px solid color-mix(in srgb, var(--v-a) 24%, transparent);
+    }
+
+    .velkio-title {
+        display: block;
+        margin-top: 3px;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.32;
+        color: var(--v-title);
+        letter-spacing: -0.01em;
+    }
+}
+
+.velkio-x {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+
+    &:hover { background: var(--v-soft); color: var(--v-title); }
+    &:disabled { opacity: 0.35; cursor: default; }
+}
+
+// ── BODY ─────────────────────────────────────────────
+.velkio-body {
+    margin: 9px 0 0 45px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--v-text);
+    max-height: 190px;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+
+    p:last-child { margin-bottom: 0; }
+    img { max-width: 100%; height: auto; border-radius: 8px; }
+    a { color: var(--v-a); font-weight: 600; }
+
+    &::-webkit-scrollbar { width: 5px; }
+    &::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.45); border-radius: 4px; }
+}
+
+// ── FOOT ─────────────────────────────────────────────
+.velkio-foot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0 0 45px;
+    flex-wrap: wrap;
+}
+
+.velkio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 9px;
+    padding: 6px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s $v-ease;
+
+    &:disabled { opacity: 0.5; cursor: default; }
+    &:active:not(:disabled) { transform: scale(0.97); }
+}
+
+.velkio-btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--v-a),
+        color-mix(in srgb, var(--v-a) 60%, #fff));
+    box-shadow: 0 4px 12px -3px var(--v-a);
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.06);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px -3px var(--v-a);
+    }
+}
+
+.velkio-btn-ghost {
+    color: var(--v-text);
+    background: var(--v-soft);
+
+    &:hover:not(:disabled) { filter: brightness(0.96); color: var(--v-title); }
+}
+
+.velkio-caret { font-size: 11px; opacity: 0.7; }
+
+.velkio-timer {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
+// ── SNOOZE MENU ──────────────────────────────────────
+.velkio-snooze {
+    position: relative;
+
+    .velkio-snooze-menu {
+        position: absolute;
+        top: calc(100% + 6px);
+        bottom: auto;
+        left: 0;
+        min-width: 148px;
+        padding: 5px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        box-shadow: 0 10px 28px -6px rgba(15, 23, 42, 0.26);
+        z-index: 5;
+        animation: velkioMenu 0.18s $v-ease both;
+    }
+
+    .velkio-snooze-option {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: 100%;
+        padding: 7px 11px;
+        border: none;
+        border-radius: 8px;
+        background: none;
+        font-size: 12px;
+        font-weight: 500;
+        color: #334155;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.14s ease;
+
+        i { color: #94a3b8; font-size: 11px; }
+        &:hover {
+            background: color-mix(in srgb, var(--v-a) 10%, transparent);
+            color: var(--v-a);
+            i { color: var(--v-a); }
+        }
+    }
+}
+
+// ── ACKNOWLEDGEMENT NOTE ─────────────────────────────
+// Shown only when the cross is withheld, so nobody hunts for a way out.
+.velkio-ack-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin: 9px 0 0 45px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: $v-muted;
+
+    i { font-size: 10px; opacity: 0.75; }
+    b { font-weight: 700; color: var(--v-title); }
+}
+
+// ── PROGRESS ─────────────────────────────────────────
+.velkio-progress {
+    position: absolute;
+    bottom: 0;
+    left: 4px;
+    right: 0;
+    height: 3px;
+    background: rgba(15, 23, 42, 0.06);
+    border-radius: 0 0 var(--v-radius) 0;
+    overflow: hidden;
+
+    .velkio-progress-fill {
+        display: block;
+        height: 100%;
+        width: 100%;
+        transform-origin: left;
+        background: linear-gradient(90deg, var(--v-a),
+            color-mix(in srgb, var(--v-a) 45%, #fff));
+        animation: velkioCountdown linear forwards;
+    }
+}
+
+// ── THE TRAY UNDER THE STACK ─────────────────────────
+// Holds the "more waiting" count and the clear-everything button, so the two
+// sit on one line instead of stacking further down the screen.
+.velkio-tray {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-end;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+// A bottom-anchored stack is reversed, so the tray has to lead rather than
+// trail or it would sit above the cards.
+.velkio-at-bottom-right .velkio-tray,
+.velkio-at-bottom-left .velkio-tray { order: -1; }
+
+// ── OVERFLOW CHIP ────────────────────────────────────
+.velkio-more {
+    pointer-events: auto;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 13px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(15, 23, 42, 0.86);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.4);
+    transition: transform 0.16s ease, background 0.16s ease;
+
+    &:hover { transform: translateY(-1px); background: rgba(15, 23, 42, 0.95); }
+    .fa-arrow-right { font-size: 9px; opacity: 0.7; }
+
+    .velkio-more-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #38bdf8;
+        animation: velkioBlink 1.6s ease-in-out infinite;
+    }
+}
+
+// ── APP TILE BADGE ───────────────────────────────────
+// The waiting count on the app's own icon, so it is visible from the home
+// screen before opening anything.
+//
+// The tile is rendered by the web client, not by this module, so the count is
+// carried in a CSS custom property that the service keeps up to date and drawn
+// as a pseudo-element. Nothing is inserted into a DOM that OWL owns, and the
+// rules simply match nothing on a build without a home menu.
+//
+// --velkio-badge holds a quoted number, or `none`, which stops the
+// pseudo-element being generated at all when there is nothing waiting.
+@mixin velkio-tile-badge {
+    content: var(--velkio-badge, none);
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 2;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    background: linear-gradient(135deg, #dc2626, #fb7185);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px -1px rgba(220, 38, 38, 0.65);
+    pointer-events: none;
+}
+
+// Enterprise home screen.
+//
+// The icon is a fixed 70px square, centred in the tile under the tile's own
+// padding, so the badge can be pinned to its top-right corner rather than to
+// the corner of the much wider tile.
+.o_home_menu a.o_app[data-menu-xmlid="velkio_reminders_notification.menu_velkio_root"] {
+    position: relative;
+
+    &::after {
+        @include velkio-tile-badge;
+        top: 8px;                     // the tile's p-md-2
+        right: auto;
+        left: calc(50% + 35px);       // half the 70px icon
+        transform: translate(-35%, -35%);
+    }
+
+    // Below md the tile drops to p-1.
+    @media (max-width: 767.98px) {
+        &::after { top: 4px; }
+    }
+}
+
+// Community apps dropdown.
+.o_navbar_apps_menu .dropdown-item[data-menu-xmlid="velkio_reminders_notification.menu_velkio_root"] {
+    position: relative;
+
+    &::after {
+        @include velkio-tile-badge;
+        top: 50%;
+        right: 8px;
+        margin-top: -10px;
+        border-width: 0;
+    }
+}
+
+// ── CLEAR EVERYTHING ─────────────────────────────────
+// Quieter than the count chip beside it: dismissing the lot should be easy to
+// reach but never the thing the eye lands on first.
+.velkio-clear {
+    pointer-events: auto;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 13px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #f1f5f9;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    transition: transform 0.16s ease, background 0.16s ease, color 0.16s ease;
+
+    i { font-size: 11px; opacity: 0.8; }
+
+    &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        background: rgba(15, 23, 42, 0.86);
+        color: #fff;
+    }
+    &:disabled { opacity: 0.55; cursor: default; }
+}
+
+// ── SYSTRAY ──────────────────────────────────────────
+.velkio-systray {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    cursor: pointer;
+
+    .fa-bell { font-size: 17px; }
+
+    .velkio-systray-badge {
+        position: absolute;
+        top: 1px;
+        right: 4px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        font-size: 9px;
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        background: linear-gradient(135deg, #dc2626, #fb7185);
+        box-shadow: 0 1px 3px rgba(220, 38, 38, 0.45);
+        animation: velkioPop 0.35s $v-ease;
+    }
+}
+
+// ── ANIMATIONS ───────────────────────────────────────
+@keyframes velkioSlide {
+    0%   { opacity: 0; transform: translateX(46px) scale(0.94); }
+    60%  { opacity: 1; transform: translateX(-4px) scale(1.006); }
+    100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes velkioFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes velkioZoom {
+    from { opacity: 0; transform: scale(0.86); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes velkioBounce {
+    0%   { opacity: 0; transform: translateY(-28px) scale(0.9); }
+    55%  { opacity: 1; transform: translateY(6px) scale(1.02); }
+    75%  { transform: translateY(-3px) scale(0.995); }
+    100% { transform: translateY(0) scale(1); }
+}
+@keyframes velkioOut {
+    from { opacity: 1; transform: translateX(0) scale(1); max-height: 340px; margin-bottom: 0; }
+    to   { opacity: 0; transform: translateX(44px) scale(0.94); max-height: 0; margin-bottom: -#{$v-gap}; }
+}
+@keyframes velkioMenu {
+    from { opacity: 0; transform: translateY(6px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes velkioCountdown {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+}
+@keyframes velkioGlow {
+    0%, 100% { box-shadow: 0 4px 12px -3px var(--v-a); }
+    50%      { box-shadow: 0 4px 18px 0 var(--v-a); }
+}
+@keyframes velkioBlink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.35; }
+}
+@keyframes velkioPop {
+    from { transform: scale(0); }
+    to   { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .velkio-popup,
+    .velkio-popup.is-leaving,
+    .velkio-badge,
+    .velkio-progress-fill,
+    .velkio-more-dot,
+    .velkio-systray-badge {
+        animation: none !important;
+    }
+    .velkio-popup:hover { transform: none; }
+}
+
+@media (max-width: 480px) {
+    .velkio-stack {
+        left: 10px !important;
+        right: 10px !important;
+        width: auto;
+        max-width: none;
+        transform: none !important;
+    }
+    .velkio-body,
+    .velkio-foot,
+    .velkio-ack-note { margin-left: 0; }
+}
+
+// ════════════════════════════════════════════════════
+// HERO LAYOUT — the big reminder card
+// ════════════════════════════════════════════════════
+.velkio-popup {
+    display: block;
+    padding: 26px 28px 22px;
+    text-align: center;
+
+    // A soft halo behind the card, in the accent colour.
+    &::before {
+        content: "";
+        position: absolute;
+        top: -46%;
+        left: 50%;
+        width: 78%;
+        height: 145%;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background: radial-gradient(closest-side,
+            color-mix(in srgb, var(--v-a) 14%, transparent), transparent 72%);
+        pointer-events: none;
+    }
+
+    .velkio-main { padding: 0; position: relative; }
+    .velkio-head { display: block; }
+    .velkio-heading { padding: 0; }
+
+    .velkio-from {
+        justify-content: center;
+        margin-bottom: 6px;
+    }
+
+    .velkio-title {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1.16;
+        letter-spacing: -0.025em;
+    }
+
+    .velkio-body {
+        margin: 10px auto 0;
+        max-width: 340px;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--v-text);
+        text-align: center;
+    }
+
+    .velkio-ack-note { margin: 12px 0 0; }
+
+    .velkio-foot {
+        position: relative;
+        margin: 20px 0 0;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .velkio-btn {
+        min-width: 128px;
+        justify-content: center;
+        padding: 11px 22px;
+        font-size: 14px;
+        border-radius: 999px;
+    }
+
+    .velkio-btn-ghost {
+        color: var(--v-a);
+        background: color-mix(in srgb, var(--v-a) 9%, transparent);
+        &:hover:not(:disabled) {
+            background: color-mix(in srgb, var(--v-a) 16%, transparent);
+            color: var(--v-a);
+        }
+    }
+
+    .velkio-timer {
+        position: absolute;
+        top: 16px;
+        left: 18px;
+        margin: 0;
+        padding: 2px 9px;
+        border-radius: 999px;
+        color: #64748b;
+        background: rgba(148, 163, 184, 0.18);
+        pointer-events: none;
+    }
+
+    .velkio-snooze {
+        position: relative;
+        // Centred under the button. Only one of top/bottom may be set, or the
+        // panel is stretched between the two and loses its height.
+        .velkio-snooze-menu {
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            top: calc(100% + 10px);
+            bottom: auto;
+            z-index: 20;
+        }
+    }
+
+    // The round red close button of the reference design.
+    .velkio-x {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 13px;
+        background: linear-gradient(135deg, #ef4444, #f87171);
+        box-shadow: 0 4px 12px -3px rgba(239, 68, 68, 0.75);
+        &:hover { filter: brightness(1.08); transform: scale(1.06); background: linear-gradient(135deg, #ef4444, #f87171); }
+    }
+
+    .velkio-progress { left: 0; border-radius: 0 0 var(--v-radius) var(--v-radius); }
+}
+
+// ── THE BELL ─────────────────────────────────────────
+.velkio-bell {
+    position: relative;
+    width: 96px;
+    height: 84px;
+    margin: 2px auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .velkio-bell-icon {
+        font-size: 54px;
+        line-height: 1;
+        background: linear-gradient(160deg, #fcd34d 0%, #f59e0b 55%, #ea9006 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 8px 14px rgba(245, 158, 11, 0.45));
+        transform-origin: top center;
+        animation: velkioRing 2.6s ease-in-out 0.35s infinite;
+    }
+
+    .velkio-bell-glow {
+        position: absolute;
+        inset: 8px 14px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side,
+            color-mix(in srgb, var(--v-a) 22%, transparent), transparent 70%);
+        animation: velkioHalo 2.6s ease-in-out infinite;
+    }
+
+    .velkio-bell-badge {
+        position: absolute;
+        top: 2px;
+        right: 16px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 800;
+        color: #fff;
+        background: linear-gradient(135deg, #ef4444, #f87171);
+        box-shadow: 0 3px 9px -2px rgba(239, 68, 68, 0.8);
+        animation: velkioBadgeBeat 1.7s ease-in-out infinite;
+    }
+
+    // The little "ringing" strokes either side of the bell.
+    .velkio-bell-ring {
+        position: absolute;
+        top: 26px;
+        width: 13px;
+        height: 3px;
+        border-radius: 3px;
+        background: #f59e0b;
+        opacity: 0.85;
+        animation: velkioRingWave 2.6s ease-in-out 0.35s infinite;
+    }
+    .velkio-bell-ring-l { left: 0; transform: rotate(-24deg); }
+    .velkio-bell-ring-r { right: 0; transform: rotate(24deg); }
+}
+
+// ── FLOATING DOTS ────────────────────────────────────
+.velkio-popup .velkio-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: #fbbf24;
+    opacity: 0.65;
+    pointer-events: none;
+    animation: velkioFloat 5s ease-in-out infinite;
+}
+.velkio-popup .velkio-dot-1 { width: 11px; height: 11px; top: 20px; left: 26px; }
+.velkio-popup .velkio-dot-2 { width: 7px;  height: 7px;  top: 74px; left: 14px; animation-delay: .7s; }
+.velkio-popup .velkio-dot-3 { width: 9px;  height: 9px;  bottom: 30px; right: 30px; animation-delay: 1.4s; }
+.velkio-popup .velkio-dot-4 { width: 6px;  height: 6px;  bottom: 60px; left: 34px; animation-delay: 2.1s; }
+
+// ── SYSTEM NOTIFICATION OFFER ────────────────────────
+.velkio-desktop-ask {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 14px;
+    padding: 5px 12px;
+    border: 1px dashed color-mix(in srgb, var(--v-a) 40%, transparent);
+    border-radius: 999px;
+    background: none;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--v-a);
+    cursor: pointer;
+    transition: background 0.16s ease;
+
+    &:hover { background: color-mix(in srgb, var(--v-a) 10%, transparent); }
+}
+
+// ── HERO ANIMATIONS ──────────────────────────────────
+@keyframes velkioDrop {
+    0%   { opacity: 0; transform: translateY(-70px) scale(0.9); }
+    62%  { opacity: 1; transform: translateY(10px) scale(1.015); }
+    82%  { transform: translateY(-4px) scale(0.998); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.velkio-popup.velkio-anim-drop { animation: velkioDrop 0.62s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+
+@keyframes velkioRing {
+    0%, 62%, 100% { transform: rotate(0deg); }
+    66% { transform: rotate(13deg); }
+    70% { transform: rotate(-11deg); }
+    74% { transform: rotate(8deg); }
+    78% { transform: rotate(-6deg); }
+    82% { transform: rotate(3deg); }
+}
+@keyframes velkioRingWave {
+    0%, 62%, 100% { opacity: 0; transform: scale(0.7) rotate(var(--r, 0deg)); }
+    68%, 80% { opacity: 0.9; }
+}
+@keyframes velkioHalo {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.09); }
+}
+@keyframes velkioBadgeBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+@keyframes velkioFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .velkio-bell-icon, .velkio-bell-glow, .velkio-bell-badge,
+    .velkio-bell-ring, .velkio-popup .velkio-dot {
+        animation: none !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .velkio-popup {
+        padding: 22px 18px 18px;
+        .velkio-title { font-size: 23px; }
+        .velkio-btn { min-width: 0; flex: 1; }
+    }
+}
+
+// ── ADDITIONAL ENTRANCES ─────────────────────────────
+@keyframes velkioRise {
+    0%   { opacity: 0; transform: translateY(46px) scale(0.94); }
+    60%  { opacity: 1; transform: translateY(-5px) scale(1.008); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes velkioPop {
+    0%   { opacity: 0; transform: scale(0.55); }
+    55%  { opacity: 1; transform: scale(1.06); }
+    78%  { transform: scale(0.98); }
+    100% { transform: scale(1); }
+}
+@keyframes velkioFlip {
+    0%   { opacity: 0; transform: perspective(1200px) rotateX(-72deg); }
+    58%  { opacity: 1; transform: perspective(1200px) rotateX(12deg); }
+    80%  { transform: perspective(1200px) rotateX(-5deg); }
+    100% { transform: perspective(1200px) rotateX(0); }
+}
+
+.velkio-popup {
+    &.velkio-anim-rise { animation: velkioRise 0.5s $v-ease both; }
+    &.velkio-anim-pop  { animation: velkioPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+    &.velkio-anim-flip {
+        transform-origin: top center;
+        animation: velkioFlip 0.62s cubic-bezier(0.3, 1.2, 0.4, 1) both;
+    }
+}
+
+// ── HERO ON GLASS ────────────────────────────────────
+// The frosted surface needs a stronger halo to read against a busy screen.
+.velkio-popup.velkio-surface-glass {
+    &::before {
+        background: radial-gradient(closest-side,
+            color-mix(in srgb, var(--v-a) 24%, transparent), transparent 74%);
+    }
+}
+
+// ── HERO IN DARK ─────────────────────────────────────
+// A rim of accent light, so the card lifts off a dark desktop.
+.velkio-popup.velkio-dark {
+    border-color: color-mix(in srgb, var(--v-a) 34%, transparent);
+    box-shadow:
+        var(--v-shadow),
+        0 0 0 1px color-mix(in srgb, var(--v-a) 20%, transparent),
+        0 0 42px -12px color-mix(in srgb, var(--v-a) 60%, transparent);
+
+    &::before {
+        background: radial-gradient(closest-side,
+            color-mix(in srgb, var(--v-a) 30%, transparent), transparent 72%);
+    }
+    .velkio-btn-ghost {
+        background: rgba(255, 255, 255, 0.09);
+        color: #e2e8f0;
+        &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); color: #fff; }
+    }
+    .velkio-timer { background: rgba(255, 255, 255, 0.1); color: #cbd5e1; }
+    .velkio-chip {
+        color: #e2e8f0;
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.24);
+    }
+    .velkio-ack-note {
+        color: #94a3b8;
+        b { color: #e2e8f0; }
+    }
+}
+
+// ── SPOTLIGHT (middle of the screen) ─────────────────
+.velkio-at-center .velkio-popup {
+    padding: 32px 34px 26px;
+
+    .velkio-title { font-size: 31px; }
+    .velkio-body { font-size: 14px; max-width: 380px; }
+    .velkio-bell { width: 108px; height: 94px; .velkio-bell-icon { font-size: 62px; } }
+}
+
+// ════════════════════════════════════════════════════
+// DESIGNS
+// Each skin is a different shape, not a recolour: the surface, the icon
+// treatment, the buttons and the spacing all change.
+// ════════════════════════════════════════════════════
+
+// ── 2. SOFT RELIEF ───────────────────────────────────
+// A raised, shadowless-border card with the icon lifted out of the top edge.
+.velkio-popup.velkio-skin-neumorph {
+    background: #eef1f7;
+    border: none;
+    margin-top: 34px;   // room for the icon that sits above the card
+    padding-top: 68px;
+    box-shadow:
+        9px 9px 22px rgba(174, 184, 202, 0.55),
+        -9px -9px 22px rgba(255, 255, 255, 0.95);
+
+    &::before { display: none; }
+    .velkio-dot { display: none; }
+
+    .velkio-bell {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 84px;
+        height: 84px;
+        margin: 0;
+        border-radius: 22px;
+        background: linear-gradient(150deg,
+            color-mix(in srgb, var(--v-a) 25%, #fff), var(--v-a));
+        box-shadow: 0 14px 26px -10px var(--v-a);
+
+        .velkio-bell-glow, .velkio-bell-ring { display: none; }
+        .velkio-bell-icon {
+            font-size: 36px;
+            background: none;
+            -webkit-background-clip: initial;
+            background-clip: initial;
+            color: #fff;
+            filter: none;
+        }
+        .velkio-bell-badge { top: -6px; right: -6px; }
+    }
+
+    .velkio-title { font-size: 25px; }
+    .velkio-body { color: #5b667a; }
+
+    .velkio-foot { gap: 14px; }
+    .velkio-snooze {
+        flex: 1;
+        display: flex;
+        .velkio-btn { width: 100%; justify-content: center; }
+    }
+    .velkio-btn {
+        flex: 1;
+        min-width: 0;
+        justify-content: center;
+        border-radius: 12px;
+        padding: 12px 18px;
+        box-shadow: 0 8px 16px -8px rgba(37, 99, 235, 0.6);
+    }
+    // Both actions are solid here, like a pair of buttons on a dialog.
+    .velkio-btn-ghost {
+        color: #fff;
+        background: linear-gradient(135deg,
+            color-mix(in srgb, var(--v-a) 62%, #94a3b8), color-mix(in srgb, var(--v-a) 30%, #94a3b8));
+        &:hover:not(:disabled) { filter: brightness(1.05); color: #fff; }
+    }
+    .velkio-x { background: #eef1f7; color: #94a3b8;
+        box-shadow: 3px 3px 7px rgba(174,184,202,.6), -3px -3px 7px #fff; }
+}
+
+// ── 3. SOLID ALERT ───────────────────────────────────
+// The whole card takes the level colour. Impossible to scroll past.
+.velkio-popup.velkio-skin-alert_solid {
+    background: linear-gradient(140deg, var(--v-a),
+        color-mix(in srgb, var(--v-a) 72%, #000));
+    border: none;
+    color: #fff;
+
+    &::before { display: none; }
+    .velkio-dot { display: none; }
+
+    .velkio-bell {
+        width: 74px; height: 74px; margin: 4px auto 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.16);
+        border: 2px solid rgba(255, 255, 255, 0.45);
+
+        .velkio-bell-glow, .velkio-bell-ring, .velkio-bell-badge { display: none; }
+        .velkio-bell-icon {
+            font-size: 34px; color: #fff; background: none;
+            -webkit-background-clip: initial; background-clip: initial; filter: none;
+            animation: none;
+        }
+    }
+
+    .velkio-from { color: rgba(255, 255, 255, 0.75); }
+    .velkio-title { color: #fff; font-size: 24px; }
+    .velkio-body { color: rgba(255, 255, 255, 0.88); }
+    .velkio-timer { background: rgba(255, 255, 255, 0.18); color: #fff; }
+    .velkio-chip {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.45);
+    }
+    .velkio-ack-note {
+        color: rgba(255, 255, 255, 0.85);
+        b { color: #fff; }
+    }
+
+    .velkio-btn-primary {
+        background: #fff; color: var(--v-a);
+        box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.5);
+        &:hover:not(:disabled) { background: #f8fafc; color: var(--v-a); filter: none; }
+    }
+    .velkio-btn-ghost {
+        background: transparent; color: #fff;
+        border: 1.5px solid rgba(255, 255, 255, 0.6);
+        &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.14); color: #fff; }
+    }
+    .velkio-x { color: rgba(255, 255, 255, 0.85);
+        &:hover { background: rgba(255, 255, 255, 0.18); color: #fff; } }
+    .velkio-progress { background: rgba(255, 255, 255, 0.25);
+        .velkio-progress-fill { background: #fff; } }
+    .velkio-desktop-ask { color: #fff; border-color: rgba(255,255,255,.5);
+        &:hover { background: rgba(255,255,255,.14); } }
+}
+
+// ── 4 & 5. OUTLINE / DASHED ALERT ────────────────────
+.velkio-popup.velkio-skin-alert_outline,
+.velkio-popup.velkio-skin-alert_dashed {
+    background: #fff;
+    border: 2px solid var(--v-a);
+
+    &::before { display: none; }
+    .velkio-dot { display: none; }
+
+    .velkio-bell {
+        width: 68px; height: 68px; margin: 2px auto 10px;
+        border-radius: 50%;
+        border: 2px solid var(--v-a);
+
+        .velkio-bell-glow, .velkio-bell-ring, .velkio-bell-badge { display: none; }
+        .velkio-bell-icon {
+            font-size: 30px; background: none; color: var(--v-a);
+            -webkit-background-clip: initial; background-clip: initial;
+            filter: none; animation: none;
+        }
+    }
+
+    .velkio-title { color: var(--v-a); font-size: 23px; }
+    .velkio-body { color: #64748b; }
+
+    .velkio-btn-primary {
+        background: none; color: var(--v-a);
+        border: 1.5px solid var(--v-a); box-shadow: none;
+        &:hover:not(:disabled) {
+            background: var(--v-a); color: #fff; filter: none; transform: none;
+        }
+    }
+    .velkio-btn-ghost { background: none; color: #94a3b8;
+        &:hover:not(:disabled) { background: #f1f5f9; color: #475569; } }
+    .velkio-x {
+        background: none;
+        color: var(--v-a);
+        box-shadow: none;
+        border: 1.5px solid color-mix(in srgb, var(--v-a) 45%, transparent);
+        &:hover {
+            background: color-mix(in srgb, var(--v-a) 12%, transparent);
+            color: var(--v-a);
+            transform: none;
+        }
+    }
+}
+
+.velkio-popup.velkio-skin-alert_dashed {
+    border-style: dashed;
+    .velkio-bell { border-style: dashed; }
+    .velkio-btn-primary { border-style: dashed; }
+}
+
+// ── 6. STRIP ─────────────────────────────────────────
+// A compact bar: icon on the left, message in the middle, actions on the right.
+.velkio-popup.velkio-skin-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    text-align: left;
+
+    &::before { display: none; }
+    .velkio-dot { display: none; }
+
+    .velkio-bell {
+        flex: 0 0 42px;
+        width: 42px; height: 42px; margin: 0;
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--v-a) 20%, transparent);
+
+        .velkio-bell-glow, .velkio-bell-ring, .velkio-bell-badge { display: none; }
+        .velkio-bell-icon {
+            font-size: 19px; background: none; color: var(--v-a);
+            -webkit-background-clip: initial; background-clip: initial;
+            filter: none; animation: none;
+        }
+    }
+
+    .velkio-main { flex: 1; min-width: 0; padding: 0; text-align: left; }
+    .velkio-from { justify-content: flex-start; margin-bottom: 2px; }
+    .velkio-title { font-size: 14.5px; }
+    .velkio-body {
+        margin: 2px 0 0;
+        max-width: none;
+        font-size: 12.5px;
+        text-align: left;
+        max-height: 42px;
+        overflow: hidden;
+    }
+
+    .velkio-foot {
+        margin: 8px 0 0;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    .velkio-ack-note { margin: 6px 0 0; justify-content: flex-start; }
+    .velkio-btn { min-width: 0; padding: 5px 12px; font-size: 12px; border-radius: 8px; }
+    .velkio-x { top: 10px; right: 10px; width: 24px; height: 24px; font-size: 11px;
+        background: transparent; box-shadow: none; }
+    .velkio-desktop-ask { display: none; }
+}
+
+
+// ── COUNTDOWN + MENU PER DESIGN ──────────────────────
+// The alert designs put the counter on the right, away from the icon ring.
+.velkio-popup.velkio-skin-alert_solid,
+.velkio-popup.velkio-skin-alert_outline,
+.velkio-popup.velkio-skin-alert_dashed {
+    .velkio-timer { left: auto; right: 56px; }
+}
+
+// The strip is one line, so the counter rides at the far right of the bar.
+.velkio-popup.velkio-skin-strip {
+    .velkio-timer {
+        top: 50%;
+        left: auto;
+        right: 38px;
+        transform: translateY(-50%);
+    }
+    .velkio-snooze .velkio-snooze-menu {
+        left: 0;
+        transform: none;
+        top: calc(100% + 8px);
+        bottom: auto;
+    }
+}
+
+// Soft Relief hides the counter: the design has no room for it.
+.velkio-popup.velkio-skin-neumorph .velkio-timer { display: none; }
+
+// The menu must always sit above the card it belongs to.
+.velkio-snooze-menu { z-index: 20; }
+
+// Anchored to the bottom edge there is no room underneath, so the menu
+// opens upward instead.
+.velkio-stack.velkio-at-bottom-right,
+.velkio-stack.velkio-at-bottom-left {
+    .velkio-popup .velkio-snooze .velkio-snooze-menu {
+        top: auto;
+        bottom: calc(100% + 10px);
+    }
+}

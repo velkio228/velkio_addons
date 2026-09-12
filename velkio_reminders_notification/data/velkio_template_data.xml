@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data noupdate="1">
+
+<!-- ══════════════════════════════════════════════════
+     POPUP STYLES — one default plus a few alternatives
+══════════════════════════════════════════════════ -->
+<record id="style_reminder_card" model="velkio.popup.style">
+    <field name="name">Reminder Card (default)</field>
+    <field name="preset">card</field>
+    <field name="skin">card</field>
+    <field name="is_default" eval="True"/>
+    <field name="position">top-center</field>
+    <field name="width">470</field>
+    <field name="appearance">light</field>
+    <field name="surface">solid</field>
+    <field name="radius">24</field>
+    <field name="shadow">deep</field>
+    <field name="animation">drop</field>
+</record>
+
+<record id="style_neumorph" model="velkio.popup.style">
+    <field name="name">Soft Relief</field>
+    <field name="preset">neumorph</field>
+    <field name="skin">neumorph</field>
+    <field name="position">top-center</field>
+    <field name="width">420</field>
+    <field name="appearance">light</field>
+    <field name="surface">solid</field>
+    <field name="radius">26</field>
+    <field name="shadow">none</field>
+    <field name="animation">pop</field>
+    <field name="show_level_chip" eval="False"/>
+    <field name="show_progress" eval="False"/>
+</record>
+
+<record id="style_alert_solid" model="velkio.popup.style">
+    <field name="name">Solid Alert</field>
+    <field name="preset">alert_solid</field>
+    <field name="skin">alert_solid</field>
+    <field name="position">top-center</field>
+    <field name="width">420</field>
+    <field name="appearance">light</field>
+    <field name="surface">solid</field>
+    <field name="radius">20</field>
+    <field name="shadow">deep</field>
+    <field name="animation">zoom</field>
+    <field name="show_level_chip" eval="False"/>
+</record>
+
+<record id="style_alert_outline" model="velkio.popup.style">
+    <field name="name">Outline Alert</field>
+    <field name="preset">alert_outline</field>
+    <field name="skin">alert_outline</field>
+    <field name="position">top-center</field>
+    <field name="width">420</field>
+    <field name="appearance">light</field>
+    <field name="surface">solid</field>
+    <field name="radius">22</field>
+    <field name="shadow">soft</field>
+    <field name="animation">rise</field>
+    <field name="show_level_chip" eval="False"/>
+    <field name="show_progress" eval="False"/>
+</record>
+
+<record id="style_alert_dashed" model="velkio.popup.style">
+    <field name="name">Dashed Alert</field>
+    <field name="preset">alert_dashed</field>
+    <field name="skin">alert_dashed</field>
+    <field name="position">top-center</field>
+    <field name="width">420</field>
+    <field name="appearance">light</field>
+    <field name="surface">solid</field>
+    <field name="radius">22</field>
+    <field name="shadow">none</field>
+    <field name="animation">flip</field>
+    <field name="show_level_chip" eval="False"/>
+    <field name="show_progress" eval="False"/>
+</record>
+
+<record id="style_strip" model="velkio.popup.style">
+    <field name="name">Strip</field>
+    <field name="preset">strip</field>
+    <field name="skin">strip</field>
+    <field name="position">bottom-right</field>
+    <field name="width">460</field>
+    <field name="appearance">dark</field>
+    <field name="surface">solid</field>
+    <field name="radius">14</field>
+    <field name="shadow">deep</field>
+    <field name="animation">slide</field>
+    <field name="show_level_chip" eval="False"/>
+    <field name="compact" eval="True"/>
+</record>
+
+<!-- ══════════════════════════════════════════════════
+     FREE TEMPLATE LIBRARY
+══════════════════════════════════════════════════ -->
+
+<!-- Personal -->
+<record id="tpl_break" model="velkio.template">
+    <field name="name">Take a break</field>
+    <field name="category">personal</field>
+    <field name="sequence">1</field>
+    <field name="title">Time for a break</field>
+    <field name="body" type="html"><p>Step away from the screen for a few minutes. Stretch, drink some water.</p></field>
+    <field name="level">info</field>
+    <field name="duration">20</field>
+    <field name="lead_minutes">60</field>
+    <field name="color">4</field>
+</record>
+
+<record id="tpl_callback" model="velkio.template">
+    <field name="name">Call someone back</field>
+    <field name="category">personal</field>
+    <field name="sequence">2</field>
+    <field name="title">Call back</field>
+    <field name="body" type="html"><p>You said you would call back about this. Now is the time.</p></field>
+    <field name="level">info</field>
+    <field name="duration">30</field>
+    <field name="lead_minutes">30</field>
+    <field name="color">4</field>
+</record>
+
+<record id="tpl_followup" model="velkio.template">
+    <field name="name">Follow up on a request</field>
+    <field name="category">personal</field>
+    <field name="sequence">3</field>
+    <field name="title">Follow up</field>
+    <field name="body" type="html"><p>No reply yet. Send a gentle nudge or pick up the phone.</p></field>
+    <field name="level">info</field>
+    <field name="duration">30</field>
+    <field name="lead_minutes">1440</field>
+    <field name="color">4</field>
+</record>
+
+<record id="tpl_end_of_day" model="velkio.template">
+    <field name="name">Wrap up the day</field>
+    <field name="category">personal</field>
+    <field name="sequence">4</field>
+    <field name="title">Wrap up for today</field>
+    <field name="body" type="html"><p>Save your work, note where you stopped, and log your hours.</p></field>
+    <field name="level">info</field>
+    <field name="duration">40</field>
+    <field name="lead_minutes">480</field>
+    <field name="color">4</field>
+</record>
+
+<!-- Meetings -->
+<record id="tpl_meeting_soon" model="velkio.template">
+    <field name="name">Meeting starts soon</field>
+    <field name="category">meeting</field>
+    <field name="sequence">10</field>
+    <field name="title">Meeting in 15 minutes</field>
+    <field name="body" type="html"><p>Your meeting starts shortly. Have your notes ready and join on time.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">15</field>
+    <field name="color">1</field>
+</record>
+
+<record id="tpl_standup" model="velkio.template">
+    <field name="name">Daily stand-up</field>
+    <field name="category">meeting</field>
+    <field name="sequence">11</field>
+    <field name="title">Daily stand-up</field>
+    <field name="body" type="html"><p>What did you do yesterday, what will you do today, and is anything blocking you?</p></field>
+    <field name="level">info</field>
+    <field name="duration">30</field>
+    <field name="lead_minutes">5</field>
+    <field name="color">1</field>
+</record>
+
+<record id="tpl_room_change" model="velkio.template">
+    <field name="name">Meeting moved</field>
+    <field name="category">meeting</field>
+    <field name="sequence">12</field>
+    <field name="title">Meeting has moved</field>
+    <field name="body" type="html"><p>The time or the room has changed. Please check the invitation again.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">10</field>
+    <field name="color">1</field>
+</record>
+
+<!-- Deadlines -->
+<record id="tpl_deadline_today" model="velkio.template">
+    <field name="name">Deadline today</field>
+    <field name="category">deadline</field>
+    <field name="sequence">20</field>
+    <field name="title">Deadline is today</field>
+    <field name="body" type="html"><p>This is due before the end of the day. Please finish it or say what is holding it up.</p></field>
+    <field name="level">urgent</field>
+    <field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">120</field>
+    <field name="color">2</field>
+</record>
+
+<record id="tpl_deadline_tomorrow" model="velkio.template">
+    <field name="name">Deadline tomorrow</field>
+    <field name="category">deadline</field>
+    <field name="sequence">21</field>
+    <field name="title">Deadline tomorrow</field>
+    <field name="body" type="html"><p>One day left. Now is a good time to check what is still open.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">1440</field>
+    <field name="color">2</field>
+</record>
+
+<record id="tpl_submit_report" model="velkio.template">
+    <field name="name">Submit the report</field>
+    <field name="category">deadline</field>
+    <field name="sequence">22</field>
+    <field name="title">Report due</field>
+    <field name="body" type="html"><p>Please send the report to your manager before the cut-off.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">240</field>
+    <field name="color">2</field>
+</record>
+
+<!-- Finance -->
+<record id="tpl_payment_due" model="velkio.template">
+    <field name="name">Payment due</field>
+    <field name="category">finance</field>
+    <field name="sequence">30</field>
+    <field name="title">Payment is due</field>
+    <field name="body" type="html"><p>An invoice needs to be paid. Please review and process it.</p></field>
+    <field name="level">urgent</field>
+    <field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">60</field>
+    <field name="color">3</field>
+</record>
+
+<record id="tpl_invoice_approval" model="velkio.template">
+    <field name="name">Invoice waiting for approval</field>
+    <field name="category">finance</field>
+    <field name="sequence">31</field>
+    <field name="title">Invoice waiting for you</field>
+    <field name="body" type="html"><p>An invoice is sitting in your approval queue.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">30</field>
+    <field name="color">3</field>
+</record>
+
+<!-- People &amp; HR -->
+<record id="tpl_timesheet" model="velkio.template">
+    <field name="name">Fill in your timesheet</field>
+    <field name="category">hr</field>
+    <field name="sequence">40</field>
+    <field name="title">Timesheet reminder</field>
+    <field name="body" type="html"><p>Please record your hours for this week before it closes.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">60</field>
+    <field name="color">5</field>
+</record>
+
+<record id="tpl_leave_approval" model="velkio.template">
+    <field name="name">Leave request waiting</field>
+    <field name="category">hr</field>
+    <field name="sequence">41</field>
+    <field name="title">Leave request to approve</field>
+    <field name="body" type="html"><p>Someone is waiting on your decision for a time-off request.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">30</field>
+    <field name="color">5</field>
+</record>
+
+<record id="tpl_birthday" model="velkio.template">
+    <field name="name">Birthday today</field>
+    <field name="category">hr</field>
+    <field name="sequence">42</field>
+    <field name="title">A birthday today</field>
+    <field name="body" type="html"><p>Someone on the team is celebrating. Do not forget to wish them well.</p></field>
+    <field name="level">info</field>
+    <field name="duration">30</field>
+    <field name="lead_minutes">60</field>
+    <field name="color">5</field>
+</record>
+
+<record id="tpl_training" model="velkio.template">
+    <field name="name">Training session</field>
+    <field name="category">hr</field>
+    <field name="sequence">43</field>
+    <field name="title">Training starts soon</field>
+    <field name="body" type="html"><p>Your training session begins shortly. Bring anything you were asked to prepare.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">30</field>
+    <field name="color">5</field>
+</record>
+
+<!-- IT &amp; maintenance -->
+<record id="tpl_maintenance" model="velkio.template">
+    <field name="name">Scheduled maintenance</field>
+    <field name="category">it</field>
+    <field name="sequence">50</field>
+    <field name="title">Maintenance window starting</field>
+    <field name="body" type="html"><p>The system will be unavailable for a while. Please <strong>save your work</strong> and close open forms.</p></field>
+    <field name="level">urgent</field>
+    <field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">30</field>
+    <field name="color">9</field>
+</record>
+
+<record id="tpl_deploy" model="velkio.template">
+    <field name="name">New version going live</field>
+    <field name="category">it</field>
+    <field name="sequence">51</field>
+    <field name="title">Update going live</field>
+    <field name="body" type="html"><p>A new version is being released. Refresh your browser once it is done.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="lead_minutes">15</field>
+    <field name="color">9</field>
+</record>
+
+<record id="tpl_backup" model="velkio.template">
+    <field name="name">Backup check</field>
+    <field name="category">it</field>
+    <field name="sequence">52</field>
+    <field name="title">Check last night's backup</field>
+    <field name="body" type="html"><p>Confirm the backup finished and the file is where it should be.</p></field>
+    <field name="level">info</field>
+    <field name="duration">40</field>
+    <field name="lead_minutes">480</field>
+    <field name="color">9</field>
+</record>
+
+<record id="tpl_password" model="velkio.template">
+    <field name="name">Password expiring</field>
+    <field name="category">it</field>
+    <field name="sequence">53</field>
+    <field name="title">Your password expires soon</field>
+    <field name="body" type="html"><p>Change it before it expires, so you are not locked out.</p></field>
+    <field name="level">warning</field>
+    <field name="duration">60</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">1440</field>
+    <field name="color">9</field>
+</record>
+
+<!-- Health &amp; safety -->
+<record id="tpl_safety_drill" model="velkio.template">
+    <field name="name">Safety drill</field>
+    <field name="category">safety</field>
+    <field name="sequence">60</field>
+    <field name="title">Safety drill starting</field>
+    <field name="body" type="html"><p>A drill is about to begin. Follow the instructions from the floor wardens.</p></field>
+    <field name="level">urgent</field>
+    <field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">15</field>
+    <field name="color">2</field>
+</record>
+
+<record id="tpl_safety_notice" model="velkio.template">
+    <field name="name">Safety notice</field>
+    <field name="category">safety</field>
+    <field name="sequence">61</field>
+    <field name="title">Please read this safety notice</field>
+    <field name="body" type="html"><p>A new instruction has been issued. Read it and confirm you have understood.</p></field>
+    <field name="level">urgent</field>
+    <field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">10</field>
+    <field name="color">2</field>
+</record>
+
+<!-- ── SALES & CRM ─────────────────────────────────── -->
+<record id="tpl_quote_expiring" model="velkio.template">
+    <field name="name">Quotation about to expire</field>
+    <field name="category">sales</field><field name="sequence">70</field>
+    <field name="title">Quotation expires soon</field>
+    <field name="body" type="html"><p>This quotation runs out shortly. Confirm it, extend it, or let the customer know.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">1440</field><field name="color">6</field>
+</record>
+
+<record id="tpl_lead_followup" model="velkio.template">
+    <field name="name">Follow up a lead</field>
+    <field name="category">sales</field><field name="sequence">71</field>
+    <field name="title">Time to follow up this lead</field>
+    <field name="body" type="html"><p>It has been quiet for a while. A short call now keeps the deal moving.</p></field>
+    <field name="level">info</field><field name="duration">30</field>
+    <field name="lead_minutes">1440</field><field name="color">6</field>
+</record>
+
+<record id="tpl_customer_callback" model="velkio.template">
+    <field name="name">Promised call to a customer</field>
+    <field name="category">sales</field><field name="sequence">72</field>
+    <field name="title">You promised a call today</field>
+    <field name="body" type="html"><p>Ring the customer back as agreed, before the day runs out.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">120</field><field name="color">6</field>
+</record>
+
+<record id="tpl_contract_renewal" model="velkio.template">
+    <field name="name">Contract up for renewal</field>
+    <field name="category">sales</field><field name="sequence">73</field>
+    <field name="title">Contract renewal due</field>
+    <field name="body" type="html"><p>The agreement ends soon. Start the renewal conversation now.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">1440</field><field name="color">6</field>
+</record>
+
+<!-- ── PURCHASE & STOCK ────────────────────────────── -->
+<record id="tpl_po_approval" model="velkio.template">
+    <field name="name">Purchase order to approve</field>
+    <field name="category">purchase</field><field name="sequence">80</field>
+    <field name="title">Purchase order waiting for approval</field>
+    <field name="body" type="html"><p>A purchase order is sitting in your approval queue and is holding up the buyer.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">60</field><field name="color">10</field>
+</record>
+
+<record id="tpl_delivery_due" model="velkio.template">
+    <field name="name">Delivery expected today</field>
+    <field name="category">purchase</field><field name="sequence">81</field>
+    <field name="title">Delivery expected today</field>
+    <field name="body" type="html"><p>Goods are due in. Have the receiving area and paperwork ready.</p></field>
+    <field name="level">info</field><field name="duration">40</field>
+    <field name="lead_minutes">120</field><field name="color">10</field>
+</record>
+
+<record id="tpl_stock_count" model="velkio.template">
+    <field name="name">Stock count</field>
+    <field name="category">purchase</field><field name="sequence">82</field>
+    <field name="title">Stock count starts soon</field>
+    <field name="body" type="html"><p>Please stop moving stock and get ready to count.</p></field>
+    <field name="level">urgent</field><field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">30</field><field name="color">10</field>
+</record>
+
+<record id="tpl_reorder" model="velkio.template">
+    <field name="name">Low stock to reorder</field>
+    <field name="category">purchase</field><field name="sequence">83</field>
+    <field name="title">Stock running low</field>
+    <field name="body" type="html"><p>Some items are below their reorder level. Raise the purchase orders.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">60</field><field name="color">10</field>
+</record>
+
+<!-- ── PROJECTS & SUPPORT ──────────────────────────── -->
+<record id="tpl_task_due" model="velkio.template">
+    <field name="name">Task due today</field>
+    <field name="category">project</field><field name="sequence">90</field>
+    <field name="title">Your task is due today</field>
+    <field name="body" type="html"><p>Finish it, or move the date and say why so the plan stays honest.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">240</field><field name="color">7</field>
+</record>
+
+<record id="tpl_sla_breach" model="velkio.template">
+    <field name="name">Support ticket close to breaching</field>
+    <field name="category">project</field><field name="sequence">91</field>
+    <field name="title">Ticket about to breach its SLA</field>
+    <field name="body" type="html"><p>This ticket needs an answer now to stay inside the agreed response time.</p></field>
+    <field name="level">urgent</field><field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">30</field><field name="color">7</field>
+</record>
+
+<record id="tpl_sprint_review" model="velkio.template">
+    <field name="name">Sprint review</field>
+    <field name="category">project</field><field name="sequence">92</field>
+    <field name="title">Sprint review starts soon</field>
+    <field name="body" type="html"><p>Have your demo ready and your board up to date.</p></field>
+    <field name="level">info</field><field name="duration">40</field>
+    <field name="lead_minutes">30</field><field name="color">7</field>
+</record>
+
+<record id="tpl_handover" model="velkio.template">
+    <field name="name">Shift handover</field>
+    <field name="category">project</field><field name="sequence">93</field>
+    <field name="title">Shift handover</field>
+    <field name="body" type="html"><p>Write up what is open and what the next shift needs to know.</p></field>
+    <field name="level">info</field><field name="duration">40</field>
+    <field name="lead_minutes">30</field><field name="color">7</field>
+</record>
+
+<!-- ── MORE FINANCE & HR ───────────────────────────── -->
+<record id="tpl_month_end" model="velkio.template">
+    <field name="name">Month-end close</field>
+    <field name="category">finance</field><field name="sequence">32</field>
+    <field name="title">Month-end close today</field>
+    <field name="body" type="html"><p>Post the last entries and reconcile the bank before the books are locked.</p></field>
+    <field name="level">urgent</field><field name="duration">0</field>
+    <field name="require_ack" eval="True"/>
+    <field name="lead_minutes">240</field><field name="color">3</field>
+</record>
+
+<record id="tpl_expense_claim" model="velkio.template">
+    <field name="name">Expense claims due</field>
+    <field name="category">finance</field><field name="sequence">33</field>
+    <field name="title">Submit your expenses</field>
+    <field name="body" type="html"><p>Claims sent after the cut-off roll into next month's payroll.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">480</field><field name="color">3</field>
+</record>
+
+<record id="tpl_payment_reminder" model="velkio.template">
+    <field name="name">Chase an overdue invoice</field>
+    <field name="category">finance</field><field name="sequence">34</field>
+    <field name="title">Overdue invoice to chase</field>
+    <field name="body" type="html"><p>This one is past its due date. Send the reminder or call the customer.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">60</field><field name="color">3</field>
+</record>
+
+<record id="tpl_appraisal" model="velkio.template">
+    <field name="name">Appraisal due</field>
+    <field name="category">hr</field><field name="sequence">44</field>
+    <field name="title">Appraisal to complete</field>
+    <field name="body" type="html"><p>Your review form is waiting. Please fill it in before the meeting.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">1440</field><field name="color">5</field>
+</record>
+
+<record id="tpl_probation_end" model="velkio.template">
+    <field name="name">Probation ending</field>
+    <field name="category">hr</field><field name="sequence">45</field>
+    <field name="title">Probation period ends soon</field>
+    <field name="body" type="html"><p>Time to hold the review and confirm the outcome.</p></field>
+    <field name="level">warning</field><field name="duration">60</field>
+    <field name="lead_minutes">1440</field><field name="color">5</field>
+</record>
+
+</data>
+</odoo>

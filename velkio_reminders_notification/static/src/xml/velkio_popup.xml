@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!-- Mounted once for the whole web client, so it floats over every screen. -->
+<t t-name="velkio_reminders_notification.PopupManager">
+    <div class="velkio-layer">
+        <t t-foreach="stacks" t-as="stack" t-key="stack.position">
+            <div t-attf-class="velkio-stack velkio-at-{{stack.position}}"
+                 t-att-style="stackStyle(stack)">
+                <t t-foreach="stack.popups" t-as="popup" t-key="popup.key">
+                    <VelkioPopupCard
+                        data="popup"
+                        onSeen="(id) => this.markSeen(id)"
+                        onClose="(id) => this.close(id)"
+                        onDone="(id, ack) => this.done(id, ack)"
+                        onSnooze="(id, minutes) => this.snooze(id, minutes)"
+                    />
+                </t>
+                <div t-if="stack.showOverflow or showCloseAll" class="velkio-tray">
+                    <button t-if="stack.showOverflow" class="velkio-more"
+                            t-on-click="() => this.openWaiting()">
+                        <span class="velkio-more-dot"/>
+                        <t t-esc="hiddenCount"/> more waiting
+                        <i class="fa fa-arrow-right" role="img" aria-hidden="true"/>
+                    </button>
+                    <button t-if="showCloseAll" class="velkio-clear"
+                            t-att-disabled="ui.clearing"
+                            t-on-click="() => this.closeAll()">
+                        <i class="fa fa-check-circle" role="img" aria-hidden="true"/>
+                        Close all
+                    </button>
+                </div>
+            </div>
+        </t>
+    </div>
+</t>
+
+<t t-name="velkio_reminders_notification.PopupCard">
+<div t-att-class="rootClass" t-att-style="rootStyle"
+     role="alertdialog" aria-live="assertive" t-att-aria-label="props.data.title">
+
+    <!-- Decorative confetti, purely visual. -->
+    <span class="velkio-dot velkio-dot-1"/>
+    <span class="velkio-dot velkio-dot-2"/>
+    <span class="velkio-dot velkio-dot-3"/>
+    <span class="velkio-dot velkio-dot-4"/>
+
+    <!-- Round close button, top right -->
+    <span t-if="state.countdown > 0" class="velkio-timer">
+        <t t-esc="state.countdown"/>s
+    </span>
+
+    <button t-if="!props.data.require_ack" class="velkio-x"
+            t-att-disabled="state.busy" t-on-click="() => this.onClose()"
+            aria-label="Close">
+        <i class="fa fa-times" role="img" aria-hidden="true"/>
+    </button>
+
+    <!-- ── THE BELL ────────────────────────────────────── -->
+    <div t-if="showIcon" class="velkio-bell">
+        <span class="velkio-bell-glow"/>
+        <i t-attf-class="fa {{heroIcon}} velkio-bell-icon" role="img" aria-hidden="true"/>
+        <span class="velkio-bell-badge">1</span>
+        <span class="velkio-bell-ring velkio-bell-ring-l"/>
+        <span class="velkio-bell-ring velkio-bell-ring-r"/>
+    </div>
+
+    <div class="velkio-main">
+        <div class="velkio-head">
+            <div class="velkio-heading">
+                <span t-if="showAuthor or showChip" class="velkio-from">
+                    <t t-if="showAuthor"><t t-esc="subtitle"/></t>
+                    <span t-if="showChip" class="velkio-chip"><t t-esc="levelLabel"/></span>
+                </span>
+                <strong class="velkio-title"><t t-esc="props.data.title"/></strong>
+            </div>
+        </div>
+
+        <div class="velkio-body" t-out="bodyMarkup"/>
+
+        <div class="velkio-foot">
+            <!-- "Later" and its menu share a wrapper: the menu is positioned
+                 against that, not against the whole footer. -->
+            <div t-if="props.data.allow_snooze" class="velkio-snooze">
+                <button class="velkio-btn velkio-btn-ghost" t-att-disabled="state.busy"
+                        t-on-click="() => this.toggleSnooze()"
+                        t-att-aria-expanded="state.snoozeOpen">
+                    <i class="fa fa-clock-o" role="img" aria-hidden="true"/>
+                    <span>Later</span>
+                </button>
+                <div t-if="state.snoozeOpen" class="velkio-snooze-menu" role="menu">
+                    <t t-foreach="snoozeChoices" t-as="minutes" t-key="minutes">
+                        <button class="velkio-snooze-option" role="menuitem"
+                                t-on-click="() => this.onSnooze(minutes)">
+                            <i class="fa fa-bell-o" role="img" aria-hidden="true"/>
+                            <t t-esc="snoozeLabel(minutes)"/>
+                        </button>
+                    </t>
+                </div>
+            </div>
+
+            <button t-elif="!props.data.require_ack" class="velkio-btn velkio-btn-ghost"
+                    t-att-disabled="state.busy" t-on-click="() => this.onClose()">
+                <span>Close</span>
+            </button>
+
+            <button class="velkio-btn velkio-btn-primary" t-att-disabled="state.busy"
+                    t-on-click="() => this.onAcknowledge()">
+                <i class="fa fa-check" role="img" aria-hidden="true"/>
+                <span>Got it</span>
+            </button>
+        </div>
+
+        <!-- The close cross is deliberately absent on these, so say why
+             rather than leaving the reader hunting for it. -->
+        <span t-if="props.data.require_ack" class="velkio-ack-note">
+            <i class="fa fa-lock" role="img" aria-hidden="true"/>
+            This one has to be acknowledged — use <b>Got it</b> to close it.
+        </span>
+
+        <!-- Offer system notifications, once, when the browser has not been
+             asked yet. Browsers only accept the request from a real click. -->
+        <button t-if="canOfferDesktop" class="velkio-desktop-ask"
+                t-on-click="() => this.enableDesktop()">
+            <i class="fa fa-desktop" role="img" aria-hidden="true"/>
+            Also show these in my system notifications
+        </button>
+    </div>
+
+    <div t-if="showProgress" class="velkio-progress">
+        <span class="velkio-progress-fill"
+              t-attf-style="animation-duration: #{props.data.duration}s;"/>
+    </div>
+
+</div>
+</t>
+
+</templates>

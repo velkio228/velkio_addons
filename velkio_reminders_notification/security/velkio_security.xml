@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<data noupdate="1">
+    <!-- Groups keep noupdate so an upgrade never rewrites who is a manager. -->
+    <record id="module_category_velkio" model="ir.module.category">
+        <field name="name">Screen Notifications</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="group_velkio_manager" model="res.groups">
+        <field name="name">Notification Manager</field>
+        <field name="category_id" ref="module_category_velkio"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="comment">May send notifications to other people and to everybody.</field>
+    </record>
+</data>
+
+<data>
+    <!-- Record rules stay updatable so fixes reach existing databases. -->
+
+    <!-- READ: a notice is visible to the person who wrote it, to anyone it is
+         addressed to, and to anyone it was actually delivered to. That covers
+         "I created it" and "it was assigned to me" from both sides. -->
+    <record id="velkio_notification_read_rule" model="ir.rule">
+        <field name="name">Notification: read mine, assigned and received</field>
+        <field name="model_id" ref="model_velkio_notification"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="domain_force">[
+            '|', '|',
+                ('create_uid', '=', user.id),
+                ('user_ids', 'in', [user.id]),
+                ('recipient_ids.user_id', '=', user.id)
+        ]</field>
+    </record>
+
+    <!-- WRITE / DELETE: only the author. Being on the receiving end of a
+         notice does not give you the right to change its wording. -->
+    <record id="velkio_notification_write_rule" model="ir.rule">
+        <field name="name">Notification: only the author may change it</field>
+        <field name="model_id" ref="model_velkio_notification"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="perm_read" eval="0"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="domain_force">[('create_uid', '=', user.id)]</field>
+    </record>
+
+    <record id="velkio_notification_manager_rule" model="ir.rule">
+        <field name="name">Notification: manager sees and manages all</field>
+        <field name="model_id" ref="model_velkio_notification"/>
+        <field name="groups" eval="[(4, ref('group_velkio_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <!-- A recipient row is personal: it says what someone did with a notice. -->
+    <record id="velkio_recipient_own_rule" model="ir.rule">
+        <field name="name">Recipient: own rows only</field>
+        <field name="model_id" ref="model_velkio_notification_recipient"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="velkio_recipient_manager_rule" model="ir.rule">
+        <field name="name">Recipient: manager sees all</field>
+        <field name="model_id" ref="model_velkio_notification_recipient"/>
+        <field name="groups" eval="[(4, ref('group_velkio_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</data>
+
+</odoo>

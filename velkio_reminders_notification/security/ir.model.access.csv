@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_velkio_notification_user,velkio.notification.user,model_velkio_notification,base.group_user,1,1,1,1
+access_velkio_notification_manager,velkio.notification.manager,model_velkio_notification,group_velkio_manager,1,1,1,1
+access_velkio_recipient_user,velkio.notification.recipient.user,model_velkio_notification_recipient,base.group_user,1,0,0,0
+access_velkio_recipient_manager,velkio.notification.recipient.manager,model_velkio_notification_recipient,group_velkio_manager,1,1,1,1
+access_velkio_template_user,velkio.template.user,model_velkio_template,base.group_user,1,0,0,0
+access_velkio_template_manager,velkio.template.manager,model_velkio_template,group_velkio_manager,1,1,1,1
+access_velkio_style_user,velkio.popup.style.user,model_velkio_popup_style,base.group_user,1,0,0,0
+access_velkio_style_manager,velkio.popup.style.manager,model_velkio_popup_style,group_velkio_manager,1,1,1,1

@@ -1,0 +1,312 @@
+// ════════════════════════════════════════════════════
+// Velkio — backend polish
+//
+// The aim is Odoo's own screen, tidied up: same structure, same behaviour,
+// just better typography, spacing and colour. Everything is scoped to this
+// module's own views (.velkio-view / .velkio-list / .velkio-kanban), so no
+// other app is touched, and nothing here changes how a control works.
+// ════════════════════════════════════════════════════
+
+$vb-accent: #2563eb;
+$vb-accent-soft: rgba(37, 99, 235, 0.08);
+$vb-ink: #111827;
+$vb-muted: #6b7280;
+$vb-line: #e5e7eb;
+$vb-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+// ── FORM ─────────────────────────────────────────────
+.o_form_view.velkio-view,
+.velkio-view {
+
+    .o_form_sheet_bg { background-color: #f6f7f9; }
+
+    // Use the whole screen. Odoo caps the sheet at a narrow column, which
+    // left most of a wide monitor empty on these forms.
+    .o_form_sheet {
+        max-width: none;
+        width: 100%;
+        margin: 12px 16px;
+        padding: 22px 26px;
+        border: 1px solid $vb-line;
+        border-radius: 14px;
+        box-shadow:
+            0 1px 2px rgba(17, 24, 39, 0.04),
+            0 10px 24px -18px rgba(17, 24, 39, 0.35);
+    }
+
+    // ── title ──
+    .oe_title {
+        h1 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+        input.o_input {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.018em;
+            color: $vb-ink;
+            &::placeholder { color: #c3c8d0; font-weight: 600; }
+        }
+    }
+
+    // ── section headings ──
+    // Odoo renders a group's string here. Keep its size and place, add a small
+    // accent tick so the eye can find the sections.
+    .o_horizontal_separator {
+        position: relative;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        padding-left: 11px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        color: $vb-ink;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 3px;
+            height: 14px;
+            margin-top: -7px;
+            border-radius: 3px;
+            background: $vb-accent;
+        }
+    }
+
+    // ── labels and fields ──
+    .o_form_label {
+        font-weight: 500;
+        color: $vb-muted;
+    }
+
+    .o_field_widget {
+        .o_input:not([type="checkbox"]):not([type="radio"]) {
+            border-radius: 7px;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .o_input:focus {
+            border-color: $vb-accent;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+    }
+
+    // Selection and date pickers keep Odoo's underline; just warm it up.
+    .o_field_widget input:hover:not(:focus) { border-color: #cbd2dc; }
+
+    // ── the message editor ──
+    // The box goes on the field itself: the html widget renders a different
+    // inner element depending on whether it is editable, so styling the
+    // container is the only thing that holds in both states.
+    .velkio-message-field {
+        display: block;
+        width: 100%;
+        min-height: 150px;
+        padding: 12px 15px;
+        border: 1px solid $vb-line;
+        border-radius: 10px;
+        background: #fff;
+        line-height: 1.6;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+        &:hover { border-color: #cbd2dc; }
+        &:focus-within {
+            border-color: $vb-accent;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .odoo-editor-editable {
+            min-height: 118px;
+            &:focus { outline: none; }
+        }
+        p:last-child { margin-bottom: 0; }
+    }
+
+    // ── status bar ──
+    .o_statusbar_status .o_arrow_button {
+        font-weight: 600;
+        &.btn-primary { box-shadow: 0 2px 8px -3px rgba(37, 99, 235, 0.8); }
+    }
+
+    // ── header buttons ──
+    .o_form_statusbar > .o_statusbar_buttons .btn {
+        border-radius: 7px;
+        font-weight: 600;
+    }
+
+    // ── stat buttons ──
+    .oe_button_box .oe_stat_button {
+        border-radius: 10px;
+        transition: background 0.15s ease, transform 0.15s $vb-ease;
+        &:hover {
+            background: $vb-accent-soft;
+            transform: translateY(-1px);
+        }
+        .o_stat_value { font-weight: 700; }
+    }
+
+    // ── notes ──
+    .alert {
+        border: 1px solid transparent;
+        border-radius: 10px;
+        font-size: 13px;
+
+        &.alert-info {
+            background: $vb-accent-soft;
+            border-color: rgba(37, 99, 235, 0.16);
+            color: #1e40af;
+        }
+    }
+
+    // ── radio groups read as choices, not as a form dump ──
+    .o_field_radio.o_horizontal .o_radio_item { margin-right: 18px; }
+}
+
+// ── LIST ─────────────────────────────────────────────
+.velkio-list {
+
+    .o_list_table {
+        thead th {
+            font-size: 12px;
+            font-weight: 600;
+            color: $vb-muted;
+        }
+
+        tbody .o_data_row {
+            transition: background 0.12s ease;
+            &:hover { background: #f7f9fc; }
+            &.o_data_row_selected { background: $vb-accent-soft; }
+        }
+
+        // The name carries the row.
+        td[name="name"] {
+            font-weight: 600;
+            color: $vb-ink;
+        }
+    }
+
+    // Odoo's own badge, tinted per level so the list matches the popup.
+    .o_field_badge > span,
+    .o_field_badge {
+        font-weight: 600;
+        border-radius: 999px;
+    }
+}
+
+// ── LEVEL BADGE ──────────────────────────────────────
+// Softer than Bootstrap's solid fills, and the same three colours as the popup.
+.velkio-list td[name="level"] .o_field_badge .badge {
+    padding: 3px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+
+    &.text-bg-info    { background: rgba(37, 99, 235, 0.12) !important; color: #1d4ed8 !important; }
+    &.text-bg-warning { background: rgba(217, 119, 6, 0.14) !important; color: #b45309 !important; }
+    &.text-bg-danger  { background: rgba(220, 38, 38, 0.12) !important; color: #b91c1c !important; }
+}
+
+// ── KANBAN (templates) ───────────────────────────────
+.velkio-kanban {
+    .o_kanban_record {
+        border: 1px solid $vb-line;
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+        transition: transform 0.18s $vb-ease, box-shadow 0.18s $vb-ease,
+                    border-color 0.18s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            border-color: rgba(37, 99, 235, 0.3);
+            box-shadow: 0 10px 22px -14px rgba(37, 99, 235, 0.75);
+        }
+
+        .o_kanban_record_title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: $vb-ink;
+        }
+        .o_kanban_record_subtitle { font-size: 11.5px; color: $vb-muted; }
+        .btn-primary { border-radius: 7px; font-weight: 600; }
+    }
+}
+
+// ── STYLE EDITOR ─────────────────────────────────────
+.velkio-style-form {
+
+    // Colour fields read better in a monospaced face.
+    .o_field_widget[name$="_color"] input,
+    .o_field_widget[name^="color_"] input {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: 0.02em;
+    }
+}
+
+// ── READ MARKER ──────────────────────────────────────
+// An eye that opens when a notice has been read. Unread rows carry a small
+// blue dot, the way an unread mail does, so the state reads at a glance
+// down the whole column.
+.velkio-eye {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: $vb-accent;
+    cursor: pointer;
+    transition: background 0.16s ease, color 0.16s ease;
+
+    &:hover { background: $vb-accent-soft; }
+    &:focus-visible { outline: 2px solid $vb-accent; outline-offset: 1px; }
+
+    .velkio-eye-icon {
+        display: block;
+        font-size: 14px;
+        line-height: 1;
+        // The lid dropping and lifting again.
+        transition: transform 0.22s $vb-ease, opacity 0.22s ease;
+    }
+
+    // Read is settled and quiet; unread is the one that wants attention.
+    &.velkio-eye-read {
+        color: #9aa4b2;
+        .velkio-eye-icon { transform: scaleY(1); }
+        &:hover { color: $vb-accent; }
+    }
+
+    &:not(.velkio-eye-read) .velkio-eye-icon {
+        animation: velkioEyeBlink 2.6s ease-in-out infinite;
+    }
+
+    &:active .velkio-eye-icon { transform: scaleY(0.6); }
+
+    .velkio-eye-dot {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: $vb-accent;
+        box-shadow: 0 0 0 2px #fff;
+    }
+}
+
+// An unread row sits slightly stronger, like unread mail.
+.velkio-list .o_data_row:has(.velkio-eye:not(.velkio-eye-read)) {
+    td[name="name"] { font-weight: 700; }
+}
+
+@keyframes velkioEyeBlink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    96%           { transform: scaleY(0.55); }
+}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="velkio_reminders_notification.Dashboard">
+    <div class="velkio-dash">
+
+        <div class="velkio-dash-head">
+            <div>
+                <h1 class="velkio-dash-title">Reminders</h1>
+                <p class="velkio-dash-sub">Everything on your calendar, at a glance.</p>
+            </div>
+            <div class="velkio-dash-actions">
+                <button class="velkio-dash-btn velkio-dash-btn-ghost"
+                        t-on-click="() => this.openCalendar()">
+                    <i class="fa fa-calendar" role="img" aria-hidden="true"/> Calendar
+                </button>
+                <button class="velkio-dash-btn velkio-dash-btn-ghost"
+                        t-on-click="() => this.openTemplates()">
+                    <i class="fa fa-clone" role="img" aria-hidden="true"/> Templates
+                </button>
+                <button class="velkio-dash-btn velkio-dash-btn-primary"
+                        t-on-click="() => this.newReminder()">
+                    <i class="fa fa-plus" role="img" aria-hidden="true"/> New reminder
+                </button>
+            </div>
+        </div>
+
+        <div t-if="state.loading" class="velkio-dash-loading">
+            <i class="fa fa-circle-o-notch fa-spin" role="img" aria-hidden="true"/> Loading…
+        </div>
+
+        <div t-else="" class="velkio-dash-grid">
+            <t t-foreach="state.buckets" t-as="bucket" t-key="bucket.key">
+                <button t-attf-class="velkio-tile velkio-accent-{{bucket.accent}}"
+                        t-on-click="() => this.openBucket(bucket)">
+                    <span class="velkio-tile-icon">
+                        <i t-attf-class="fa {{bucket.icon}}" role="img" aria-hidden="true"/>
+                    </span>
+                    <span class="velkio-tile-count"><t t-esc="bucket.count"/></span>
+                    <span class="velkio-tile-label"><t t-esc="bucket.label"/></span>
+                    <span class="velkio-tile-help"><t t-esc="bucket.help"/></span>
+                    <span class="velkio-tile-go">
+                        <i class="fa fa-arrow-right" role="img" aria-hidden="true"/>
+                    </span>
+                </button>
+            </t>
+        </div>
+
+        <div t-if="!state.loading" class="velkio-dash-next">
+            <div class="velkio-dash-next-head">
+                <h2>Coming up</h2>
+                <span class="velkio-dash-next-count">
+                    <t t-esc="state.nextUp.length"/> scheduled
+                </span>
+            </div>
+
+            <div t-if="!state.nextUp.length" class="velkio-dash-empty">
+                <i class="fa fa-check-circle" role="img" aria-hidden="true"/>
+                <span>Nothing scheduled. You are all clear.</span>
+            </div>
+
+            <div t-else="" class="velkio-dash-rows">
+                <t t-foreach="state.nextUp" t-as="row" t-key="row.id">
+                    <button t-attf-class="velkio-row velkio-row-{{row.level}}"
+                            t-on-click="() => this.openRecord(row)">
+                        <span class="velkio-row-dot"/>
+                        <span class="velkio-row-name">
+                            <t t-esc="row.name"/>
+                            <i t-if="row.flagged" class="fa fa-star velkio-row-flag"
+                               role="img" aria-label="Flagged"/>
+                        </span>
+                        <span class="velkio-row-level"><t t-esc="levelLabel(row.level)"/></span>
+                        <span class="velkio-row-when"><t t-esc="whenLabel(row.notify_datetime)"/></span>
+                    </button>
+                </t>
+            </div>
+        </div>
+
+    </div>
+</t>
+
+</templates>

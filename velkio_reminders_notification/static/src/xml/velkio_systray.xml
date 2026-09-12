@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="velkio_reminders_notification.SystrayIcon">
+    <div class="velkio-systray o_mail_systray_item" role="button" tabindex="0"
+         title="My notifications" t-on-click="() => this.openList()">
+        <i class="fa fa-bell" role="img" aria-label="Notifications"/>
+        <span t-if="count > 0" class="velkio-systray-badge"><t t-esc="badge"/></span>
+    </div>
+</t>
+
+</templates>

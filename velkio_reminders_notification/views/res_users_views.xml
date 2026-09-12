@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+<!-- Own preferences (My Profile) -->
+<record id="view_users_form_simple_modif_velkio" model="ir.ui.view">
+    <field name="name">res.users.preferences.form.velkio</field>
+    <field name="model">res.users</field>
+    <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+    <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+            <page string="Notifications" name="velkio_preferences">
+                <group>
+                    <field name="velkio_popup_enabled"/>
+                    <field name="velkio_sound_enabled"
+                           invisible="not velkio_popup_enabled"/>
+                    <field name="velkio_desktop_enabled"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Urgent notifications are always shown, even with popups switched off.<br/>
+                    System notifications appear in your operating system's own
+                    notification area. Your browser asks permission the first
+                    time a reminder arrives.
+                </div>
+            </page>
+        </xpath>
+    </field>
+</record>
+
+</data>
+</odoo>

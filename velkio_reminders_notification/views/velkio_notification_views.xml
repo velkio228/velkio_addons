@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+<!-- ── FORM ────────────────────────────────────────────── -->
+<record id="velkio_notification_form_view" model="ir.ui.view">
+    <field name="name">velkio.notification.form</field>
+    <field name="model">velkio.notification</field>
+    <field name="arch" type="xml">
+        <form string="Reminder" class="velkio-view" edit="1">
+            <header>
+                <button name="action_schedule" type="object" string="Schedule"
+                        class="btn-primary" invisible="state != 'draft' or not can_edit"/>
+                <button name="action_send_now" type="object" string="Show Now"
+                        class="btn-secondary" invisible="state not in ['draft', 'scheduled'] or not can_edit"
+                        confirm="Show this notification on screen right now?"/>
+                <button name="action_cancel" type="object" string="Cancel"
+                        invisible="state in ['cancelled', 'sent'] or not can_edit"/>
+                <button name="action_reset_to_draft" type="object" string="Back to Draft"
+                        invisible="state != 'cancelled' or not can_edit"/>
+                <field name="state" widget="statusbar"
+                       statusbar_visible="draft,scheduled,sent"
+                       invisible="not can_edit"/>
+            </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box"
+                     invisible="not can_edit">
+                    <button class="oe_stat_button" type="object" icon="fa-users"
+                            name="action_view_recipients" invisible="recipient_count == 0">
+                        <field name="recipient_count" widget="statinfo" string="People"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" icon="fa-hourglass-half"
+                            name="action_view_recipients" invisible="recipient_count == 0">
+                        <field name="open_count" widget="statinfo" string="Waiting"/>
+                    </button>
+                </div>
+
+                <div class="oe_title">
+                    <label class="o_form_label" for="name"/>
+                    <h1>
+                        <field name="flagged" widget="boolean_favorite" nolabel="1"/>
+                        <field name="name" placeholder="e.g. Server maintenance at 6 PM"
+                               readonly="not can_edit"/>
+                    </h1>
+                </div>
+
+                <field name="can_edit" invisible="1"/>
+                <group invisible="not can_edit">
+                    <field name="template_id" options="{'no_create': True}"
+                           placeholder="Start from a ready-made notice..."/>
+                </group>
+                <div class="alert alert-info" role="alert" invisible="can_edit">
+                    <i class="fa fa-lock" role="img" aria-hidden="true"/>
+                    This notification was written by
+                    <field name="create_uid" readonly="1" nolabel="1" class="oe_inline"/>.
+                    You can read it and star it, but only the author can change it.
+                </div>
+
+                <group>
+                    <group string="When">
+                        <field name="notify_datetime" readonly="not can_edit"/>
+                        <field name="level" readonly="not can_edit"/>
+                        <field name="sent_at" string="Arrived"
+                               invisible="state != 'sent'"/>
+                    </group>
+                    <group string="Who" invisible="not can_edit">
+                        <field name="audience" widget="radio" readonly="not can_edit"/>
+                        <field name="user_ids" widget="many2many_tags"
+                               invisible="audience != 'users'"
+                               required="audience == 'users'"
+                               readonly="not can_edit"/>
+                        <field name="company_id" groups="base.group_multi_company"
+                               readonly="not can_edit"/>
+                    </group>
+                </group>
+
+                <separator string="Message"/>
+                <field name="body" nolabel="1" class="velkio-message-field"
+                       placeholder="What should the popup say?"
+                       readonly="not can_edit"/>
+
+                <separator string="Popup Behaviour" invisible="not can_edit"/>
+                <group invisible="not can_edit">
+                    <group>
+                        <field name="duration" readonly="not can_edit"/>
+                        <field name="require_ack" readonly="not can_edit"/>
+                    </group>
+                    <group>
+                        <field name="allow_snooze" invisible="require_ack"
+                               readonly="not can_edit"/>
+                        <field name="play_sound" readonly="not can_edit"/>
+                        <field name="style_id" options="{'no_create': True}"
+                               readonly="not can_edit"/>
+                    </group>
+                </group>
+
+                <div class="alert alert-info" role="alert" invisible="state != 'draft' or not can_edit">
+                    The popup appears on the reader's screen wherever they are working,
+                    on every device where they are signed in.
+                </div>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<!-- ── LIST ────────────────────────────────────────────── -->
+<record id="velkio_notification_tree_view" model="ir.ui.view">
+    <field name="name">velkio.notification.tree</field>
+    <field name="model">velkio.notification</field>
+    <field name="arch" type="xml">
+        <tree string="Reminders" class="velkio-list"
+              decoration-muted="state in ['cancelled', 'draft']">
+            <field name="is_read" widget="velkio_read_eye" string=" "
+                   nolabel="1" optional="show"/>
+            <field name="flagged" widget="boolean_favorite" nolabel="1" optional="show"/>
+            <field name="name"/>
+            <field name="notify_datetime"/>
+            <field name="level" widget="badge"
+                   decoration-info="level == 'info'"
+                   decoration-warning="level == 'warning'"
+                   decoration-danger="level == 'urgent'"/>
+            <field name="audience"/>
+            <field name="recipient_count" string="People" optional="show"/>
+            <field name="open_count" string="Waiting" optional="show"/>
+            <field name="create_uid" string="Created by" optional="hide"/>
+            <field name="state" widget="badge"
+                   decoration-success="state == 'sent'"
+                   decoration-info="state == 'scheduled'"/>
+        </tree>
+    </field>
+</record>
+
+<!-- ── SEARCH ──────────────────────────────────────────── -->
+<record id="velkio_notification_search_view" model="ir.ui.view">
+    <field name="name">velkio.notification.search</field>
+    <field name="model">velkio.notification</field>
+    <field name="arch" type="xml">
+        <search string="Search Notifications">
+            <field name="name"/>
+            <field name="body"/>
+            <field name="user_ids"/>
+            <filter string="Created by Me" name="mine"
+                    domain="[('create_uid', '=', uid)]"/>
+            <filter string="Assigned to Me" name="assigned"
+                    domain="[('user_ids', 'in', uid)]"/>
+            <filter string="Sent to Me" name="to_me"
+                    domain="[('recipient_ids.user_id', '=', uid)]"/>
+            <filter string="Mine" name="mine_any"
+                    domain="['|', '|', ('create_uid', '=', uid),
+                             ('user_ids', 'in', uid),
+                             ('recipient_ids.user_id', '=', uid)]"/>
+            <separator/>
+            <filter string="Scheduled" name="scheduled" domain="[('state', '=', 'scheduled')]"/>
+            <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+            <filter string="Urgent" name="urgent" domain="[('level', '=', 'urgent')]"/>
+            <filter string="Flagged" name="flagged" domain="[('flagged', '=', True)]"/>
+            <separator/>
+            <filter string="Unread" name="unread" domain="[('is_read', '=', False)]"/>
+            <filter string="Read" name="read" domain="[('is_read', '=', True)]"/>
+            <separator/>
+            <filter string="Upcoming" name="upcoming"
+                    domain="[('notify_datetime', '&gt;=', datetime.datetime.now())]"/>
+            <group expand="0" string="Group By">
+                <filter string="Status" name="by_state" context="{'group_by': 'state'}"/>
+                <filter string="Level" name="by_level" context="{'group_by': 'level'}"/>
+                <filter string="Show Date" name="by_date"
+                        context="{'group_by': 'notify_datetime:day'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+<!-- ── RECIPIENT LIST ──────────────────────────────────── -->
+<record id="velkio_recipient_tree_view" model="ir.ui.view">
+    <field name="name">velkio.notification.recipient.tree</field>
+    <field name="model">velkio.notification.recipient</field>
+    <field name="arch" type="xml">
+        <tree string="Recipients" class="velkio-list" create="false"
+              decoration-success="state == 'done'"
+              decoration-info="state == 'snoozed'"
+              decoration-muted="state == 'muted'">
+            <field name="notification_id"/>
+            <field name="user_id"/>
+            <field name="state" widget="badge"/>
+            <field name="sent_at"/>
+            <field name="seen_at" optional="hide"/>
+            <field name="done_at"/>
+            <field name="acknowledged" optional="show"/>
+            <field name="snooze_until" optional="hide"/>
+            <field name="snooze_count" optional="hide"/>
+            <button name="action_mark_done" type="object" string="Close"
+                    icon="fa-check" invisible="state in ['done', 'muted']"/>
+        </tree>
+    </field>
+</record>
+
+<!-- ── ACTIONS ─────────────────────────────────────────── -->
+<!-- ── CALENDAR ────────────────────────────────────────── -->
+<record id="velkio_notification_calendar_view" model="ir.ui.view">
+    <field name="name">velkio.notification.calendar</field>
+    <field name="model">velkio.notification</field>
+    <field name="arch" type="xml">
+        <calendar string="Reminders" date_start="notify_datetime"
+                  color="level" mode="month" quick_create="0"
+                  event_open_popup="1">
+            <field name="name"/>
+            <field name="level" filters="1"/>
+            <field name="state"/>
+            <field name="create_uid" filters="1" avatar_field="avatar_128"/>
+        </calendar>
+    </field>
+</record>
+
+<record id="action_velkio_calendar" model="ir.actions.act_window">
+    <field name="name">Reminder Calendar</field>
+    <field name="res_model">velkio.notification</field>
+    <field name="view_mode">calendar,tree,form</field>
+    <field name="search_view_id" ref="velkio_notification_search_view"/>
+    <!-- Opens on what belongs to whoever is looking: their own reminders and
+         anything addressed to them. The filter is a search default, so it can
+         be cleared to look wider. -->
+    <field name="context">{'search_default_mine_any': 1, 'default_audience': 'me'}</field>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            Nothing on the calendar yet
+        </p>
+        <p>Every reminder due to you, laid out by date. Click a day to add one.</p>
+    </field>
+</record>
+
+<record id="action_velkio_my_notifications" model="ir.actions.act_window">
+    <field name="name">My Notifications</field>
+    <field name="res_model">velkio.notification</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="velkio_notification_search_view"/>
+    <field name="context">{'search_default_to_me': 1}</field>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            Nothing waiting for you
+        </p>
+        <p>Notifications sent to you show up here after they appear on screen.</p>
+    </field>
+</record>
+
+<record id="action_velkio_reminders" model="ir.actions.act_window">
+    <field name="name">Reminders</field>
+    <field name="res_model">velkio.notification</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="velkio_notification_search_view"/>
+    <field name="context">{'default_audience': 'me', 'search_default_mine': 1}</field>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            Set your first reminder
+        </p>
+        <p>Write a note, pick a time, and it pops up on your screen when the
+           moment arrives — wherever you are working in Odoo.</p>
+    </field>
+</record>
+
+<record id="action_velkio_all_notifications" model="ir.actions.act_window">
+    <field name="name">All Notifications</field>
+    <field name="res_model">velkio.notification</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="velkio_notification_search_view"/>
+</record>
+
+<record id="action_velkio_recipients" model="ir.actions.act_window">
+    <field name="name">Delivery</field>
+    <field name="res_model">velkio.notification.recipient</field>
+    <field name="view_mode">tree</field>
+</record>
+
+</data>
+</odoo>

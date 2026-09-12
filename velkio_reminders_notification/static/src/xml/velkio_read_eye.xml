@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="velkio_reminders_notification.ReadEye">
+    <button class="velkio-eye" type="button"
+            t-att-class="{ 'velkio-eye-read': isRead }"
+            t-att-title="title" t-att-aria-label="title"
+            t-att-aria-pressed="isRead"
+            t-on-click="(ev) => this.onClick(ev)">
+        <span class="velkio-eye-icon">
+            <i t-attf-class="fa {{ isRead ? 'fa-eye' : 'fa-eye-slash' }}"
+               role="img" aria-hidden="true"/>
+        </span>
+        <span t-if="!isRead" class="velkio-eye-dot"/>
+    </button>
+</t>
+
+</templates>
