@@ -1,644 +1,296 @@
-<div class="vk">
-<style>
-/* ══════════════════════════════════════════════════════════════
-   Velkio Reminders & Notifications — module listing
-   Everything is scoped to .vk and self-contained: no external
-   fonts, no scripts, nothing to load but the screenshots.
-   ══════════════════════════════════════════════════════════════ */
-.vk{
-  --ink:#0f172a; --body:#475569; --muted:#94a3b8; --line:#e2e8f0;
-  --blue:#2563eb; --violet:#7c3aed; --amber:#d97706; --red:#dc2626;
-  --teal:#0d9488; --paper:#ffffff; --wash:#f6f8fc;
-  --shadow:0 1px 2px rgba(15,23,42,.05),0 12px 28px -12px rgba(15,23,42,.22);
-  --shadow-lg:0 2px 6px rgba(15,23,42,.06),0 34px 60px -28px rgba(15,23,42,.42);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,
-    "Helvetica Neue",Arial,sans-serif;
-  color:var(--body); line-height:1.62; font-size:15.5px;
-  background:var(--paper); margin:0 auto; max-width:1180px;
-  -webkit-font-smoothing:antialiased;
-}
-.vk *{box-sizing:border-box}
-.vk img{max-width:100%;height:auto;display:block}
-.vk h1,.vk h2,.vk h3,.vk h4{color:var(--ink);margin:0;line-height:1.22;
-  letter-spacing:-.021em;font-weight:800}
-.vk p{margin:0 0 14px}
-.vk section{padding:64px 40px;position:relative}
-.vk .wrap{max-width:1060px;margin:0 auto}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<title>Velkio Reminders &amp; Notifications for Odoo 17 (Community / Enterprise)</title>
+</head>
+<body>
+<section class="oe_container">
+<div style="background-color:#f3f5fb !important;color:#1f2937 !important;max-width:1180px !important;margin:0 auto !important;padding:18px !important;font-family:Arial,Helvetica,sans-serif !important;box-sizing:border-box;">
 
-/* ── entrance motion ─────────────────────────────────────── */
-@keyframes vkUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-@keyframes vkIn{from{opacity:0;transform:scale(.965)}to{opacity:1;transform:none}}
-@keyframes vkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-@keyframes vkGlow{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.9;transform:scale(1.09)}}
-@keyframes vkSheen{from{background-position:0% 50%}to{background-position:200% 50%}}
-@keyframes vkPulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.45)}
-  70%{box-shadow:0 0 0 16px rgba(37,99,235,0)}100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}}
-.vk .up{animation:vkUp .78s cubic-bezier(.22,1,.36,1) both}
-.vk .in{animation:vkIn .9s cubic-bezier(.22,1,.36,1) both}
-.vk .d1{animation-delay:.08s}.vk .d2{animation-delay:.16s}
-.vk .d3{animation-delay:.24s}.vk .d4{animation-delay:.32s}
-.vk .d5{animation-delay:.40s}.vk .d6{animation-delay:.48s}
-
-/* ── hero ────────────────────────────────────────────────── */
-.vk .hero{
-  padding:74px 40px 0; text-align:center; overflow:hidden;
-  background:
-    radial-gradient(900px 420px at 12% -8%, rgba(37,99,235,.16), transparent 62%),
-    radial-gradient(760px 420px at 88% 4%, rgba(124,58,237,.14), transparent 62%),
-    linear-gradient(180deg,#f7f9ff 0%, #ffffff 78%);
-}
-.vk .hero::before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:radial-gradient(rgba(37,99,235,.10) 1px, transparent 1px);
-  background-size:26px 26px;
-  -webkit-mask-image:linear-gradient(180deg,#000,transparent 66%);
-  mask-image:linear-gradient(180deg,#000,transparent 66%);
-}
-.vk .hero>*{position:relative}
-.vk .mark{
-  width:88px;height:88px;margin:0 auto 22px;border-radius:24px;
-  display:flex;align-items:center;justify-content:center;position:relative;
-  background:linear-gradient(150deg,#3b82f6,#2563eb 45%,#4f46e5);
-  box-shadow:0 18px 38px -14px rgba(37,99,235,.72);
-  animation:vkFloat 5.5s ease-in-out infinite;
-}
-.vk .mark::after{
-  content:"";position:absolute;inset:-14px;border-radius:34px;z-index:-1;
-  background:radial-gradient(circle,rgba(37,99,235,.34),transparent 66%);
-  animation:vkGlow 4s ease-in-out infinite;
-}
-.vk .mark svg{width:46px;height:46px}
-.vk .mark .dot{
-  position:absolute;top:-6px;right:-6px;min-width:26px;height:26px;padding:0 7px;
-  border-radius:999px;background:linear-gradient(135deg,#dc2626,#fb7185);
-  color:#fff;font-size:13px;font-weight:800;line-height:26px;
-  border:3px solid #fff;box-shadow:0 4px 12px -2px rgba(220,38,38,.6)}
-.vk .hero h1{font-size:50px;letter-spacing:-.035em;margin-bottom:14px}
-.vk .grad{
-  background:linear-gradient(100deg,#2563eb,#7c3aed 42%,#0d9488 82%,#2563eb);
-  background-size:200% auto;-webkit-background-clip:text;background-clip:text;
-  color:transparent;animation:vkSheen 7s linear infinite}
-.vk .lede{font-size:19.5px;max-width:680px;margin:0 auto 26px;color:#556070}
-.vk .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:34px}
-.vk .chip{
-  display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:999px;
-  background:#fff;border:1px solid var(--line);font-size:12.5px;font-weight:700;
-  color:var(--ink);box-shadow:0 1px 2px rgba(15,23,42,.05)}
-.vk .chip i{width:7px;height:7px;border-radius:50%;background:var(--blue)}
-.vk .chip.g i{background:#16a34a}.vk .chip.v i{background:var(--violet)}
-.vk .chip.a i{background:var(--amber)}
-.vk .shot{
-  border-radius:16px;border:1px solid var(--line);overflow:hidden;
-  box-shadow:var(--shadow-lg);background:#fff;
-  transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s}
-.vk .shot:hover{transform:translateY(-6px)}
-.vk .hero .shot{max-width:1000px;margin:0 auto;transform:translateY(16px)}
-.vk .banner{
-  max-width:1040px;margin:0 auto 30px;border-radius:20px;overflow:hidden;
-  box-shadow:0 3px 10px rgba(15,23,42,.10),0 40px 70px -34px rgba(15,23,42,.55);
-  border:1px solid rgba(15,23,42,.08)}
-.vk .banner img{width:100%}
-.vk .cap{font-size:12.5px;color:var(--muted);text-align:center;margin:12px 0 0}
-
-/* ── section headings ────────────────────────────────────── */
-.vk .eyebrow{
-  display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--blue);margin-bottom:12px}
-.vk .head{text-align:center;max-width:720px;margin:0 auto 44px}
-.vk .head h2{font-size:34px;margin-bottom:12px}
-.vk .head p{font-size:17px;margin:0}
-
-/* ── feature rows ────────────────────────────────────────── */
-.vk .row{display:grid;grid-template-columns:1fr 1.24fr;gap:52px;align-items:center;
-  margin-bottom:72px}
-.vk .row.flip>.copy{order:2}
-.vk .row h3{font-size:25px;margin-bottom:13px}
-.vk .row p{font-size:16px}
-.vk .ticks{list-style:none;padding:0;margin:18px 0 0}
-.vk .ticks li{position:relative;padding-left:29px;margin-bottom:10px;font-size:15px}
-.vk .ticks li::before{
-  content:"";position:absolute;left:0;top:7px;width:17px;height:17px;border-radius:50%;
-  background:rgba(37,99,235,.12);
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
-  background-size:11px;background-repeat:no-repeat;background-position:center}
-
-/* ── cards ───────────────────────────────────────────────── */
-.vk .grid{display:grid;gap:20px}
-.vk .g3{grid-template-columns:repeat(3,1fr)}
-.vk .g2{grid-template-columns:repeat(2,1fr)}
-.vk .card{
-  background:#fff;border:1px solid var(--line);border-radius:15px;padding:26px 24px;
-  box-shadow:0 1px 2px rgba(15,23,42,.04);
-  transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,border-color .3s}
-.vk .card:hover{transform:translateY(-4px);border-color:rgba(37,99,235,.34);
-  box-shadow:0 18px 34px -22px rgba(37,99,235,.75)}
-.vk .card h4{font-size:16.5px;margin-bottom:8px}
-.vk .card p{font-size:14.4px;margin:0;color:var(--body)}
-.vk .ico{
-  width:44px;height:44px;border-radius:13px;display:flex;align-items:center;
-  justify-content:center;margin-bottom:15px;color:#fff;
-  background:linear-gradient(140deg,#3b82f6,#2563eb);
-  box-shadow:0 8px 18px -10px rgba(37,99,235,.9)}
-.vk .ico svg{width:21px;height:21px}
-.vk .ico.v{background:linear-gradient(140deg,#8b5cf6,#6d28d9)}
-.vk .ico.a{background:linear-gradient(140deg,#f59e0b,#d97706)}
-.vk .ico.r{background:linear-gradient(140deg,#f87171,#dc2626)}
-.vk .ico.t{background:linear-gradient(140deg,#2dd4bf,#0d9488)}
-.vk .ico.s{background:linear-gradient(140deg,#64748b,#334155)}
-
-/* ── dark band ───────────────────────────────────────────── */
-.vk .dark{
-  background:linear-gradient(155deg,#0b1220,#111c33 52%,#0b1220);
-  color:#c7d2e3;border-radius:0}
-.vk .dark h2,.vk .dark h3,.vk .dark h4{color:#fff}
-.vk .dark .eyebrow{color:#7dd3fc}
-.vk .dark .card{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.1)}
-.vk .dark .card p{color:#b3c0d4}
-.vk .dark .card:hover{border-color:rgba(125,211,252,.4);
-  box-shadow:0 18px 34px -22px rgba(56,189,248,.5)}
-.vk .dark .shot{border-color:rgba(255,255,255,.12)}
-.vk .dark .cap{color:#7b8aa3}
-
-/* ── stats ───────────────────────────────────────────────── */
-.vk .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
-.vk .stat{text-align:center;padding:24px 14px;border-radius:14px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
-.vk .stat b{display:block;font-size:34px;font-weight:800;color:#fff;
-  letter-spacing:-.03em;line-height:1}
-.vk .stat span{display:block;font-size:12.5px;color:#93a3ba;margin-top:8px;
-  letter-spacing:.02em}
-
-/* ── steps ───────────────────────────────────────────────── */
-.vk .steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.vk .step{position:relative;padding:26px 22px 22px;border-radius:15px;
-  background:var(--wash);border:1px solid var(--line)}
-.vk .step::before{
-  counter-increment:s;content:counter(s);
-  position:absolute;top:-15px;left:22px;width:32px;height:32px;border-radius:10px;
-  background:linear-gradient(140deg,#3b82f6,#2563eb);color:#fff;font-weight:800;
-  font-size:15px;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 18px -8px rgba(37,99,235,.8)}
-.vk .step h4{margin:8px 0 7px;font-size:16px}
-.vk .step p{font-size:14.3px;margin:0}
-
-/* ── spec table ──────────────────────────────────────────── */
-.vk table{width:100%;border-collapse:collapse;font-size:14.6px;
-  border:1px solid var(--line);border-radius:13px;overflow:hidden}
-.vk td{padding:13px 18px;border-bottom:1px solid var(--line);vertical-align:top}
-.vk tr:last-child td{border-bottom:none}
-.vk tr:nth-child(odd){background:var(--wash)}
-.vk td:first-child{font-weight:700;color:var(--ink);width:32%}
-
-/* ── closing ─────────────────────────────────────────────── */
-.vk .end{text-align:center;padding:74px 40px}
-.vk .end h2{font-size:33px;margin-bottom:14px}
-.vk .badge-cta{
-  display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:14px 28px;
-  border-radius:999px;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;
-  font-weight:700;font-size:15px;animation:vkPulse 2.8s ease-out infinite}
-.vk .foot{border-top:1px solid var(--line);padding:26px 40px;text-align:center;
-  font-size:12.8px;color:var(--muted)}
-
-/* ── velkio brand strip ─────────────────────────────────────── */
-.vk .topbar{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
-  padding:14px 40px;border-bottom:1px solid var(--line);background:#fff}
-.vk .topbar .brand{display:flex;align-items:center;gap:9px}
-.vk .topbar img{height:26px;width:26px;border-radius:50%;display:block}
-.vk .topbar b{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:.01em}
-.vk .topbar b span{color:var(--muted);font-weight:600}
-.vk .topbar em{font-size:12px;color:var(--muted);font-style:normal;font-weight:600}
-
-/* ── hero trust strip & scroll cta ──────────────────────────── */
-.vk .trust{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;
-  margin:-8px auto 30px;max-width:760px}
-.vk .trust b{position:relative;padding-left:23px;font-size:13px;font-weight:700;color:#3d4759}
-.vk .trust b::before{
-  content:"";position:absolute;left:0;top:2px;width:16px;height:16px;border-radius:50%;
-  background:rgba(22,163,74,.14);
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
-  background-size:9px;background-repeat:no-repeat;background-position:center}
-.vk .scrollcta{
-  display:inline-flex;align-items:center;gap:7px;margin:2px auto 34px;padding:10px 20px;
-  border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--blue);
-  font-weight:800;font-size:13px;text-decoration:none;box-shadow:var(--shadow);
-  transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .25s}
-.vk .scrollcta:hover{transform:translateY(-2px);border-color:rgba(37,99,235,.4)}
-.vk .scrollcta svg{width:13px;height:13px;animation:vkFloat 2.2s ease-in-out infinite}
-
-/* ── brand footer ────────────────────────────────────────────── */
-.vk .brandfoot{text-align:center;padding:56px 40px 46px}
-.vk .brandfoot img{height:40px;width:auto;margin:0 auto 18px}
-.vk .brandfoot .name{font-size:19px;font-weight:800;color:#fff;margin-bottom:6px}
-.vk .brandfoot .tag{font-size:13px;color:#93a3ba;margin-bottom:20px}
-.vk .brandfoot .support{font-size:13px;color:#7b8aa3}
-.vk .brandfoot .support a{color:#7dd3fc;text-decoration:none;font-weight:700}
-
-@media (max-width:880px){
-  .vk .topbar{padding:14px 22px;justify-content:center;text-align:center}
-  .vk section{padding:48px 22px}
-  .vk .hero{padding:56px 22px 0}
-  .vk .hero h1{font-size:34px}
-  .vk .lede{font-size:17px}
-  .vk .row{grid-template-columns:1fr;gap:26px;margin-bottom:52px}
-  .vk .row.flip>.copy{order:0}
-  .vk .g3,.vk .g2,.vk .steps,.vk .stats{grid-template-columns:1fr}
-  .vk .head h2{font-size:27px}
-}
-@media (prefers-reduced-motion:reduce){
-  .vk *,.vk *::before,.vk *::after{animation:none!important;transition:none!important}
-}
-</style>
-
-<!-- ═══════════════ BRAND STRIP ═══════════════ -->
-<div class="topbar">
-  <div class="brand">
-    <img src="velkio_mark.png" alt="Velkio">
-    <b>VELKIO <span>· Odoo Solutions</span></b>
+<!-- ===================== HERO ===================== -->
+<div style="background-color:#0b1220 !important;color:#fff !important;border-radius:26px;padding:40px 30px 34px;box-shadow:0 18px 40px rgba(11,18,32,.3) !important;overflow:hidden;position:relative;">
+  <div style="position:absolute;top:0;left:0;width:5px;height:100%;background-color:#2563eb !important;border-radius:26px 0 0 26px;"></div>
+  <img src="velkio_logo.png" alt="Velkio - Odoo Solutions" style="position:absolute;top:0;right:0;width:150px;height:auto;border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.35) !important;"/>
+  <div style="text-align:center;max-width:880px;margin:0 auto;position:relative;">
+    <div style="display:inline-block;background-color:rgba(37,99,235,.18) !important;border:1px solid rgba(37,99,235,.4) !important;border-radius:999px;padding:8px 20px;font-size:13px;font-weight:800;letter-spacing:.4px;color:#93c5fd !important;margin-bottom:20px;">
+      &#128276; Ready for Odoo 17 &middot; Community &amp; Enterprise
+    </div>
+    <h1 style="margin:0 0 14px;font-size:38px;line-height:1.2;letter-spacing:-1px;font-weight:900;color:#fff !important;">
+      Reminders &amp; Notifications<br/>
+      <span style="color:#fbbf24 !important;">Everyone Actually Sees</span>
+    </h1>
+    <p style="margin:0 auto 22px;font-size:16px;line-height:1.8;color:rgba(255,255,255,.85) !important;max-width:760px;">
+      An on-screen reminder popup and notification system for Odoo. It appears wherever the person is working, at the exact second it is due &mdash; on every device they are signed in to.
+    </p>
+    <div style="margin-bottom:18px;">
+      <span style="display:inline-block;background-color:#16a34a !important;color:#fff !important;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:800;margin:4px;">&#10003; Installs in 2 minutes</span>
+      <span style="display:inline-block;background-color:#16a34a !important;color:#fff !important;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:800;margin:4px;">&#10003; 123 automated tests</span>
+      <span style="display:inline-block;background-color:#16a34a !important;color:#fff !important;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:800;margin:4px;">&#10003; Free &amp; open source</span>
+      <span style="display:inline-block;background-color:#16a34a !important;color:#fff !important;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:800;margin:4px;">&#10003; No configuration</span>
+    </div>
+    <div>
+      <span style="display:inline-block;background-color:#2563eb !important;color:#fff !important;border-radius:999px;padding:9px 20px;font-size:13px;font-weight:800;margin:5px;box-shadow:0 6px 18px rgba(37,99,235,.4) !important;">Odoo 17</span>
+      <span style="display:inline-block;background-color:#7c3aed !important;color:#fff !important;border-radius:999px;padding:9px 20px;font-size:13px;font-weight:800;margin:5px;box-shadow:0 6px 18px rgba(124,58,237,.35) !important;">6 Popup Designs</span>
+      <span style="display:inline-block;background-color:#d97706 !important;color:#fff !important;border-radius:999px;padding:9px 20px;font-size:13px;font-weight:800;margin:5px;box-shadow:0 6px 18px rgba(217,119,6,.35) !important;">39 Templates</span>
+      <span style="display:inline-block;background-color:rgba(255,255,255,.1) !important;color:rgba(255,255,255,.85) !important;border:1px solid rgba(255,255,255,.22) !important;border-radius:999px;padding:9px 20px;font-size:13px;font-weight:700;margin:5px;">LGPL-3 &middot; Free</span>
+    </div>
   </div>
-  <em>Odoo 17 Apps by Velkio</em>
 </div>
 
-<!-- ═══════════════ HERO ═══════════════ -->
-<section class="hero">
-  <div class="mark in" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-    <span class="dot">3</span>
-  </div>
-  <h1 class="up">Reminders &amp; Notifications <span class="grad">Everyone Actually Sees</span></h1>
-  <div class="banner in d1"><img src="banner.gif"
-    alt="Velkio Reminders &amp; Notifications for Odoo 17 — animated banner showing the Velkio logo, an on-screen reminder popup arriving with a live countdown, an urgent alert notification, and the app's key features"></div>
-  <p class="lede up d2">
-    A reminder that actually reaches the person. It appears on screen wherever
-    they are working in Odoo, at the exact second it is due — on every device
-    they are signed in to.
-  </p>
-  <div class="trust up d2">
-    <b>Installs in 2 minutes</b>
-    <b>123 automated tests · 0 known defects</b>
-    <b>Free &amp; open source — LGPL-3</b>
-    <b>No configuration required</b>
-  </div>
-  <div class="chips up d3">
-    <span class="chip"><i></i> Odoo 17</span>
-    <span class="chip g"><i></i> Community &amp; Enterprise</span>
-    <span class="chip v"><i></i> 6 popup designs</span>
-    <span class="chip a"><i></i> 39 ready-made templates</span>
-    <span class="chip"><i></i> LGPL-3</span>
-  </div>
-  <a class="scrollcta up d3" href="#designs">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-    See the 6 popup designs in motion
-  </a>
-  <div class="shot in d4"><img src="07_popup_stack.jpg"
-    alt="An urgent reminder popup notification on screen over a working Odoo list, with two more waiting"></div>
-  <p class="cap">A real screen. The notice arrives over whatever you were doing, and
-     never blocks it.</p>
-</section>
+<!-- ===================== ANIMATED BANNER ===================== -->
+<div style="margin-top:18px;border-radius:22px;overflow:hidden;box-shadow:0 18px 40px rgba(15,23,42,.16) !important;line-height:0;">
+  <img src="banner.gif" alt="Velkio Reminders &amp; Notifications for Odoo 17 - animated demo: the Velkio logo, an on-screen reminder popup with a live countdown, an urgent alert, and the app's key features" style="display:block;width:100% !important;height:auto !important;"/>
+</div>
+<p style="text-align:center;font-size:12.5px;color:#94a3b8 !important;margin:10px 0 0;">A real screen. The notice arrives over whatever you were doing, and never blocks it.</p>
 
-<!-- ═══════════════ THE PROBLEM ═══════════════ -->
-<section>
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Why this exists</span>
-      <h2>Odoo can tell people things. It cannot make them look.</h2>
-      <p>Activities sit in a list. Emails wait in an inbox. Chatter needs someone
-         to open the record. None of that helps when something has to be seen
-         <em>now</em>.</p>
-    </div>
-    <div class="row" style="margin-bottom:56px">
-      <div class="copy up">
-        <h3>This is what it looks like</h3>
-        <p>The card drops in over the screen you were already on. It counts itself
-           down, and anything else waiting queues up underneath rather than
-           stacking over your work.</p>
-      </div>
-      <div class="shot in d1"><img src="demo_arrive.gif"
-        alt="A reminder dropping onto the screen, counting down, with two more waiting"></div>
-    </div>
-    <div class="grid g3">
-      <div class="card up d1">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2"/><path d="M9 2h6"/></svg></div>
-        <h4>On the exact second</h4>
-        <p>The browser is told how long is left and counts it down itself, then asks
-           the server to confirm before showing anything. Not “within a minute”.</p>
-      </div>
-      <div class="card up d2">
-        <div class="ico v"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="14" height="10" rx="2"/><path d="M6 19h8"/><path d="M9 14v5"/><rect x="17" y="9" width="5" height="11" rx="1.6"/></svg></div>
-        <h4>On every screen</h4>
-        <p>One account on a laptop and a phone gets the notice on both. Answer it
-           on either and it comes down on the other.</p>
-      </div>
-      <div class="card up d3">
-        <div class="ico a"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
-        <h4>Outside Odoo too</h4>
-        <p>Optionally mirrored into the operating system’s own notification
-           centre, so it lands even when Odoo is not the window in front.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ DESIGNS ═══════════════ -->
-<section class="dark" id="designs">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Six genuinely different designs</span>
-      <h2>Not one card in six colours</h2>
-      <p>Each design has its own layout, motion and personality. Pick one for the
-         whole company, or give a single notice its own.</p>
-    </div>
-    <div class="shot in" style="max-width:620px;margin:0 auto"><img src="demo_skins.gif"
-      alt="The six popup designs cycling one after another"></div>
-    <p class="cap">Reminder Card · Soft Relief · Solid Alert · Outline Alert ·
-       Dashed Alert · Strip</p>
-    <div class="shot in" style="margin-top:34px"><img src="08_skins.jpg"
-      alt="All six designs side by side"></div>
-    <p class="cap">All six, side by side.</p>
-    <div class="grid g3" style="margin-top:38px">
-      <div class="card up d1">
-        <h4>Placed where you want it</h4>
-        <p>Six positions, your own width, corner radius, shadow depth, light or
-           dark, solid or glass.</p>
-      </div>
-      <div class="card up d2">
-        <h4>Coloured by urgency</h4>
-        <p>Information, Important and Urgent each carry their own colour — or set
-           one accent for everything.</p>
-      </div>
-      <div class="card up d3">
-        <h4>Motion you choose</h4>
-        <p>Drop, pop, slide or fade, with an optional chime and a countdown bar
-           that shows the time left.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ FEATURE ROWS ═══════════════ -->
-<section>
-  <div class="wrap">
-    <div class="row">
-      <div class="copy up">
-        <span class="eyebrow">Dashboard</span>
-        <h3>Everything waiting, at a glance</h3>
-        <p>Seven buckets, counted live and opening straight into the exact set that
-           was counted — so the number you clicked is the list you get.</p>
-        <ul class="ticks">
-          <li>Today, Scheduled, Assigned to me, Flagged, Urgent, Completed, All</li>
-          <li>A “Coming up” list of what fires next, with times</li>
-          <li>One click to a new reminder, the calendar or the template library</li>
-        </ul>
-      </div>
-      <div class="shot in d1"><img src="01_dashboard.jpg" alt="The reminders dashboard"></div>
-    </div>
-
-    <div class="row flip">
-      <div class="copy up">
-        <span class="eyebrow">Calendar</span>
-        <h3>Your own reminders, by date</h3>
-        <p>A month view of everything coming to you — what you wrote, what was
-           addressed to you, and what has already been delivered. Click a day to
-           add one.</p>
-        <ul class="ticks">
-          <li>Colour-coded by urgency, filterable by level and author</li>
-          <li>Opens on <b>Mine</b>, so each person sees their own</li>
-          <li>Shows reminders that have not been sent yet — the whole point</li>
-        </ul>
-      </div>
-      <div class="shot in d1"><img src="02_calendar.jpg" alt="The reminder calendar"></div>
-    </div>
-
-    <div class="row">
-      <div class="copy up">
-        <span class="eyebrow">Read tracking</span>
-        <h3>An eye that tells you what you have actually read</h3>
-        <p>Every row carries a read marker that belongs to you alone. Open a notice
-           and it marks itself read; click the eye to put it back to unread.</p>
-        <ul class="ticks">
-          <li>Unread rows stay bold, with a blue dot, like unread mail</li>
-          <li>The count follows you to the bell <em>and</em> the app icon</li>
-          <li>Per person — your colleague’s read marks are not yours</li>
-        </ul>
-      </div>
-      <div class="shot in d1"><img src="03_list.jpg" alt="The reminder list with its read column"></div>
-    </div>
-
-    <div class="row flip">
-      <div class="copy up">
-        <span class="eyebrow">Always in view</span>
-        <h3>A count you cannot miss</h3>
-        <p>Unread reminders are counted on the bell in the top bar and badged on
-           the app icon on the home screen, so the number is there before you open
-           anything.</p>
-        <ul class="ticks">
-          <li>Updates the moment a notice arrives — no waiting for a refresh</li>
-          <li>Follows you across devices as you read things</li>
-          <li>Clearing the screen is not reading: the count holds until you open it</li>
-        </ul>
-      </div>
-      <div class="shot in d1" style="background:#e9ecf5">
-        <img src="09_badges.jpg" alt="The unread badge on the app icon and on the top-bar bell"></div>
-    </div>
-
-    <div class="row">
-      <div class="copy up">
-        <span class="eyebrow">Templates</span>
-        <h3>Thirty-nine notices already written</h3>
-        <p>Ten categories of everyday wording — meetings, approvals, deadlines,
-           payroll, stock, maintenance and more. Pick one, set the time, send it.</p>
-        <ul class="ticks">
-          <li>Each carries its own urgency, duration and snooze settings</li>
-          <li>Edit them freely, or add your own</li>
-          <li>Counts how often each one gets used</li>
-        </ul>
-      </div>
-      <div class="shot in d1"><img src="04_templates.jpg" alt="The template library"></div>
-    </div>
-
-    <div class="row flip">
-      <div class="copy up">
-        <span class="eyebrow">Configuration</span>
-        <h3>Design the popup without touching code</h3>
-        <p>Everything about how a notice looks lives in a record you can edit, with
-           a <b>Preview on my screen</b> button that shows the result immediately.</p>
-        <ul class="ticks">
-          <li>Ships with six styles; make as many of your own as you like</li>
-          <li>One is the default; any notice may pick its own</li>
-          <li>Decide how many may share the screen before the rest queue</li>
-        </ul>
-      </div>
-      <div class="shot in d1"><img src="05_styles.jpg" alt="The popup style records"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ PERMISSIONS ═══════════════ -->
-<section class="dark">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Who can do what</span>
-      <h2>Everyone reminds themselves. Managers remind the team.</h2>
-      <p>Two groups, and a form that shows each person only what concerns them.</p>
-    </div>
-    <div class="grid g2">
-      <div class="card up d1">
-        <h4>Anyone</h4>
-        <p>Sets reminders for themselves, stars and reads what arrives, snoozes,
-           and answers. They cannot send to other people, and cannot change a
-           notice somebody else wrote.</p>
-      </div>
-      <div class="card up d2">
-        <h4>Notification Manager</h4>
-        <p>Sends to chosen people or to everybody, edits their own notices,
-           and sees the full delivery history — who was told, who answered,
-           who is still waiting.</p>
-      </div>
-    </div>
-    <div class="row" style="margin-top:52px;align-items:center">
-      <div class="copy up">
-        <h3>A reader sees the message, not the machinery</h3>
-        <p>Open a notice somebody sent you and you get the title, when it is due,
-           how urgent it is, who wrote it and what it says. The audience picker,
-           the popup settings and the workflow bar belong to the author, so they
-           are simply not there.</p>
-      </div>
-      <div class="shot in d1"><img src="06_form.jpg" alt="The reminder form"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
-<section>
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">In practice</span>
-      <h2>Three steps, about twenty seconds</h2>
-    </div>
-    <div class="steps">
-      <div class="step up d1">
-        <h4>Write it</h4>
-        <p>Start from a template or from nothing. Give it a time, a level and a
-           message.</p>
-      </div>
-      <div class="step up d2">
-        <h4>Choose who</h4>
-        <p>Only me, selected people, or everybody. Or press <b>Show Now</b> and
-           skip the waiting.</p>
-      </div>
-      <div class="step up d3">
-        <h4>It arrives</h4>
-        <p>On their screen, on the second, wherever they are in Odoo — and in
-           their system tray if they asked for it.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ DETAIL ═══════════════ -->
-<section style="background:var(--wash)">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">The small things</span>
-      <h2>Built for a working day, not a demo</h2>
-    </div>
-    <div class="grid g3">
-      <div class="card up d1"><div class="ico t"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 15v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></div>
-        <h4>A backlog never floods you</h4>
-        <p>Away for three days? One card appears — the most urgent — and the rest
-           wait behind a “more waiting” chip. <b>Close all</b> clears the screen
-           without marking anything read.</p></div>
-      <div class="card up d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M14 3h7l-7 7h7"/><path d="M8 14h8"/></svg></div>
-        <h4>Snooze that holds everywhere</h4>
-        <p>Ten minutes, an hour, tomorrow. Put it off on one screen and it is put
-           off on all of them, then comes back when it is due.</p></div>
-      <div class="card up d3"><div class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 11V3.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 11V5.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-1a7 7 0 0 1-7-7v-3a1.5 1.5 0 0 1 3 0"/></svg></div>
-        <h4>Acknowledgement when it matters</h4>
-        <p>Some notices need an answer. Those have no close cross, say so plainly,
-           and keep coming back until somebody clicks <b>Got it</b>.</p></div>
-      <div class="card up d4"><div class="ico a"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></div>
-        <h4>Flags that are yours</h4>
-        <p>Star anything to find it again. Your stars are yours — nobody else sees
-           them, even on a notice you both received.</p></div>
-      <div class="card up d5"><div class="ico v"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-9.3-5"/><path d="M6 9v-1"/><path d="M6 8c0 7-3 9-3 9h13"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/><path d="M3 3l18 18"/></svg></div>
-        <h4>A quiet switch</h4>
-        <p>Anyone can turn popups off for themselves. Urgent notices still get
-           through, and everything still lands in their list.</p></div>
-      <div class="card up d6"><div class="ico s"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
-        <h4>Nothing shown twice</h4>
-        <p>A notice already answered is never pushed again, and a device that was
-           closed catches up the moment it opens.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ QUALITY ═══════════════ -->
-<section class="dark">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Tested, not hoped for</span>
-      <h2>Every behaviour on this page has a test behind it</h2>
-      <p>Including seven that sign one account into two sessions at once to prove
-         the multi-device promise.</p>
-    </div>
-    <div class="stats">
-      <div class="stat up d1"><b>123</b><span>automated tests</span></div>
-      <div class="stat up d2"><b>12</b><span>real-browser tests</span></div>
-      <div class="stat up d3"><b>7</b><span>multi-device cases</span></div>
-      <div class="stat up d4"><b>0</b><span>known defects</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ SPEC ═══════════════ -->
-<section>
-  <div class="wrap" style="max-width:840px">
-    <div class="head"><span class="eyebrow">Specification</span>
-      <h2>What you are installing</h2></div>
-    <table>
-      <tr><td>Odoo version</td><td>17.0 — Community and Enterprise</td></tr>
-      <tr><td>Depends on</td><td><code>base</code>, <code>mail</code>, <code>web</code>
-        — nothing else</td></tr>
-      <tr><td>Licence</td><td>LGPL-3</td></tr>
-      <tr><td>Models added</td><td><code>velkio.notification</code>,
-        <code>velkio.notification.recipient</code>, <code>velkio.template</code>,
-        <code>velkio.popup.style</code></td></tr>
-      <tr><td>Security groups</td><td>Notification User, Notification Manager</td></tr>
-      <tr><td>Live delivery</td><td>Odoo’s own bus — no polling loop, no third-party
-        service, nothing leaves your server</td></tr>
-      <tr><td>System notifications</td><td>Standard browser notifications, asked for
-        once and only with the reader’s permission</td></tr>
-      <tr><td>Setup required</td><td>None. Install it and send one.</td></tr>
-    </table>
-  </div>
-</section>
-
-<!-- ═══════════════ CLOSE ═══════════════ -->
-<section class="end">
-  <div class="wrap">
-    <h2>Tell somebody something, and know it landed.</h2>
-    <p class="lede">Install it, open any screen in Odoo, and send yourself a reminder
-       for one minute from now.</p>
-    <div class="badge-cta">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff"
-           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"
-           aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-      Works the moment it is installed
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ BRAND FOOTER ═══════════════ -->
-<div class="dark brandfoot">
-  <img src="velkio_logo.png" alt="Velkio — Odoo Solutions">
-  <div class="name">Velkio Reminders &amp; Notifications</div>
-  <div class="tag">Popups · Dashboard · Calendar · Templates — for Odoo 17</div>
-  <div class="support">By <b style="color:#c7d2e3">Velkio – Odoo Solutions</b> ·
-    Support: <a href="mailto:velkio.odoosolution@gmail.com">velkio.odoosolution@gmail.com</a></div>
+<!-- ===================== WHY THIS EXISTS ===================== -->
+<div style="margin-top:22px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:22px;padding:28px;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#2563eb !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Why This Exists</div>
+<h2 style="margin:0 0 16px;color:#111827 !important;font-size:26px;letter-spacing:-.3px;text-align:center;">Odoo can tell people things. It cannot make them look.</h2>
+<p style="margin:0 auto 22px;font-size:15px;line-height:1.85;color:#4b5563 !important;max-width:820px;text-align:center;">
+Activities sit in a list. Emails wait in an inbox. Chatter needs someone to open the record. None of that helps when something has to be seen <em>now</em>. Velkio Reminders &amp; Notifications puts a real popup on the screen &mdash; a genuine on-screen alert, not another line item.
+</p>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:33.33%;padding:6px;vertical-align:top;">
+<div style="background-color:#eff6ff !important;border:1px solid #bfdbfe !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;">
+<div style="font-size:24px;margin-bottom:8px;">&#9203;</div>
+<div style="font-weight:800;color:#1e3a5f !important;font-size:14px;margin-bottom:5px;">On the exact second</div>
+<div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">The browser counts the time down itself, then confirms with the server before showing anything &mdash; not &ldquo;within a minute&rdquo;.</div>
+</div>
+</td>
+<td style="width:33.33%;padding:6px;vertical-align:top;">
+<div style="background-color:#f5f3ff !important;border:1px solid #ddd6fe !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;">
+<div style="font-size:24px;margin-bottom:8px;">&#128241;</div>
+<div style="font-weight:800;color:#4c1d95 !important;font-size:14px;margin-bottom:5px;">On every screen</div>
+<div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">One account on a laptop and a phone gets the notice on both. Answer it on either and it comes down on the other.</div>
+</div>
+</td>
+<td style="width:33.33%;padding:6px;vertical-align:top;">
+<div style="background-color:#fffbeb !important;border:1px solid #fde68a !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;">
+<div style="font-size:24px;margin-bottom:8px;">&#128276;</div>
+<div style="font-weight:800;color:#78350f !important;font-size:14px;margin-bottom:5px;">Outside Odoo too</div>
+<div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Optionally mirrored into the operating system&rsquo;s own notification centre, so it lands even when Odoo is not the window in front.</div>
+</div>
+</td>
+</tr>
+</table>
 </div>
 
-<div class="foot">
-  Velkio Reminders &amp; Notifications · Odoo 17 · LGPL-3 ·
-  every screenshot on this page is a real screen from a fresh database
+<!-- ===================== NAVIGATION ===================== -->
+<div style="margin-top:16px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:18px;padding:12px;text-align:center;">
+<a href="#designs" style="display:inline-block;margin:4px;padding:10px 20px;border-radius:999px;background-color:#2563eb !important;color:#fff !important;text-decoration:none;font-weight:800;font-size:14px;">6 Popup Designs</a>
+<a href="#screens" style="display:inline-block;margin:4px;padding:10px 20px;border-radius:999px;background-color:#f3f5fb !important;color:#1f2a5a !important;text-decoration:none;font-weight:800;font-size:14px;border:1px solid #dfe5f2 !important;">Inside the App</a>
+<a href="#permissions" style="display:inline-block;margin:4px;padding:10px 20px;border-radius:999px;background-color:#f3f5fb !important;color:#1f2a5a !important;text-decoration:none;font-weight:800;font-size:14px;border:1px solid #dfe5f2 !important;">Permissions</a>
+<a href="#setup" style="display:inline-block;margin:4px;padding:10px 20px;border-radius:999px;background-color:#f3f5fb !important;color:#1f2a5a !important;text-decoration:none;font-weight:800;font-size:14px;border:1px solid #dfe5f2 !important;">Setup</a>
+<a href="#technical" style="display:inline-block;margin:4px;padding:10px 20px;border-radius:999px;background-color:#f3f5fb !important;color:#1f2a5a !important;text-decoration:none;font-weight:800;font-size:14px;border:1px solid #dfe5f2 !important;">Technical</a>
+</div>
+
+<!-- ===================== DESIGNS ===================== -->
+<div id="designs" style="margin-top:22px;background-color:#0b1220 !important;border-radius:22px;padding:30px;color:#c7d2e3 !important;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#7dd3fc !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Six Genuinely Different Designs</div>
+<h2 style="margin:0 0 16px;color:#fff !important;font-size:26px;letter-spacing:-.3px;text-align:center;">Not one card in six colours</h2>
+<p style="margin:0 auto 20px;font-size:14.5px;line-height:1.8;color:#b3c0d4 !important;max-width:760px;text-align:center;">
+Each design has its own layout, motion and personality: Reminder Card, Soft Relief, Solid Alert, Outline Alert, Dashed Alert and Strip. Pick one for the whole company, or give a single notice its own.
+</p>
+<div style="border-radius:18px;overflow:hidden;box-shadow:0 20px 44px rgba(0,0,0,.4) !important;margin-bottom:10px;">
+<img src="demo_skins.gif" alt="The six Velkio popup designs cycling one after another" style="display:block;width:100% !important;height:auto !important;"/>
+</div>
+<p style="text-align:center;font-size:12.5px;color:#7b8aa3 !important;margin:0 0 20px;">All six designs, live.</p>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:33.33%;padding:6px;vertical-align:top;">
+<div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:16px;padding:16px;height:100%;box-sizing:border-box;">
+<div style="font-weight:800;color:#fff !important;font-size:14px;margin-bottom:5px;">Placed where you want it</div>
+<div style="font-size:13px;line-height:1.7;color:#b3c0d4 !important;">Six positions, your own width, corner radius, shadow depth, light or dark, solid or glass.</div>
+</div>
+</td>
+<td style="width:33.33%;padding:6px;vertical-align:top;">
+<div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:16px;padding:16px;height:100%;box-sizing:border-box;">
+<div style="font-weight:800;color:#fff !important;font-size:14px;margin-bottom:5px;">Coloured by urgency</div>
+<div style="font-size:13px;line-height:1.7;color:#b3c0d4 !important;">Information, Important and Urgent each carry their own colour &mdash; or set one accent for everything.</div>
+</div>
+</td>
+<td style="width:33.33%;padding:6px;vertical-align:top;">
+<div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:16px;padding:16px;height:100%;box-sizing:border-box;">
+<div style="font-weight:800;color:#fff !important;font-size:14px;margin-bottom:5px;">Motion you choose</div>
+<div style="font-size:13px;line-height:1.7;color:#b3c0d4 !important;">Drop, pop, slide or fade, with an optional chime and a countdown bar that shows the time left.</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== INSIDE THE APP (screenshots) ===================== -->
+<div id="screens" style="margin-top:22px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:22px;padding:28px;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#2563eb !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Inside The App</div>
+<h2 style="margin:0 0 22px;color:#111827 !important;font-size:26px;letter-spacing:-.3px;text-align:center;">Everything waiting, at a glance</h2>
+
+<div style="font-weight:800;color:#1f2a5a !important;font-size:15px;margin-bottom:8px;">&#128202; Dashboard &mdash; seven buckets, counted live</div>
+<img src="01_dashboard.jpg" alt="The Velkio reminders dashboard showing Today, Scheduled, Assigned to me, Flagged, Urgent, Completed and All" style="display:block;width:100% !important;height:auto !important;border:1px solid #e6e0f7 !important;border-radius:14px;box-shadow:0 14px 34px -14px rgba(37,99,235,.28) !important;"/>
+<p style="font-size:13px;color:#9a92ad !important;margin:10px 0 24px;">Today, Scheduled, Assigned to me, Flagged, Urgent, Completed, All &mdash; each one opens straight into the exact set that was counted.</p>
+
+<div style="font-weight:800;color:#1f2a5a !important;font-size:15px;margin-bottom:8px;">&#128197; Calendar &mdash; your own reminders, by date</div>
+<img src="02_calendar.jpg" alt="The Velkio reminder calendar, colour-coded by urgency" style="display:block;width:100% !important;height:auto !important;border:1px solid #e6e0f7 !important;border-radius:14px;box-shadow:0 14px 34px -14px rgba(37,99,235,.28) !important;"/>
+<p style="font-size:13px;color:#9a92ad !important;margin:10px 0 24px;">A month view of everything coming to you, colour-coded by urgency and filterable by level and author.</p>
+
+<div style="font-weight:800;color:#1f2a5a !important;font-size:15px;margin-bottom:8px;">&#128065; Read tracking &mdash; know what was actually seen</div>
+<img src="03_list.jpg" alt="The reminder list with its per-user read column" style="display:block;width:100% !important;height:auto !important;border:1px solid #e6e0f7 !important;border-radius:14px;box-shadow:0 14px 34px -14px rgba(37,99,235,.28) !important;"/>
+<p style="font-size:13px;color:#9a92ad !important;margin:10px 0 24px;">Every row carries a read marker that belongs to you alone. Unread rows stay bold, with a blue dot &mdash; like unread mail.</p>
+
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:50%;padding:0 8px 0 0;vertical-align:top;">
+<div style="font-weight:800;color:#1f2a5a !important;font-size:15px;margin-bottom:8px;">&#128221; Templates &mdash; 39 notices already written</div>
+<img src="04_templates.jpg" alt="The Velkio template library with 39 ready-made notices across 10 categories" style="display:block;width:100% !important;height:auto !important;border:1px solid #e6e0f7 !important;border-radius:14px;box-shadow:0 14px 34px -14px rgba(37,99,235,.28) !important;"/>
+<p style="font-size:13px;color:#9a92ad !important;margin:10px 0 0;">Meetings, approvals, deadlines, payroll, stock, maintenance and more. Pick one, set the time, send it.</p>
+</td>
+<td style="width:50%;padding:0 0 0 8px;vertical-align:top;">
+<div style="font-weight:800;color:#1f2a5a !important;font-size:15px;margin-bottom:8px;">&#127912; Styles &mdash; design the popup, no code</div>
+<img src="05_styles.jpg" alt="The Velkio popup style records with a live preview button" style="display:block;width:100% !important;height:auto !important;border:1px solid #e6e0f7 !important;border-radius:14px;box-shadow:0 14px 34px -14px rgba(124,58,237,.28) !important;"/>
+<p style="font-size:13px;color:#9a92ad !important;margin:10px 0 0;">Everything about how a notice looks lives in a record, with a &ldquo;Preview on my screen&rdquo; button.</p>
+</td>
+</tr>
+</table>
+
+<div style="font-weight:800;color:#1f2a5a !important;font-size:15px;margin:24px 0 8px;">&#128172; Form &mdash; the message, not the machinery</div>
+<img src="06_form.jpg" alt="The Velkio reminder form as seen by a reader" style="display:block;width:100% !important;height:auto !important;border:1px solid #e6e0f7 !important;border-radius:14px;box-shadow:0 14px 34px -14px rgba(37,99,235,.28) !important;"/>
+<p style="font-size:13px;color:#9a92ad !important;margin:10px 0 0;">Open a notice somebody sent you and you get the title, when it is due, how urgent it is, who wrote it and what it says &mdash; nothing else.</p>
+</div>
+
+<!-- ===================== FEATURE HIGHLIGHTS ===================== -->
+<div style="margin-top:22px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:22px;padding:28px;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#2563eb !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Built For A Real Working Day</div>
+<h2 style="margin:0 0 20px;color:#111827 !important;font-size:26px;letter-spacing:-.3px;text-align:center;">The small things that make it usable</h2>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:33.33%;padding:6px;vertical-align:top;"><div style="background-color:#f0fdfa !important;border:1px solid #99f6e4 !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;"><div style="font-size:22px;margin-bottom:8px;">&#128230;</div><div style="font-weight:800;color:#0f766e !important;font-size:14px;margin-bottom:5px;">A backlog never floods you</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Away for three days? One card appears &mdash; the most urgent &mdash; and the rest wait behind a &ldquo;more waiting&rdquo; chip.</div></div></td>
+<td style="width:33.33%;padding:6px;vertical-align:top;"><div style="background-color:#eff6ff !important;border:1px solid #bfdbfe !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;"><div style="font-size:22px;margin-bottom:8px;">&#8987;</div><div style="font-weight:800;color:#1e3a5f !important;font-size:14px;margin-bottom:5px;">Snooze that holds everywhere</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Ten minutes, an hour, tomorrow. Put it off on one screen and it is put off on all of them.</div></div></td>
+<td style="width:33.33%;padding:6px;vertical-align:top;"><div style="background-color:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;"><div style="font-size:22px;margin-bottom:8px;">&#9989;</div><div style="font-weight:800;color:#991b1b !important;font-size:14px;margin-bottom:5px;">Acknowledgement when it matters</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Some notices need an answer. Those keep coming back until somebody clicks &ldquo;Got it&rdquo;.</div></div></td>
+</tr>
+<tr><td colspan="3" style="height:12px;"></td></tr>
+<tr>
+<td style="padding:6px;vertical-align:top;"><div style="background-color:#fffbeb !important;border:1px solid #fde68a !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;"><div style="font-size:22px;margin-bottom:8px;">&#11088;</div><div style="font-weight:800;color:#78350f !important;font-size:14px;margin-bottom:5px;">Flags that are yours</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Star anything to find it again. Nobody else sees your stars, even on a notice you both received.</div></div></td>
+<td style="padding:6px;vertical-align:top;"><div style="background-color:#f5f3ff !important;border:1px solid #ddd6fe !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;"><div style="font-size:22px;margin-bottom:8px;">&#128263;</div><div style="font-weight:800;color:#4c1d95 !important;font-size:14px;margin-bottom:5px;">A quiet switch</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Anyone can turn popups off for themselves. Urgent notices still get through.</div></div></td>
+<td style="padding:6px;vertical-align:top;"><div style="background-color:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:16px;padding:18px;height:100%;box-sizing:border-box;"><div style="font-size:22px;margin-bottom:8px;">&#128064;</div><div style="font-weight:800;color:#334155 !important;font-size:14px;margin-bottom:5px;">Nothing shown twice</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">A notice already answered is never pushed again. A closed device catches up the moment it opens.</div></div></td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== ALWAYS IN VIEW ===================== -->
+<div style="margin-top:22px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:22px;padding:28px;">
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:50%;padding:0 14px 0 0;vertical-align:middle;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#2563eb !important;text-transform:uppercase;margin-bottom:8px;">Always In View</div>
+<h3 style="margin:0 0 12px;color:#111827 !important;font-size:22px;letter-spacing:-.3px;">A count you cannot miss</h3>
+<p style="margin:0;font-size:14.5px;line-height:1.8;color:#4b5563 !important;">Unread reminders are counted on the bell in the top bar and badged on the app icon, updating the moment a notice arrives &mdash; no waiting for a refresh.</p>
+</td>
+<td style="width:50%;padding:0 0 0 14px;vertical-align:top;">
+<img src="09_badges.jpg" alt="The unread badge on the app icon and on the top-bar bell" style="display:block;width:100% !important;height:auto !important;border:1px solid #e6e0f7 !important;border-radius:14px;box-shadow:0 14px 34px -14px rgba(37,99,235,.28) !important;"/>
+</td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== PERMISSIONS ===================== -->
+<div id="permissions" style="margin-top:22px;background-color:#0b1220 !important;border-radius:22px;padding:30px;color:#c7d2e3 !important;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#7dd3fc !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Who Can Do What</div>
+<h2 style="margin:0 0 20px;color:#fff !important;font-size:26px;letter-spacing:-.3px;text-align:center;">Everyone reminds themselves. Managers remind the team.</h2>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:50%;padding:6px;vertical-align:top;"><div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:16px;padding:20px;height:100%;box-sizing:border-box;"><div style="font-weight:800;color:#fff !important;font-size:15px;margin-bottom:8px;">Anyone</div><div style="font-size:13.5px;line-height:1.75;color:#b3c0d4 !important;">Sets reminders for themselves, stars and reads what arrives, snoozes, and answers. They cannot send to other people, and cannot change a notice somebody else wrote.</div></div></td>
+<td style="width:50%;padding:6px;vertical-align:top;"><div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:16px;padding:20px;height:100%;box-sizing:border-box;"><div style="font-weight:800;color:#fff !important;font-size:15px;margin-bottom:8px;">Notification Manager</div><div style="font-size:13.5px;line-height:1.75;color:#b3c0d4 !important;">Sends to chosen people or to everybody, edits their own notices, and sees the full delivery history &mdash; who was told, who answered, who is still waiting.</div></div></td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<div style="margin-top:22px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:22px;padding:28px;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#2563eb !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">In Practice</div>
+<h2 style="margin:0 0 20px;color:#111827 !important;font-size:26px;letter-spacing:-.3px;text-align:center;">Three steps, about twenty seconds</h2>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:33.33%;padding:6px;vertical-align:top;"><div style="background-color:#f8faff !important;border:1px solid #e2e8f0 !important;border-radius:16px;padding:20px;height:100%;box-sizing:border-box;"><div style="width:32px;height:32px;border-radius:10px;background-color:#2563eb !important;color:#fff !important;font-weight:900;font-size:15px;text-align:center;line-height:32px;margin-bottom:12px;">1</div><div style="font-weight:800;color:#1f2a5a !important;font-size:14px;margin-bottom:5px;">Write it</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Start from a template or from nothing. Give it a time, a level and a message.</div></div></td>
+<td style="width:33.33%;padding:6px;vertical-align:top;"><div style="background-color:#f8faff !important;border:1px solid #e2e8f0 !important;border-radius:16px;padding:20px;height:100%;box-sizing:border-box;"><div style="width:32px;height:32px;border-radius:10px;background-color:#2563eb !important;color:#fff !important;font-weight:900;font-size:15px;text-align:center;line-height:32px;margin-bottom:12px;">2</div><div style="font-weight:800;color:#1f2a5a !important;font-size:14px;margin-bottom:5px;">Choose who</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">Only me, selected people, or everybody. Or press &ldquo;Show Now&rdquo; and skip the waiting.</div></div></td>
+<td style="width:33.33%;padding:6px;vertical-align:top;"><div style="background-color:#f8faff !important;border:1px solid #e2e8f0 !important;border-radius:16px;padding:20px;height:100%;box-sizing:border-box;"><div style="width:32px;height:32px;border-radius:10px;background-color:#2563eb !important;color:#fff !important;font-weight:900;font-size:15px;text-align:center;line-height:32px;margin-bottom:12px;">3</div><div style="font-weight:800;color:#1f2a5a !important;font-size:14px;margin-bottom:5px;">It arrives</div><div style="font-size:13px;line-height:1.7;color:#5b6472 !important;">On their screen, on the second, wherever they are in Odoo &mdash; and in their system tray if they asked for it.</div></div></td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== QUALITY ===================== -->
+<div style="margin-top:22px;background-color:#0b1220 !important;border-radius:22px;padding:30px;color:#c7d2e3 !important;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#7dd3fc !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Tested, Not Hoped For</div>
+<h2 style="margin:0 0 20px;color:#fff !important;font-size:24px;letter-spacing:-.3px;text-align:center;">Every behaviour on this page has a test behind it</h2>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:25%;padding:6px;text-align:center;"><div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:14px;padding:18px 8px;"><div style="font-size:30px;font-weight:900;color:#fff !important;">123</div><div style="font-size:12px;color:#93a3ba !important;margin-top:6px;">automated tests</div></div></td>
+<td style="width:25%;padding:6px;text-align:center;"><div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:14px;padding:18px 8px;"><div style="font-size:30px;font-weight:900;color:#fff !important;">12</div><div style="font-size:12px;color:#93a3ba !important;margin-top:6px;">real-browser tests</div></div></td>
+<td style="width:25%;padding:6px;text-align:center;"><div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:14px;padding:18px 8px;"><div style="font-size:30px;font-weight:900;color:#fff !important;">7</div><div style="font-size:12px;color:#93a3ba !important;margin-top:6px;">multi-device cases</div></div></td>
+<td style="width:25%;padding:6px;text-align:center;"><div style="background-color:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.1) !important;border-radius:14px;padding:18px 8px;"><div style="font-size:30px;font-weight:900;color:#fff !important;">0</div><div style="font-size:12px;color:#93a3ba !important;margin-top:6px;">known defects</div></div></td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== SETUP ===================== -->
+<div id="setup" style="margin-top:22px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:22px;padding:28px;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#2563eb !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Setup</div>
+<h2 style="margin:0 0 20px;color:#111827 !important;font-size:26px;letter-spacing:-.3px;text-align:center;">Install it, try it, in under two minutes</h2>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<td style="width:48px;vertical-align:top;padding:0 14px 20px 0;"><div style="width:36px;height:36px;border-radius:50%;background-color:#2563eb !important;color:#fff !important;font-weight:900;font-size:16px;text-align:center;line-height:36px;">1</div></td>
+<td style="vertical-align:top;padding-bottom:20px;border-bottom:1px dashed #e5e7eb !important;"><div style="font-weight:800;color:#1f2a5a !important;font-size:14px;margin-bottom:4px;">Add the module and install it</div><div style="font-size:13px;color:#5b6472 !important;line-height:1.7;">Copy it into your addons path, update the app list, then install <strong>Velkio Reminders &amp; Notifications</strong> from Apps. It depends only on <code>base</code>, <code>mail</code> and <code>web</code>.</div></td>
+</tr>
+<tr><td colspan="2" style="height:14px;"></td></tr>
+<tr>
+<td style="width:48px;vertical-align:top;padding:0 14px 20px 0;"><div style="width:36px;height:36px;border-radius:50%;background-color:#2563eb !important;color:#fff !important;font-weight:900;font-size:16px;text-align:center;line-height:36px;">2</div></td>
+<td style="vertical-align:top;padding-bottom:20px;border-bottom:1px dashed #e5e7eb !important;"><div style="font-weight:800;color:#1f2a5a !important;font-size:14px;margin-bottom:4px;">Send yourself a reminder</div><div style="font-size:13px;color:#5b6472 !important;line-height:1.7;">Open any screen in Odoo, create a reminder for one minute from now, and watch it land.</div></td>
+</tr>
+<tr><td colspan="2" style="height:14px;"></td></tr>
+<tr>
+<td style="width:48px;vertical-align:top;padding:0 14px 0 0;"><div style="width:36px;height:36px;border-radius:50%;background-color:#2563eb !important;color:#fff !important;font-weight:900;font-size:16px;text-align:center;line-height:36px;">3</div></td>
+<td style="vertical-align:top;"><div style="font-weight:800;color:#1f2a5a !important;font-size:14px;margin-bottom:4px;">Grant the manager group</div><div style="font-size:13px;color:#5b6472 !important;line-height:1.7;">Give the people who broadcast to others the <strong>Notification Manager</strong> group, and you are fully set up.</div></td>
+</tr>
+</table>
+</div>
+
+<!-- ===================== TECHNICAL ===================== -->
+<div id="technical" style="margin-top:22px;background-color:#fff !important;border:1px solid #e5e7eb !important;border-radius:22px;padding:28px;">
+<div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:#2563eb !important;text-transform:uppercase;margin-bottom:8px;text-align:center;">Technical</div>
+<h2 style="margin:0 0 20px;color:#111827 !important;font-size:26px;letter-spacing:-.3px;text-align:center;">What you are installing</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13.5px;">
+<tr><td style="width:220px;padding:12px 12px 12px 0;vertical-align:top;font-weight:800;color:#1e3a5f !important;border-bottom:1px solid #eef1f6 !important;">Odoo version</td><td style="padding:12px 0;color:#5b6472 !important;line-height:1.7;border-bottom:1px solid #eef1f6 !important;">17.0 &mdash; Community and Enterprise</td></tr>
+<tr><td style="padding:12px 12px 12px 0;vertical-align:top;font-weight:800;color:#1e3a5f !important;border-bottom:1px solid #eef1f6 !important;">Depends on</td><td style="padding:12px 0;color:#5b6472 !important;line-height:1.7;border-bottom:1px solid #eef1f6 !important;"><code>base</code>, <code>mail</code>, <code>web</code> &mdash; nothing else</td></tr>
+<tr><td style="padding:12px 12px 12px 0;vertical-align:top;font-weight:800;color:#1e3a5f !important;border-bottom:1px solid #eef1f6 !important;">Licence</td><td style="padding:12px 0;color:#5b6472 !important;line-height:1.7;border-bottom:1px solid #eef1f6 !important;">LGPL-3 &mdash; free &amp; open source</td></tr>
+<tr><td style="padding:12px 12px 12px 0;vertical-align:top;font-weight:800;color:#1e3a5f !important;border-bottom:1px solid #eef1f6 !important;">Models added</td><td style="padding:12px 0;color:#5b6472 !important;line-height:1.7;border-bottom:1px solid #eef1f6 !important;"><code>velkio.notification</code>, <code>velkio.notification.recipient</code>, <code>velkio.template</code>, <code>velkio.popup.style</code></td></tr>
+<tr><td style="padding:12px 12px 12px 0;vertical-align:top;font-weight:800;color:#1e3a5f !important;border-bottom:1px solid #eef1f6 !important;">Security groups</td><td style="padding:12px 0;color:#5b6472 !important;line-height:1.7;border-bottom:1px solid #eef1f6 !important;">Notification User, Notification Manager</td></tr>
+<tr><td style="padding:12px 12px 12px 0;vertical-align:top;font-weight:800;color:#1e3a5f !important;border-bottom:1px solid #eef1f6 !important;">Live delivery</td><td style="padding:12px 0;color:#5b6472 !important;line-height:1.7;border-bottom:1px solid #eef1f6 !important;">Odoo&rsquo;s own bus &mdash; no polling loop, no third-party service, nothing leaves your server</td></tr>
+<tr><td style="padding:12px 12px 12px 0;vertical-align:top;font-weight:800;color:#1e3a5f !important;">Setup required</td><td style="padding:12px 0;color:#5b6472 !important;line-height:1.7;">None. Install it and send one.</td></tr>
+</table>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<div style="margin-top:22px;background-color:#0b1220 !important;border-radius:24px;padding:34px;text-align:center;position:relative;overflow:hidden;">
+<div style="position:relative;">
+<img src="velkio_logo.png" alt="Velkio - Odoo Solutions" style="width:170px;height:auto;border-radius:10px;margin:0 auto 18px;display:block;box-shadow:0 10px 24px rgba(0,0,0,.35) !important;"/>
+<div style="font-size:22px;font-weight:900;color:#fff !important;margin-bottom:8px;">Velkio Reminders &amp; Notifications</div>
+<div style="font-size:14px;color:rgba(255,255,255,.7) !important;margin-bottom:22px;">Popups &middot; Dashboard &middot; Calendar &middot; Templates &mdash; for Odoo 17</div>
+<div>
+<span style="display:inline-block;background-color:#2563eb !important;color:#fff !important;border-radius:999px;padding:11px 28px;font-size:14px;font-weight:800;margin:5px;box-shadow:0 8px 20px rgba(37,99,235,.4) !important;">Install it &mdash; it works the moment you do</span>
+<span style="display:inline-block;background-color:rgba(255,255,255,.1) !important;color:#fff !important;border-radius:999px;padding:11px 22px;font-size:14px;font-weight:700;margin:5px;border:1px solid rgba(255,255,255,.2) !important;">LGPL-3 &middot; Free &amp; Open Source</span>
+</div>
+<div style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.55) !important;">
+By <strong style="color:rgba(255,255,255,.8) !important;">Velkio &ndash; Odoo Solutions</strong> &middot; Support: <a href="mailto:velkio.odoosolution@gmail.com" style="color:#93c5fd !important;text-decoration:none;">velkio.odoosolution@gmail.com</a>
+</div>
+<div style="margin-top:10px;font-size:11.5px;color:rgba(255,255,255,.4) !important;">
+Odoo 17 &middot; LGPL-3 &middot; every screenshot on this page is a real screen from a fresh database
 </div>
 </div>
+</div>
+
+</div><!-- /container -->
+</section>
+</body>
+</html>
