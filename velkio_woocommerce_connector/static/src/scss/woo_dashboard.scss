@@ -67,7 +67,14 @@ $woo-warning: #f0a85e;
         width: 46px;
         height: 46px;
         border-radius: 12px;
-        background: linear-gradient(135deg, $woo-brand, $woo-brand-dark);
+        background: #fff;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         display: flex;
         align-items: center;
         justify-content: center;

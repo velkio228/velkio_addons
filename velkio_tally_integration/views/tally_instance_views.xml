@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tally_instance_list" model="ir.ui.view">
+        <field name="name">tally.instance.list</field>
+        <field name="model">tally.instance</field>
+        <field name="arch" type="xml">
+            <list string="Tally Instances">
+                <field name="name"/>
+                <field name="tally_company" string="Company"/>
+                <field name="state" string="Connection" widget="badge"
+                       decoration-success="state == 'online'"
+                       decoration-danger="state == 'offline'"
+                       decoration-muted="state == 'draft'"/>
+                <field name="posted_to_tally_count" string="To Tally"/>
+                <field name="received_from_tally_count" string="From Tally"/>
+                <field name="last_pull" string="Last Import" widget="remaining_days"/>
+                <field name="endpoint_url" string="Address" optional="hide"/>
+                <field name="queue_pending" string="Waiting" optional="hide"/>
+                <field name="queue_failed" string="Failed" optional="hide"
+                       decoration-danger="queue_failed &gt; 0"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="tally_host" optional="hide"/>
+                <field name="tally_port" optional="hide"/>
+                <field name="default_source" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tally_instance_form" model="ir.ui.view">
+        <field name="name">tally.instance.form</field>
+        <field name="model">tally.instance</field>
+        <field name="arch" type="xml">
+            <form string="Tally Instance">
+                <header>
+                    <!-- Day-to-day actions only; setup lives on the Setup &amp; Tools tab. -->
+                    <button name="action_sync_now" type="object"
+                            string="Sync Now" icon="fa-refresh" class="btn-primary"
+                            invisible="connection_mode != 'direct'"
+                            help="Send everything queued, then fetch masters and vouchers from Tally."
+                            groups="velkio_tally_integration.group_tally_manager"/>
+                    <button name="action_test_connection" type="object"
+                            string="Test Connection" icon="fa-plug"
+                            help="Check that TallyPrime answers on the address below."/>
+                    <button name="action_pull_now" type="object"
+                            string="Get Everything from Tally" icon="fa-cloud-download"
+                            invisible="connection_mode != 'direct'"
+                            help="Masters and vouchers."
+                            groups="velkio_tally_integration.group_tally_manager"/>
+                    <button name="action_pull_masters" type="object"
+                            string="Get Masters Only" icon="fa-download"
+                            invisible="connection_mode != 'direct'"
+                            help="Ledgers, parties, stock items, godowns and cost centres."
+                            groups="velkio_tally_integration.group_tally_manager"/>
+                    <button name="action_retry_quarantined" type="object"
+                            string="Retry Quarantined" icon="fa-life-ring"
+                            invisible="quarantine_count == 0"
+                            groups="velkio_tally_integration.group_tally_manager"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Online" bg_color="text-bg-success"
+                            invisible="state != 'online'"/>
+                    <widget name="web_ribbon" title="Offline" bg_color="text-bg-danger"
+                            invisible="state != 'offline'"/>
+                    <widget name="web_ribbon" title="Not Tested" bg_color="text-bg-secondary"
+                            invisible="state != 'draft'"/>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_posted_to_tally" type="object"
+                                class="oe_stat_button" icon="fa-cloud-upload">
+                            <field name="posted_to_tally_count" widget="statinfo"
+                                   string="Odoo → Tally"/>
+                        </button>
+                        <button name="action_view_received_from_tally" type="object"
+                                class="oe_stat_button" icon="fa-cloud-download">
+                            <field name="received_from_tally_count" widget="statinfo"
+                                   string="Tally → Odoo"/>
+                        </button>
+                        <button name="action_view_queue_pending" type="object"
+                                class="oe_stat_button" icon="fa-clock-o">
+                            <field name="queue_pending" widget="statinfo" string="Waiting"/>
+                        </button>
+                        <button name="action_view_queue_failed" type="object"
+                                class="oe_stat_button" icon="fa-exclamation-triangle"
+                                invisible="queue_failed == 0">
+                            <field name="queue_failed" widget="statinfo" string="Failed"/>
+                        </button>
+                        <button name="action_view_logs" type="object"
+                                class="oe_stat_button" icon="fa-check">
+                            <field name="synced_today" widget="statinfo" string="Today"/>
+                        </button>
+                        <button name="action_view_mappings" type="object"
+                                class="oe_stat_button" icon="fa-exchange">
+                            <field name="mapping_count" widget="statinfo" string="Linked"/>
+                        </button>
+                        <button name="action_view_logs" type="object"
+                                class="oe_stat_button" icon="fa-list">
+                            <field name="log_count" widget="statinfo" string="All Logs"/>
+                        </button>
+                        <button name="action_view_orphans" type="object"
+                                class="oe_stat_button" icon="fa-unlink"
+                                invisible="orphan_count == 0">
+                            <field name="orphan_count" widget="statinfo" string="Orphans"/>
+                        </button>
+                        <button name="action_view_quarantine" type="object"
+                                class="oe_stat_button" icon="fa-ban"
+                                invisible="quarantine_count == 0">
+                            <field name="quarantine_count" widget="statinfo" string="Quarantined"/>
+                        </button>
+                    </div>
+
+                    <div class="float-end d-none d-md-block">
+                        <img src="/velkio_tally_integration/static/description/velkio_logo.png"
+                             alt="Velkio Odoo Solutions" style="width:144px;height:auto;"/>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Connection Name"/>
+                        <h1><field name="name" placeholder="e.g. Head Office Tally"/></h1>
+                        <h3 class="text-muted">
+                            <field name="tally_company" placeholder="Tally company name"/>
+                        </h3>
+                    </div>
+
+                    <group>
+                        <group string="Status">
+                            <field name="state" string="Tally Connection" widget="badge"
+                                   decoration-success="state == 'online'"
+                                   decoration-danger="state == 'offline'"
+                                   decoration-muted="state == 'draft'"/>
+                            <field name="endpoint_url" string="Address Odoo Uses"/>
+                            <field name="agent_last_seen" string="Last Contact"/>
+                            <field name="last_pull" string="Last Import from Tally"
+                                   invisible="connection_mode != 'direct'"/>
+                        </group>
+                        <group string="Company">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="odoo_role" string="Who keeps the books"/>
+                            <field name="tally_inventory" string="Tally company type"/>
+                            <field name="odoo_edition" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Connection" name="connection">
+                            <div class="alert alert-info" role="alert">
+                                Odoo talks to TallyPrime over its XML gateway. TallyPrime must be
+                                running, the company open, and sitting on the Gateway of Tally screen —
+                                an open voucher or report screen blocks every request. Nothing else
+                                may use port 9000 when Tally starts.
+                            </div>
+                            <group>
+                                <group string="Where Tally Is">
+                                    <field name="tally_host" string="Tally Computer (IP)"/>
+                                    <field name="tally_port" string="Port"/>
+                                    <field name="tally_protocol" string="Protocol"/>
+                                    <field name="tally_base_url" string="Full URL (optional)"
+                                           placeholder="https://acme-tally.example.com — overrides the fields above"/>
+                                    <field name="connection_mode" string="How Odoo connects"/>
+                                </group>
+                                <group string="Security">
+                                    <field name="auth_type" string="Authentication"/>
+                                    <field name="auth_username" invisible="auth_type != 'basic'"/>
+                                    <field name="auth_password" password="True"
+                                           invisible="auth_type != 'basic'"/>
+                                    <field name="auth_header_name" invisible="auth_type != 'header'"/>
+                                    <field name="auth_header_value" password="True"
+                                           invisible="auth_type != 'header'"/>
+                                    <field name="tls_verify" string="Check TLS certificate"
+                                           invisible="tally_protocol == 'http' and not tally_base_url"/>
+                                    <field name="active" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Sync Rules" name="policy">
+                            <group>
+                                <group string="Bringing Records In (Tally → Odoo)">
+                                    <field name="direct_auto_pull" string="Import automatically"
+                                           invisible="connection_mode != 'direct'"/>
+                                    <field name="pull_interval" string="Import every (minutes)"
+                                           invisible="connection_mode != 'direct' or not direct_auto_pull"/>
+                                    <field name="pull_lookback_days" string="Import vouchers from the last (days)"
+                                           invisible="connection_mode != 'direct'"/>
+                                    <field name="auto_post" string="Post imported vouchers"/>
+                                    <field name="default_source" string="Who wins on conflict"/>
+                                    <field name="inbound_quarantine_threshold"
+                                           string="Quarantine after failures"/>
+                                </group>
+                                <group string="Sending Records Out (Odoo → Tally)">
+                                    <field name="tally_educational_mode"
+                                           string="Tally is in Educational mode"/>
+                                    <field name="sync_automated_valuation_stock"
+                                           string="Send stock valuation entries"
+                                           invisible="tally_inventory != 'with_inventory'"/>
+                                    <field name="poll_interval" string="Agent poll interval (s)"
+                                           invisible="connection_mode == 'direct'"/>
+                                    <field name="use_tdl_delta" string="Use Tally delta (AlterID)"
+                                           invisible="connection_mode != 'direct'"/>
+                                    <field name="verbose_logging" string="Log every record"/>
+                                    <field name="log_retention_days" string="Keep logs for (days)"/>
+                                </group>
+                            </group>
+                            <div class="text-muted">
+                                Educational mode only accepts vouchers dated the 1st, 2nd or 31st of a
+                                month, so other dates are moved to the 1st when sent. Untick this once
+                                TallyPrime is licensed.
+                            </div>
+                        </page>
+
+                        <page string="What Syncs" name="entities">
+                            <div class="alert alert-info" role="alert">
+                                One line per record type. <b>Two-way</b> means it travels in both
+                                directions; the other settings restrict it to a single direction.
+                            </div>
+                            <field name="entity_config_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="entity" string="Record Type"/>
+                                    <field name="odoo_model_name" string="Odoo Model" optional="hide"/>
+                                    <field name="enabled" string="On"/>
+                                    <field name="direction" string="Direction" widget="badge"
+                                           decoration-success="direction == 'both'"
+                                           decoration-info="direction != 'both'"/>
+                                    <field name="source_of_truth" string="Wins on conflict"/>
+                                    <field name="last_sync" string="Last Synced" readonly="1"/>
+                                    <field name="last_alterid" string="Tally Marker"
+                                           readonly="1" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Setup &amp; Tools" name="setup"
+                              groups="velkio_tally_integration.group_tally_manager">
+                            <group string="One-time setup">
+                                <div colspan="2">
+                                    <button name="action_open_onboarding" type="object"
+                                            string="Start Onboarding" icon="fa-rocket"
+                                            class="btn-primary"/>
+                                    <span class="text-muted ms-2">Guided first-time setup.</span>
+                                </div>
+                                <div colspan="2" class="mt-2">
+                                    <button name="action_setup_indian_localization" type="object"
+                                            string="Configure Indian Localization (GST/INR)"
+                                            icon="fa-flag"/>
+                                    <span class="text-muted ms-2">Sets country, currency and GST on the company.</span>
+                                </div>
+                                <div colspan="2" class="mt-2">
+                                    <button name="action_load_default_entities" type="object"
+                                            string="Load Default Record Types" icon="fa-magic"/>
+                                    <span class="text-muted ms-2">Fills the "What Syncs" tab with the standard list.</span>
+                                </div>
+                                <div colspan="2" class="mt-2">
+                                    <button name="action_enable_two_way" type="object"
+                                            string="Make Everything Two-Way" icon="fa-exchange"/>
+                                    <span class="text-muted ms-2">Sets every record type to travel in both directions.</span>
+                                </div>
+                            </group>
+                            <group string="Maintenance">
+                                <div colspan="2">
+                                    <button name="action_reconcile_deletions" type="object"
+                                            string="Find Records Deleted in Tally"
+                                            icon="fa-balance-scale"
+                                            invisible="connection_mode != 'direct'"/>
+                                    <span class="text-muted ms-2">Flags Odoo records whose Tally original is gone.</span>
+                                </div>
+                                <div colspan="2" class="mt-2">
+                                    <button name="action_generate_token" type="object"
+                                            string="Generate Agent Token" icon="fa-key"/>
+                                    <span class="text-muted ms-2">Only needed for the on-premise agent.</span>
+                                </div>
+                            </group>
+                        </page>
+
+                        <page string="Agent" name="agent"
+                              invisible="connection_mode == 'direct'">
+                            <group>
+                                <group string="Pairing">
+                                    <field name="agent_token" password="True"
+                                           groups="velkio_tally_integration.group_tally_manager"/>
+                                    <field name="agent_last_seen"/>
+                                </group>
+                                <group string="How it connects">
+                                    <div colspan="2" class="text-muted">
+                                        The on-prem Sync Agent authenticates with the token above
+                                        and makes outbound-only HTTPS to this Odoo instance. It polls
+                                        Tally for AlterID changes and writes Odoo-owned records back
+                                        into Tally. No inbound ports are opened on-site.
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tally_instance_search" model="ir.ui.view">
+        <field name="name">tally.instance.search</field>
+        <field name="model">tally.instance</field>
+        <field name="arch" type="xml">
+            <search string="Tally Instances">
+                <field name="name"/>
+                <field name="tally_company"/>
+                <filter string="Online" name="online" domain="[('state', '=', 'online')]"/>
+                <filter string="Offline" name="offline" domain="[('state', '=', 'offline')]"/>
+                <group>
+                    <filter string="Source of Truth" name="grp_sot"
+                            context="{'group_by': 'default_source'}"/>
+                    <filter string="Status" name="grp_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_tally_instance_kanban" model="ir.ui.view">
+        <field name="name">tally.instance.kanban</field>
+        <field name="model">tally.instance</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard o_tally_dashboard" sample="1">
+                <templates>
+                    <t t-name="card">
+                        <!-- Status strip, full width of the card -->
+                        <div class="o_tally_status_strip w-100 text-center text-uppercase fw-bold py-2 text-bg-success"
+                             invisible="state != 'online'">Online</div>
+                        <div class="o_tally_status_strip w-100 text-center text-uppercase fw-bold py-2 text-bg-danger"
+                             invisible="state != 'offline'">Offline</div>
+                        <div class="o_tally_status_strip w-100 text-center text-uppercase fw-bold py-2 text-bg-secondary"
+                             invisible="state != 'draft'">Not tested</div>
+
+                        <!-- Three blocks: side by side on a wide card, stacked otherwise -->
+                        <div class="o_tally_body">
+                            <div class="o_tally_who">
+                                <field name="name" class="fw-bold fs-4 d-block"/>
+                                <field name="tally_company" class="d-block text-muted"/>
+                                <div class="text-muted small mt-1 text-truncate">
+                                    <i class="fa fa-plug me-1" title="Endpoint"/><field name="endpoint_url"/>
+                                </div>
+                            </div>
+
+                            <div class="o_tally_flows">
+                                <div class="d-flex text-center">
+                                    <button name="action_view_posted_to_tally" type="object"
+                                            class="btn btn-link p-0 flex-fill text-decoration-none">
+                                        <div class="display-6 fw-bold text-primary">
+                                            <field name="posted_to_tally_count"/>
+                                        </div>
+                                        <div class="text-uppercase small text-muted">
+                                            <i class="fa fa-arrow-up me-1"/>To Tally
+                                        </div>
+                                    </button>
+                                    <button name="action_view_received_from_tally" type="object"
+                                            class="btn btn-link p-0 flex-fill text-decoration-none">
+                                        <div class="display-6 fw-bold text-success">
+                                            <field name="received_from_tally_count"/>
+                                        </div>
+                                        <div class="text-uppercase small text-muted">
+                                            <i class="fa fa-arrow-down me-1"/>From Tally
+                                        </div>
+                                    </button>
+                                </div>
+                                <div class="small text-muted text-center mt-2">
+                                    Waiting <field name="queue_pending" class="fw-bold"/>
+                                    <span class="mx-1">·</span>
+                                    <span invisible="queue_failed &gt; 0">
+                                        Failed <field name="queue_failed" class="fw-bold"/>
+                                    </span>
+                                    <span class="text-danger" invisible="queue_failed == 0">
+                                        Failed <field name="queue_failed" class="fw-bold"/>
+                                    </span>
+                                    <span class="mx-1">·</span>
+                                    Today <field name="synced_today" class="fw-bold"/>
+                                </div>
+                                <div class="small text-muted text-center" invisible="not last_pull">
+                                    Last import <field name="last_pull" widget="remaining_days"/>
+                                </div>
+                            </div>
+
+                            <div class="o_tally_actions">
+                                <button name="action_sync_now" type="object"
+                                        class="btn btn-primary"
+                                        invisible="connection_mode != 'direct'"
+                                        title="Send queued records, then import from Tally">
+                                    <i class="fa fa-refresh me-1"/>Sync Now
+                                </button>
+                                <button name="action_pull_now" type="object"
+                                        class="btn btn-secondary"
+                                        invisible="connection_mode != 'direct'"
+                                        title="Bring masters and vouchers from Tally">
+                                    <i class="fa fa-cloud-download me-1"/>Get from Tally
+                                </button>
+                                <button name="action_test_connection" type="object"
+                                        class="btn btn-secondary">
+                                    <i class="fa fa-plug me-1"/>Test Connection
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_tally_instance" model="ir.actions.act_window">
+        <field name="name">Tally Instances</field>
+        <field name="res_model">tally.instance</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_tally_instance_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Connect your first Tally instance</p>
+            <p>Define the Tally endpoint, choose the source of truth, load the entities to sync,
+               and pair the on-prem Sync Agent.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="cron_tally_health_check" model="ir.cron">
+            <field name="name">Tally: agent health check</field>
+            <field name="model_id" ref="model_tally_instance"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_health_check()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="cron_tally_direct_sync" model="ir.cron">
+            <field name="name">Tally: direct sync (no agent)</field>
+            <field name="model_id" ref="model_tally_instance"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_direct_sync()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="cron_tally_reconcile_deletions" model="ir.cron">
+            <field name="name">Tally: reconcile deleted records (daily)</field>
+            <field name="model_id" ref="model_tally_instance"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_reconcile_deletions()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="cron_tally_prune_logs" model="ir.cron">
+            <field name="name">Tally: prune old sync logs (daily)</field>
+            <field name="model_id" ref="model_tally_instance"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_prune_logs()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

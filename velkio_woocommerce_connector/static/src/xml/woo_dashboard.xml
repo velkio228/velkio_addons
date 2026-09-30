@@ -13,7 +13,7 @@
                 <div class="o_woo_dashboard_header">
                     <div class="o_woo_header_left">
                         <div class="o_woo_brand">
-                            <i class="fa fa-shopping-bag"/>
+                            <img src="/velkio_woocommerce_connector/static/description/velkio_mark.png" alt="Velkio Odoo Solutions" width="46" height="46"/>
                         </div>
                         <div>
                             <h2>Odoo WooCommerce Connector</h2>

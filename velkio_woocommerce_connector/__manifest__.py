@@ -1,15 +1,17 @@
 {
-    "name": "Odoo WooCommerce Connector",
-    "version": "19.0.1.0.0",
+    "name": "WooCommerce Connector",
+    "version": "19.0.1.0.1",
     "category": "Sales/eCommerce",
     "summary": "Connect WooCommerce with Odoo products, customers, and orders",
     "description": """
 WooCommerce Connector
 =====================
 
-Synchronize WooCommerce products, customers, and orders with Odoo. The module
-includes multi-store configuration, import and export actions, mapping records,
-sync logs, and a backend dashboard for operational visibility.
+Import WooCommerce products, customers and new sales orders into Odoo. Export
+mapped product names, SKUs and prices to the configured store. Includes multi-store
+connections, manual actions, mappings, sync logs and an operational dashboard.
+Requires a reachable WooCommerce store and REST API credentials. Customer and
+order synchronization is inbound only. Imports read up to 1,000 records per resource.
     """,
     "author": "Velkio - Odoo Solutions",
     "website": "https://apps.odoo.com/apps/modules/browse?author=Velkio%20-%20Odoo%20Solutions",
@@ -35,7 +37,7 @@ sync logs, and a backend dashboard for operational visibility.
     },
     "images": [
         "static/description/banner.png",
-        "static/description/icon.png",
+        "static/description/workflow.png",
     ],
     "application": True,
     "installable": True,

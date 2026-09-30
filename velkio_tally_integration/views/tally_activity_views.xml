@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One screen per direction, so "what went to Tally" and "what came from
+         Tally" are never mixed up. Both read the same sync log. -->
+
+    <record id="action_tally_posted_to_tally" model="ir.actions.act_window">
+        <field name="name">Posted to Tally (Odoo → Tally)</field>
+        <field name="res_model">tally.sync.log</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_tally_sync_log_search"/>
+        <field name="domain">[('direction', '=', 'odoo_to_tally')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Nothing has been posted to Tally yet</p>
+            <p>
+                Records reach Tally when you post an invoice, bill, payment or journal entry,
+                or when you press the <b>Tally Post</b> button on a document.
+                Each line here shows what was sent and when — open the record with the
+                arrow on the right.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_tally_received_from_tally" model="ir.actions.act_window">
+        <field name="name">Received from Tally (Tally → Odoo)</field>
+        <field name="res_model">tally.sync.log</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_tally_sync_log_search"/>
+        <field name="domain">[('direction', '=', 'tally_to_odoo')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Nothing has been imported from Tally yet</p>
+            <p>
+                Press <b>Pull Now</b> on the Tally instance to fetch masters and vouchers.
+                Each line here shows the Odoo record that was created or updated — open it
+                with the arrow on the right.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_tally_problems" model="ir.actions.act_window">
+        <field name="name">Problems</field>
+        <field name="res_model">tally.sync.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_tally_sync_log_search"/>
+        <field name="domain">[('status', 'in', ['error', 'warning'])]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No sync problems</p>
+            <p>Anything Tally or Odoo refused will be listed here with the reason.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_tally_posted_to_tally" name="Posted to Tally"
+              parent="menu_tally_monitoring" action="action_tally_posted_to_tally" sequence="1"/>
+    <menuitem id="menu_tally_received_from_tally" name="Received from Tally"
+              parent="menu_tally_monitoring" action="action_tally_received_from_tally" sequence="2"/>
+    <menuitem id="menu_tally_problems" name="Problems"
+              parent="menu_tally_monitoring" action="action_tally_problems" sequence="3"/>
+</odoo>

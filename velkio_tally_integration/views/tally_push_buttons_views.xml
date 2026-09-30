@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- "Tally Post" buttons on the documents and masters that can be pushed.
+         Forms that already own a <header> get the button inside it; the others
+         get a header added before their sheet. -->
+
+    <record id="view_move_form_tally_push" model="ir.ui.view">
+        <field name="name">account.move.form.tally.push</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_tally_post" type="object"
+                        string="Tally Post" icon="fa-cloud-upload"
+                        invisible="state != 'posted'"
+                        groups="velkio_tally_integration.group_tally_user"/>
+                <field name="tally_sync_state" widget="badge" string="Tally"
+                       decoration-success="tally_sync_state in ('posted', 'from_tally')"
+                       decoration-warning="tally_sync_state == 'queued'"
+                       decoration-danger="tally_sync_state == 'failed'"
+                       decoration-muted="tally_sync_state == 'none'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_payment_form_tally_push" model="ir.ui.view">
+        <field name="name">account.payment.form.tally.push</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_tally_post" type="object"
+                        string="Tally Post" icon="fa-cloud-upload"
+                        invisible="state == 'draft'"
+                        groups="velkio_tally_integration.group_tally_user"/>
+                <field name="tally_sync_state" widget="badge" string="Tally"
+                       decoration-success="tally_sync_state in ('posted', 'from_tally')"
+                       decoration-warning="tally_sync_state == 'queued'"
+                       decoration-danger="tally_sync_state == 'failed'"
+                       decoration-muted="tally_sync_state == 'none'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_form_tally_push" model="ir.ui.view">
+        <field name="name">stock.picking.form.tally.push</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_tally_post" type="object"
+                        string="Tally Post" icon="fa-cloud-upload"
+                        invisible="state != 'done'"
+                        groups="velkio_tally_integration.group_tally_user"/>
+                <field name="tally_sync_state" widget="badge" string="Tally"
+                       decoration-success="tally_sync_state in ('posted', 'from_tally')"
+                       decoration-warning="tally_sync_state == 'queued'"
+                       decoration-danger="tally_sync_state == 'failed'"
+                       decoration-muted="tally_sync_state == 'none'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_form_tally_push" model="ir.ui.view">
+        <field name="name">res.partner.form.tally.push</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_form_tally_push" model="ir.ui.view">
+        <field name="name">product.template.form.tally.push</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_form_tally_push" model="ir.ui.view">
+        <field name="name">account.account.form.tally.push</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_tax_form_tally_push" model="ir.ui.view">
+        <field name="name">account.tax.form.tally.push</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_uom_form_tally_push" model="ir.ui.view">
+        <field name="name">uom.uom.form.tally.push</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_category_form_tally_push" model="ir.ui.view">
+        <field name="name">product.category.form.tally.push</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_location_form_tally_push" model="ir.ui.view">
+        <field name="name">stock.location.form.tally.push</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_analytic_account_form_tally_push" model="ir.ui.view">
+        <field name="name">account.analytic.account.form.tally.push</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_tally_post" type="object"
+                            string="Tally Post" icon="fa-cloud-upload"
+                            invisible="not id"
+                            groups="velkio_tally_integration.group_tally_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+</odoo>

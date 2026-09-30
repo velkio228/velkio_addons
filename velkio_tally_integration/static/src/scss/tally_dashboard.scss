@@ -1,0 +1,48 @@
+// The Tally dashboard shows one card per connection. Each card is a status
+// board for that connection, so it spans the full width of the view and lays
+// its three blocks out side by side.
+//
+// The class on <kanban class="..."> lands on the controller's root element,
+// not on the renderer, so everything here is scoped as a descendant.
+.o_tally_dashboard {
+
+    .o_kanban_renderer {
+        --KanbanRecord-width: 100%;
+        --KanbanRecord-width-small: 100%;
+    }
+
+    .o_kanban_record {
+        width: 100%;
+        max-width: 100%;
+        flex: 1 1 100%;
+        padding: 0;
+    }
+
+    .o_tally_status_strip {
+        letter-spacing: .08em;
+    }
+
+    .o_tally_body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    .o_tally_actions {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    @media (min-width: 992px) {
+        .o_tally_body {
+            flex-direction: row;
+            align-items: center;
+            gap: 2rem;
+        }
+        .o_tally_who { flex: 0 0 32%; min-width: 0; }
+        .o_tally_flows { flex: 1 1 auto; }
+        .o_tally_actions { flex: 0 0 15rem; }
+    }
+}

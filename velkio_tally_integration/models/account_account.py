@@ -1,0 +1,107 @@
+# -*- coding: utf-8 -*-
+"""Outbound event hooks on account.account for syncing the chart of accounts to Tally."""
+import logging
+from odoo import api, models
+
+_logger = logging.getLogger(__name__)
+
+
+def _outbound_allowed(record, config):
+    """Whether this entity may be pushed to Tally right now.
+
+    Normally the entity's configured direction decides. A manual "Tally Post"
+    click sets ``tally_force_push`` in the context and overrides it.
+    """
+    if record.env.context.get("tally_force_push"):
+        return True
+    return config.direction in ("odoo_to_tally", "both")
+
+_TYPE_TO_GROUP = {
+    "asset_receivable": "Sundry Debtors",
+    "asset_cash": "Bank Accounts",
+    "asset_current": "Current Assets",
+    "asset_non_current": "Investments",
+    "asset_fixed": "Fixed Assets",
+    "liability_payable": "Sundry Creditors",
+    "liability_current": "Current Liabilities",
+    "liability_non_current": "Loans (Liability)",
+    "equity": "Capital Account",
+    "income": "Direct Incomes",
+    "income_other": "Indirect Incomes",
+    "expense": "Indirect Expenses",
+    "expense_direct_cost": "Direct Expenses",
+}
+
+
+class AccountAccount(models.Model):
+    _inherit = "account.account"
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        if not self.env.context.get("tally_no_sync"):
+            for rec in records:
+                rec._enqueue_tally_account()
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        if not self.env.context.get("tally_no_sync"):
+            for rec in self:
+                rec._enqueue_tally_account()
+        return res
+
+    def _enqueue_tally_account(self):
+        self.ensure_one()
+        try:
+            if not self.name:
+                return
+            company = getattr(self, "company_id", None) or (getattr(self, "company_ids", None) and self.company_ids[0]) or self.env.company
+            instance = self.env["tally.instance"].search(
+                [("company_id", "=", company.id), ("active", "=", True)], limit=1)
+            if not instance:
+                return
+            cfg = instance.entity_config_ids.filtered(
+                lambda c: c.entity == "account_ledger" and c.enabled)
+            if not cfg or not _outbound_allowed(self, cfg):
+                return
+
+            from ..services import tally_xml_builder
+            guid = self.env["tally.mapping"].outbound_guid(
+                instance, "account_ledger", self._name, self.id)
+            parent_group = _TYPE_TO_GROUP.get(self.account_type, "Indirect Expenses")
+            msg_xml = tally_xml_builder.build_account_ledger_xml(
+                name=self.name,
+                parent=parent_group,
+                currency=self.currency_id.name if self.currency_id else "INR",
+                guid=guid,
+                affects_stock=self.account_type in (
+                    "income", "income_other", "expense", "expense_direct_cost"),
+            )
+            envelope_xml = tally_xml_builder.wrap_import_envelope(
+                [msg_xml], company_name=instance.tally_company)
+
+            should_enqueue = self.env["tally.mapping"].register_outbound(
+                instance=instance,
+                entity="account_ledger",
+                model_name=self._name,
+                res_id=self.id,
+                payload_xml=envelope_xml,
+                guid=guid,
+                allow_tally_origin=True,
+            )
+            if not should_enqueue:
+                return
+
+            self.env["tally.sync.queue"].create({
+                "instance_id": instance.id,
+                "entity": "account_ledger",
+                "odoo_model_name": self._name,
+                "odoo_res_id": self.id,
+                "idempotency_key": "odoo_account_%s_%s" % (
+                    self.id, self.write_date and self.write_date.strftime("%Y%m%d%H%M%S") or ""),
+                "payload": envelope_xml,
+                "state": "pending",
+            })
+        except Exception as e:
+            _logger.warning("Tally account enqueue skipped for account %s: %s", self.id, e)
