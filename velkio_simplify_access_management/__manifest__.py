@@ -8,7 +8,7 @@
 #  it, in whole or in part, for any purpose.
 #############################################################################
 {
-    'name': 'Velkio Simplify Access Management',
+    'name': 'Simplify Access Manager',
     'version': '17.0.6.0.0',
     'category': 'Tools',
     'sequence': 5,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Velkio Reminders & Notifications',
+    'name': 'Reminders & Notifications',
     'version': '17.0.1.1.0',
     'category': 'Productivity',
     'summary': 'On-screen reminders & notifications for Odoo — instant popups, '
