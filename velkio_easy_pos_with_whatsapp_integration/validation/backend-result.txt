@@ -1,0 +1,2 @@
+2026-09-30 11:19:32,917 736758 INFO velkio_pos_final_17 odoo.service.server: 25 post-tests in 5.15s, 3739 queries 
+2026-09-30 11:19:32,918 736758 INFO velkio_pos_final_17 odoo.tests.result: 0 failed, 0 error(s) of 25 tests when loading database 'velkio_pos_final_17' 

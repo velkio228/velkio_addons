@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Kept deliberately ASCII-only: wkhtmltopdf on this deployment mangles
+        non-ASCII glyphs, so the currency CODE is printed rather than the
+        symbol (e.g. "INR 362.48").
+    -->
+    <template id="report_pos_screen_order_document">
+        <t t-call="web.external_layout">
+            <t t-set="doc" t-value="o.with_context(lang=o.partner_id.lang or user.lang)"/>
+            <div class="page">
+
+                <h2>
+                    Bill
+                    <span t-field="doc.name"/>
+                </h2>
+
+                <div class="row mt32 mb32">
+                    <div class="col-6">
+                        <strong>Customer:</strong>
+                        <span t-if="doc.partner_id" t-field="doc.partner_id"/>
+                        <span t-else="">Walk-in Customer</span>
+                        <br/>
+                        <strong>Date:</strong>
+                        <span t-field="doc.date_order"/>
+                        <br/>
+                        <strong>Billed by:</strong>
+                        <span t-field="doc.user_id"/>
+                    </div>
+                    <div class="col-6">
+                        <strong>Counter:</strong>
+                        <span t-field="doc.config_id"/>
+                        <br/>
+                        <strong>Payment:</strong>
+                        <span t-field="doc.payment_method_id"/>
+                        <br/>
+                        <t t-if="doc.payment_machine">
+                            <strong>Machine:</strong>
+                            <span t-field="doc.payment_machine"/>
+                        </t>
+                    </div>
+                </div>
+
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th class="text-end">Qty</th>
+                            <th>UoM</th>
+                            <th class="text-end">Unit Price</th>
+                            <th class="text-end">Disc %</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.line_ids" t-as="line">
+                            <td>
+                                <span t-if="line.product_id.default_code"
+                                      t-field="line.product_id.default_code"/>
+                                <span t-esc="line.name or line.product_id.display_name"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-esc="line.qty"
+                                      t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td><span t-field="line.product_uom_id"/></td>
+                            <td class="text-end">
+                                <span t-esc="line.price_unit"
+                                      t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td class="text-end">
+                                <span t-esc="line.discount"
+                                      t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                            <td class="text-end">
+                                <span t-esc="line.price_subtotal"
+                                      t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-6 offset-6">
+                        <table class="table table-sm">
+                            <tr>
+                                <td>Untaxed Amount</td>
+                                <td class="text-end">
+                                    <span t-field="doc.currency_id.name"/>
+                                    <span t-esc="doc.amount_untaxed"
+                                          t-options='{"widget": "float", "precision": 2}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Taxes</td>
+                                <td class="text-end">
+                                    <span t-field="doc.currency_id.name"/>
+                                    <span t-esc="doc.amount_tax"
+                                          t-options='{"widget": "float", "precision": 2}'/>
+                                </td>
+                            </tr>
+                            <tr class="border-black o_total">
+                                <td><strong>Total</strong></td>
+                                <td class="text-end">
+                                    <strong>
+                                        <span t-field="doc.currency_id.name"/>
+                                        <span t-esc="doc.amount_total"
+                                              t-options='{"widget": "float", "precision": 2}'/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <p t-if="doc.note">
+                    <strong>Note:</strong>
+                    <span t-field="doc.note"/>
+                </p>
+
+            </div>
+        </t>
+    </template>
+
+    <template id="report_pos_screen_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="velkio_easy_pos_with_whatsapp_integration.report_pos_screen_order_document"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

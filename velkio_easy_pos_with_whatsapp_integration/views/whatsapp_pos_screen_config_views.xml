@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pos_screen_config_form_whatsapp" model="ir.ui.view">
+        <field name="name">pos.screen.config.form.whatsapp</field>
+        <field name="model">pos.screen.config</field>
+        <field name="inherit_id" ref="velkio_easy_pos_with_whatsapp_integration.view_pos_screen_config_form"/>
+        <field name="arch" type="xml">
+            <page name="receipt" position="after">
+                <page string="WhatsApp" name="whatsapp">
+                    <group>
+                        <group string="Send Bill on WhatsApp">
+                            <field name="whatsapp_send_on_payment"/>
+                            <field name="whatsapp_template_id"
+                                   options="{'no_create': True}"
+                                   required="whatsapp_send_on_payment"/>
+                            <field name="whatsapp_template_status"
+                                   invisible="not whatsapp_template_id"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="alert"
+                         invisible="not whatsapp_send_on_payment">
+                        <p class="mb-1">
+                            <strong>The template must be approved by Meta
+                            before anything is delivered.</strong>
+                        </p>
+                        <p class="mb-0">
+                            Submit it from WhatsApp &#8250; Templates. Bills are
+                            sent only to customers who have a phone or mobile
+                            number, and a failed send never blocks the payment.
+                        </p>
+                    </div>
+                </page>
+            </page>
+        </field>
+    </record>
+
+</odoo>

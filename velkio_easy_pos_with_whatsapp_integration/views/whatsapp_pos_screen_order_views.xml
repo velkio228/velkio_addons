@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pos_screen_order_form_whatsapp" model="ir.ui.view">
+        <field name="name">pos.screen.order.form.whatsapp</field>
+        <field name="model">pos.screen.order</field>
+        <field name="inherit_id" ref="velkio_easy_pos_with_whatsapp_integration.view_pos_screen_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_send_whatsapp" type="object"
+                        string="Send on WhatsApp" icon="fa-whatsapp"
+                        invisible="state != 'paid'"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_machine']" position="after">
+                <field name="whatsapp_number"/>
+                <field name="whatsapp_number_manual"
+                       readonly="state not in ('draft', 'confirmed')"/>
+                <field name="whatsapp_state" invisible="whatsapp_state == 'none'"/>
+                <field name="whatsapp_error"
+                       invisible="whatsapp_state != 'failed'"/>
+                <field name="whatsapp_message_id"
+                       invisible="not whatsapp_message_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pos_screen_order_tree_whatsapp" model="ir.ui.view">
+        <field name="name">pos.screen.order.tree.whatsapp</field>
+        <field name="model">pos.screen.order</field>
+        <field name="inherit_id" ref="velkio_easy_pos_with_whatsapp_integration.view_pos_screen_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="whatsapp_state" optional="show" widget="badge"
+                       decoration-info="whatsapp_state == 'queued'"
+                       decoration-success="whatsapp_state == 'sent'"
+                       decoration-danger="whatsapp_state == 'failed'"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

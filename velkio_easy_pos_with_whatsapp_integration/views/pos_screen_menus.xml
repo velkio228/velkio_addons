@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_pos_screen_root"
+              name="Velkio Easy POS"
+              web_icon="velkio_easy_pos_with_whatsapp_integration,static/description/icon.png"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_user"
+              sequence="55"/>
+
+    <menuitem id="menu_pos_screen_billing"
+              name="Billing Screen"
+              parent="menu_pos_screen_root"
+              action="action_pos_screen"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_user"
+              sequence="10"/>
+
+    <menuitem id="menu_pos_screen_orders"
+              name="Orders"
+              parent="menu_pos_screen_root"
+              action="action_pos_screen_order"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_user"
+              sequence="20"/>
+
+    <!-- ============ Inventory ============ -->
+    <menuitem id="menu_pos_screen_inventory"
+              name="Inventory"
+              parent="menu_pos_screen_root"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_user"
+              sequence="30"/>
+
+    <menuitem id="menu_pos_screen_stock_quant"
+              name="Stock on Hand"
+              parent="menu_pos_screen_inventory"
+              action="action_pos_screen_stock_quant"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_user"
+              sequence="10"/>
+
+    <menuitem id="menu_pos_screen_picking"
+              name="POS Deliveries"
+              parent="menu_pos_screen_inventory"
+              action="action_pos_screen_picking"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_user"
+              sequence="20"/>
+
+    <menuitem id="menu_pos_screen_move"
+              name="Stock Moves"
+              parent="menu_pos_screen_inventory"
+              action="action_pos_screen_move"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_manager"
+              sequence="30"/>
+
+    <menuitem id="menu_pos_screen_product"
+              name="Products"
+              parent="menu_pos_screen_inventory"
+              action="action_pos_screen_product"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_user"
+              sequence="40"/>
+
+    <!-- ============ Configuration ============ -->
+    <menuitem id="menu_pos_screen_configuration"
+              name="Configuration"
+              parent="menu_pos_screen_root"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_pos_screen_config"
+              name="Counters"
+              parent="menu_pos_screen_configuration"
+              action="action_pos_screen_config"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_manager"
+              sequence="10"/>
+
+    <menuitem id="menu_pos_screen_payment_method"
+              name="Payment Methods"
+              parent="menu_pos_screen_configuration"
+              action="action_pos_screen_payment_method"
+              groups="velkio_easy_pos_with_whatsapp_integration.group_pos_screen_manager"
+              sequence="20"/>
+
+</odoo>

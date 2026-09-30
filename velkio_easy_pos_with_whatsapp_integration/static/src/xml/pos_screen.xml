@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="velkio_easy_pos_with_whatsapp_integration.PosScreen">
+    <div class="o_pos_screen d-flex flex-column h-100">
+
+        <!-- ============ Top bar ============ -->
+        <div class="o_pos_screen_topbar d-flex align-items-center gap-2 px-3 py-2">
+            <img src="/velkio_easy_pos_with_whatsapp_integration/static/description/velkio_logo.png" alt="Velkio Odoo Solutions" class="o_velkio_pos_logo"/>
+            <span class="o_pos_screen_brand">Velkio Easy POS</span>
+            <span t-if="state.orderName" class="badge o_pos_screen_ref">
+                <t t-esc="state.orderName"/>
+            </span>
+            <span t-if="state.orderName and state.orderState !== 'draft'"
+                  class="badge text-bg-success text-uppercase">
+                <t t-esc="state.orderState"/>
+            </span>
+            <select t-if="state.configs.length > 1"
+                    class="form-select form-select-sm o_pos_screen_counter"
+                    t-on-change="switchConfig">
+                <option t-foreach="state.configs" t-as="counter" t-key="counter.id"
+                        t-att-value="counter.id"
+                        t-att-selected="counter.id === state.configId">
+                    <t t-esc="counter.name"/>
+                </option>
+            </select>
+            <span t-elif="state.config" class="o_pos_screen_counter_label">
+                <t t-esc="state.config.name"/>
+            </span>
+
+            <div class="flex-grow-1"/>
+            <button t-if="state.orderId and state.orderState === 'paid'" class="btn btn-sm btn-outline-secondary" t-on-click="sendWhatsApp">
+                <i class="fa fa-whatsapp me-1"/>Send Receipt
+            </button>
+            <button class="btn btn-sm btn-outline-secondary"
+                    t-att-disabled="!canPrint"
+                    t-on-click="printReceipt">
+                <i class="fa fa-print me-1"/>Print
+            </button>
+            <button class="btn btn-sm btn-outline-secondary"
+                    t-on-click="onNewOrder">
+                New Bill
+            </button>
+            <button t-if="state.orderId" class="btn btn-sm btn-outline-secondary"
+                    t-on-click="openCurrentOrder">
+                Open Record
+            </button>
+
+            <!-- parked drafts the cashier can resume -->
+            <div class="o_pos_screen_drafts_wrap">
+                <button class="btn btn-sm btn-outline-secondary"
+                        t-on-click="toggleDrafts">
+                    Drafts
+                    <span t-if="state.drafts.length" class="o_pos_screen_draft_count">
+                        <t t-esc="state.drafts.length"/>
+                    </span>
+                </button>
+
+                <div t-if="state.showDrafts" class="o_pos_screen_drafts_backdrop"
+                     t-on-click="closeDrafts"/>
+                <div t-if="state.showDrafts" class="o_pos_screen_drafts">
+                    <div class="o_pos_screen_drafts_head">
+                        <span>Parked bills</span>
+                        <button class="btn btn-sm" t-on-click="closeDrafts">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
+
+                    <div t-if="!state.drafts.length" class="o_pos_screen_drafts_empty">
+                        No draft bill saved.
+                    </div>
+
+                    <div t-else="" class="o_pos_screen_drafts_list">
+                        <div t-foreach="state.drafts" t-as="draft" t-key="draft.id"
+                             class="o_pos_screen_draft_row"
+                             t-att-class="{ 'o_current': draft.id === state.orderId }"
+                             t-on-click="() => this.openDraft(draft)">
+                            <div class="o_pos_screen_draft_main">
+                                <span class="o_pos_screen_draft_ref">
+                                    <t t-esc="draft.name"/>
+                                </span>
+                                <span class="o_pos_screen_draft_total">
+                                    <t t-esc="formatMoney(draft.amount_total)"/>
+                                </span>
+                            </div>
+                            <div class="o_pos_screen_draft_meta">
+                                <span>
+                                    <t t-if="draft.partner_name">
+                                        <t t-esc="draft.partner_name"/>
+                                    </t>
+                                    <t t-else="">Walk-in</t>
+                                    &#183; <t t-esc="draft.line_count"/> item(s)
+                                </span>
+                                <span><t t-esc="nowLabel(draft.date_order)"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-sm btn-outline-secondary"
+                    t-on-click="openOrders">
+                Orders
+            </button>
+        </div>
+
+        <!-- ==== Body: spinner, then the two panels ==== -->
+        <div t-if="state.loading" class="d-flex flex-grow-1 align-items-center justify-content-center">
+            <span class="spinner-border text-primary"/>
+        </div>
+        <div t-else="" class="o_pos_screen_body d-flex flex-grow-1 overflow-hidden">
+
+            <!-- ==== LEFT : search + cart ==== -->
+            <div class="o_pos_screen_left d-flex flex-column">
+
+                <div class="o_pos_screen_search_wrap p-3">
+                    <div class="o_pos_screen_search position-relative">
+                        <i class="fa fa-search o_pos_screen_search_icon"/>
+                        <input type="text"
+                               t-ref="searchInput"
+                               class="form-control o_pos_screen_search_input"
+                               placeholder="Search product by name, internal reference or barcode..."
+                               autocomplete="off"
+                               t-att-value="state.query"
+                               t-on-input="onQueryInput"
+                               t-on-keydown="onSearchKeydown"
+                               t-on-focus="() => this.state.showResults = this.state.results.length &gt; 0"/>
+                        <span t-if="state.searching"
+                              class="spinner-border spinner-border-sm o_pos_screen_search_spin"/>
+                        <button t-if="state.query"
+                                class="btn o_pos_screen_search_clear"
+                                t-on-click="() => { this.state.query = ''; this.searchProducts(); this.focusSearch(); }">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
+
+                    <!-- suggestion list -->
+                    <div t-if="state.showResults" class="o_pos_screen_results">
+                        <div t-if="!state.results.length" class="o_pos_screen_noresult">
+                            No product matches "<t t-esc="state.query"/>".
+                        </div>
+                        <table t-else="" class="table table-sm o_pos_screen_result_table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="o_pos_col_img"/>
+                                    <th t-foreach="state.columns" t-as="col" t-key="col.name"
+                                        t-att-style="col.width ? 'width:' + col.width + 'px' : ''"
+                                        t-att-class="'text-' + col.align">
+                                        <t t-esc="col.label"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="state.results" t-as="product" t-key="product.id"
+                                    class="o_pos_screen_result"
+                                    t-att-class="{ 'o_highlighted': product_index === state.highlight }"
+                                    t-on-mouseenter="() => this.state.highlight = product_index"
+                                    t-on-click="() => this.addProduct(product)">
+                                    <td class="o_pos_col_img">
+                                        <img class="o_pos_screen_thumb"
+                                             t-att-src="product.image_url"
+                                             t-att-alt="product.name"/>
+                                    </td>
+                                    <td t-foreach="state.columns" t-as="col" t-key="col.name"
+                                        t-att-class="'text-' + col.align + (col.name === 'name' ? ' o_pos_screen_pname' : '')">
+                                        <span t-if="col.name === 'default_code' and product.cells[col_index]"
+                                              class="o_pos_screen_code">
+                                            <t t-esc="product.cells[col_index]"/>
+                                        </span>
+                                        <span t-elif="col.name === 'qty_available'"
+                                              class="o_pos_screen_stock"
+                                              t-att-class="product.tracks_stock ? (product.qty_available &lt;= 0 ? 'o_pos_screen_stock_out' : 'o_pos_screen_stock_ok') : 'o_pos_screen_stock_na'">
+                                            <t t-esc="product.tracks_stock ? product.cells[col_index] : '-'"/>
+                                        </span>
+                                        <t t-else="">
+                                            <t t-esc="product.cells[col_index]"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- cart -->
+                <div class="o_pos_screen_cart flex-grow-1 px-3 pb-3">
+                    <div t-if="!state.lines.length" class="o_pos_screen_empty">
+                        <i class="fa fa-shopping-basket fa-3x mb-3"/>
+                        <div class="fw-bold">No product added yet</div>
+                        <div class="text-muted small">
+                            Type in the box above, use the arrow keys and press Enter to add.
+                        </div>
+                    </div>
+
+                    <table t-else="" class="table o_pos_screen_cart_table">
+                        <thead>
+                            <tr>
+                                <th class="o_pos_col_seq">#</th>
+                                <th>Product</th>
+                                <th class="text-center o_pos_col_qty">Qty</th>
+                                <th class="text-end o_pos_col_price">Unit Price</th>
+                                <th class="text-end o_pos_col_disc">Disc %</th>
+                                <th class="text-end o_pos_col_sub">Subtotal</th>
+                                <th class="o_pos_col_del"/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="state.lines" t-as="line" t-key="line.key">
+                                <td class="o_pos_col_seq text-muted">
+                                    <t t-esc="line_index + 1"/>
+                                </td>
+                                <td>
+                                    <div class="o_pos_screen_pname">
+                                        <span t-if="line.default_code" class="o_pos_screen_code me-1">
+                                            <t t-esc="line.default_code"/>
+                                        </span>
+                                        <t t-esc="line.name"/>
+                                    </div>
+                                    <div class="o_pos_screen_pmeta">
+                                        <span t-att-class="stockClass(line)">
+                                            <t t-if="line.tracks_stock">
+                                                On hand: <t t-esc="formatQty(line.qty_available)"/>
+                                            </t>
+                                            <t t-else="">Not stocked</t>
+                                        </span>
+                                        <t t-if="line.tax_names">
+                                            &#183; <t t-esc="line.tax_names"/>
+                                        </t>
+                                    </div>
+                                </td>
+                                <td class="o_pos_col_qty">
+                                    <div class="o_pos_screen_stepper">
+                                        <button class="btn btn-sm"
+                                                t-att-disabled="!isEditable"
+                                                t-on-click="() => this.stepQty(line, -1)">
+                                            <i class="fa fa-minus"/>
+                                        </button>
+                                        <input type="number" step="any" min="0"
+                                               class="form-control form-control-sm text-center"
+                                               t-att-disabled="!isEditable"
+                                               t-att-value="line.qty"
+                                               t-on-input="(ev) => this.onQtyInput(line, ev)"/>
+                                        <button class="btn btn-sm"
+                                                t-att-disabled="!isEditable"
+                                                t-on-click="() => this.stepQty(line, 1)">
+                                            <i class="fa fa-plus"/>
+                                        </button>
+                                    </div>
+                                    <div class="o_pos_screen_uom text-muted">
+                                        <t t-esc="line.uom_name"/>
+                                    </div>
+                                </td>
+                                <td class="text-end o_pos_col_price">
+                                    <input type="number" step="any"
+                                           class="form-control form-control-sm text-end"
+                                           t-att-disabled="!isEditable"
+                                           t-att-value="line.price_unit"
+                                           t-on-input="(ev) => this.onPriceInput(line, ev)"/>
+                                </td>
+                                <td class="text-end o_pos_col_disc">
+                                    <input type="number" step="any" min="0" max="100"
+                                           class="form-control form-control-sm text-end"
+                                           t-att-disabled="!isEditable"
+                                           t-att-value="line.discount"
+                                           t-on-input="(ev) => this.onDiscountInput(line, ev)"/>
+                                </td>
+                                <td class="text-end o_pos_col_sub fw-bold">
+                                    <t t-esc="formatMoney(line.price_subtotal)"/>
+                                </td>
+                                <td class="o_pos_col_del">
+                                    <button class="btn btn-sm o_pos_screen_del"
+                                            t-att-disabled="!isEditable"
+                                            t-on-click="() => this.removeLine(line)">
+                                        <i class="fa fa-trash-o"/>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ==== RIGHT : billing ==== -->
+            <div class="o_pos_screen_right">
+
+                <!-- pinned: who is being billed -->
+                <div class="o_pos_screen_bill_head">
+                    <label class="o_pos_screen_label">Customer</label>
+                    <div t-if="state.partner" class="o_pos_screen_partner">
+                        <div class="o_pos_screen_partner_name">
+                            <div class="fw-bold"><t t-esc="state.partner.display_name"/></div>
+                            <div class="o_pos_screen_pmeta">
+                                <t t-if="state.partner.phone">
+                                    <i class="fa fa-phone me-1"/><t t-esc="state.partner.phone"/>
+                                </t>
+                                <t t-else="">No number - cannot send on WhatsApp</t>
+                                <t t-if="state.pricelistName">
+                                    &#183; <t t-esc="state.pricelistName"/>
+                                </t>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm o_pos_screen_del"
+                                t-att-disabled="!isEditable"
+                                t-on-click="clearPartner">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
+                    <div t-else="" class="position-relative">
+                        <input type="text"
+                               t-ref="partnerInput"
+                               class="form-control form-control-sm"
+                               placeholder="Walk-in customer - type to search..."
+                               autocomplete="off"
+                               t-att-disabled="!isEditable"
+                               t-att-value="state.partnerQuery"
+                               t-on-input="onPartnerInput"
+                               t-on-keydown="onPartnerKeydown"/>
+                        <!-- a bare number is a customer in its own right -->
+                        <div t-if="typedNumber" class="o_pos_screen_usenumber"
+                             t-on-click="usePartnerNumber">
+                            <i class="fa fa-whatsapp me-1"/>
+                            Use number <strong><t t-esc="typedNumber"/></strong>
+                            <div class="o_pos_screen_pmeta">
+                                Press Enter - matches an existing customer, or
+                                creates one named by the number.
+                            </div>
+                        </div>
+
+                        <div t-if="state.showPartnerResults and state.partnerResults.length"
+                             class="o_pos_screen_partner_results">
+                            <div t-foreach="state.partnerResults" t-as="partner" t-key="partner.id"
+                                 class="o_pos_screen_partner_row"
+                                 t-att-class="{ 'o_highlighted': partner_index === state.partnerHighlight }"
+                                 t-on-mouseenter="() => this.state.partnerHighlight = partner_index"
+                                 t-on-click="() => this.selectPartner(partner)">
+                                <div class="fw-bold"><t t-esc="partner.name"/></div>
+                                <div class="o_pos_screen_pmeta">
+                                    <t t-esc="partner.city"/>
+                                    <t t-if="partner.phone">
+                                        &#183; <t t-esc="partner.phone"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-3 pb-2">
+                    <label class="small text-light">WhatsApp receipt number (optional)</label>
+                    <input type="tel" class="form-control form-control-sm" placeholder="Customer phone by default" t-att-disabled="!isEditable" t-model="state.whatsappNumber"/>
+                </div>
+                <!-- scrolls: everything that is reference material -->
+                <div class="o_pos_screen_bill_body">
+
+                    <div class="o_pos_screen_receipt_meta">
+                        <div>
+                            <span>Bill</span>
+                            <span t-if="state.orderName"><t t-esc="state.orderName"/></span>
+                            <span t-else="" class="fst-italic">not saved yet</span>
+                        </div>
+                        <div>
+                            <span>Date</span>
+                            <span><t t-esc="state.billTime"/></span>
+                        </div>
+                        <div>
+                            <span>Billed by</span>
+                            <span><t t-esc="state.userName"/></span>
+                        </div>
+                    </div>
+
+                    <div class="o_pos_screen_summary_row">
+                        <span>Items</span>
+                        <span><t t-esc="state.lines.length"/></span>
+                    </div>
+                    <div class="o_pos_screen_summary_row">
+                        <span>Total Quantity</span>
+                        <span><t t-esc="formatQty(totalQty)"/></span>
+                    </div>
+
+                    <hr/>
+
+                    <div t-if="hasDiscount" class="o_pos_screen_summary_row">
+                        <span>Gross Amount</span>
+                        <span><t t-esc="formatMoney(state.amountGross)"/></span>
+                    </div>
+                    <div t-if="hasDiscount"
+                         class="o_pos_screen_summary_row o_pos_screen_discount_row">
+                        <span>Discount</span>
+                        <span>- <t t-esc="formatMoney(state.amountDiscount)"/></span>
+                    </div>
+
+                    <div class="o_pos_screen_summary_row">
+                        <span>Untaxed Amount</span>
+                        <span><t t-esc="formatMoney(state.amountUntaxed)"/></span>
+                    </div>
+                    <div t-foreach="state.taxBreakup" t-as="tax" t-key="tax.id"
+                         class="o_pos_screen_summary_row o_pos_screen_taxrow">
+                        <span><t t-esc="tax.name"/></span>
+                        <span><t t-esc="formatMoney(tax.amount)"/></span>
+                    </div>
+                    <div t-if="!state.taxBreakup.length"
+                         class="o_pos_screen_summary_row o_pos_screen_taxrow">
+                        <span>Taxes</span>
+                        <span><t t-esc="formatMoney(state.amountTax)"/></span>
+                    </div>
+
+                    <div t-if="hasDiscount" class="o_pos_screen_saved">
+                        You saved <t t-esc="formatMoney(state.amountDiscount)"/> on this bill
+                    </div>
+
+                    <label class="o_pos_screen_label mt-3">Payment Method</label>
+                    <div t-if="!state.paymentMethods.length" class="o_pos_screen_pmeta">
+                        No payment method on this counter. Add one in
+                        Configuration &#8250; Counters.
+                    </div>
+                    <div t-else="" class="o_pos_screen_paymethods">
+                        <button t-foreach="state.paymentMethods" t-as="method" t-key="method.id"
+                                class="btn o_pos_screen_paybtn"
+                                t-att-class="{ 'active': state.paymentMethodId === method.id }"
+                                t-att-disabled="!isEditable"
+                                t-on-click="() => this.setPayment(method.id)">
+                            <t t-esc="method.name"/>
+                            <span t-if="method.machine_name" class="o_pos_screen_machine">
+                                <t t-esc="method.machine_name"/>
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- note is opt-in, it was only ever clutter on a quick bill -->
+                    <button class="o_pos_screen_note_toggle" t-on-click="toggleNote">
+                        <i class="fa" t-att-class="state.showNote ? 'fa-caret-down' : 'fa-caret-right'"/>
+                        Note
+                        <span t-if="state.note and !state.showNote" class="o_pos_screen_note_dot"/>
+                    </button>
+                    <textarea t-if="state.showNote"
+                              class="form-control form-control-sm mb-3" rows="2"
+                              placeholder="Optional note on this bill..."
+                              t-att-disabled="!isEditable"
+                              t-att-value="state.note"
+                              t-on-input="(ev) => this.setNote(ev)"/>
+                </div>
+
+                <!-- pinned: the total and the actions are always reachable -->
+                <div class="o_pos_screen_bill_foot">
+                    <div t-if="state.flash" class="o_pos_screen_flash"
+                         t-att-class="'o_' + state.flash.type">
+                        <t t-esc="state.flash.text"/>
+                    </div>
+
+                    <div class="o_pos_screen_total">
+                        <span>TOTAL</span>
+                        <span><t t-esc="formatMoney(state.amountTotal)"/></span>
+                    </div>
+
+                    <button class="btn btn-success o_pos_screen_paynow"
+                            t-att-disabled="state.saving or !state.lines.length or !canPay"
+                            t-on-click="() => this.save({ confirm: true, paid: true })">
+                        <span t-if="state.saving" class="spinner-border spinner-border-sm me-2"/>
+                        Pay <t t-esc="formatMoney(state.amountTotal)"/>
+                    </button>
+
+                    <div class="o_pos_screen_foot_row">
+                        <button class="btn btn-outline-light"
+                                t-att-disabled="state.saving or !state.lines.length or !isEditable"
+                                t-on-click="() => this.save({})">
+                            Save Draft
+                        </button>
+                        <button class="btn btn-warning"
+                                t-att-disabled="state.saving or !state.lines.length or !isEditable"
+                                t-on-click="() => this.save({ confirm: true })">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+</templates>

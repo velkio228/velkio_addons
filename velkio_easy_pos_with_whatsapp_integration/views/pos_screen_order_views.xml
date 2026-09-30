@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pos_screen_order_tree" model="ir.ui.view">
+        <field name="name">pos.screen.order.tree</field>
+        <field name="model">pos.screen.order</field>
+        <field name="arch" type="xml">
+            <tree string="POS Orders" sample="1"
+                  decoration-muted="state == 'cancel'"
+                  decoration-success="state == 'paid'"
+                  decoration-info="state == 'draft'">
+                <field name="name"/>
+                <field name="date_order"/>
+                <field name="partner_id"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="payment_method_id"/>
+                <field name="line_count" string="Lines"/>
+                <field name="amount_untaxed" sum="Untaxed"/>
+                <field name="amount_tax" sum="Taxes"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="company_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"
+                       optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'confirmed'"
+                       decoration-success="state == 'paid'"
+                       decoration-danger="state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_pos_screen_order_form" model="ir.ui.view">
+        <field name="name">pos.screen.order.form</field>
+        <field name="model">pos.screen.order</field>
+        <field name="arch" type="xml">
+            <form string="POS Order">
+                <header>
+                    <button name="action_open_pos_screen" type="object"
+                            string="Open in Velkio Easy POS" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object"
+                            string="Confirm" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_mark_paid" type="object"
+                            string="Mark as Paid" class="btn-primary"
+                            invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_cancel" type="object"
+                            string="Cancel"
+                            invisible="state in ('cancel', 'paid')"/>
+                    <button name="action_draft" type="object"
+                            string="Reset to Draft"
+                            invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,paid"/>
+                </header>
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_picking" type="object"
+                                class="oe_stat_button" icon="fa-truck"
+                                invisible="not picking_id">
+                            <div class="o_stat_info">
+                                <field name="picking_state" class="o_stat_value"/>
+                                <span class="o_stat_text">Delivery</span>
+                            </div>
+                        </button>
+                    </div>
+                    <field name="picking_id" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="pricelist_id"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="fiscal_position_id"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="config_id"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="payment_method_id"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="payment_machine"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="date_order"
+                                   readonly="state != 'draft'"/>
+                            <field name="user_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines" name="lines">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="qty"/>
+                                    <field name="product_uom_id"
+                                           groups="uom.group_uom"
+                                           options="{'no_create': True}"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount"/>
+                                    <field name="tax_ids" widget="many2many_tags"
+                                           options="{'no_create': True}"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="price_total"/>
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed"/>
+                                <field name="amount_tax"/>
+                                <div class="oe_subtotal_footer_separator o_td_label">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1"
+                                       class="oe_subtotal_footer_separator"/>
+                            </group>
+                            <div class="clearfix"/>
+                        </page>
+                        <page string="Note" name="note">
+                            <field name="note" readonly="state != 'draft'"
+                                   placeholder="Internal note for this bill..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pos_screen_order_search" model="ir.ui.view">
+        <field name="name">pos.screen.order.search</field>
+        <field name="model">pos.screen.order</field>
+        <field name="arch" type="xml">
+            <search string="POS Orders">
+                <field name="name" string="Reference"
+                       filter_domain="['|', ('name', 'ilike', self), ('partner_id', 'ilike', self)]"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="line_ids" string="Product"
+                       filter_domain="[('line_ids.product_id', 'ilike', self)]"/>
+                <filter name="filter_draft" string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_confirmed" string="Confirmed"
+                        domain="[('state', '=', 'confirmed')]"/>
+                <filter name="filter_paid" string="Paid"
+                        domain="[('state', '=', 'paid')]"/>
+                <separator/>
+                <filter name="filter_my" string="My Orders"
+                        domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="filter_today" string="Today"
+                        domain="[('date_order', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter name="filter_month" string="This Month"
+                        domain="[('date_order', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_partner" string="Customer"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_user" string="Salesperson"
+                            context="{'group_by': 'user_id'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_payment" string="Payment Method"
+                            context="{'group_by': 'payment_method_id'}"/>
+                    <filter name="group_config" string="Counter"
+                            context="{'group_by': 'config_id'}"/>
+                    <filter name="group_date" string="Order Date"
+                            context="{'group_by': 'date_order:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pos_screen_order" model="ir.actions.act_window">
+        <field name="name">POS Orders</field>
+        <field name="res_model">pos.screen.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_pos_screen_order_search"/>
+        <field name="context">{'search_default_filter_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No POS order yet</p>
+            <p>Bills created from the POS screen show up here.</p>
+        </field>
+    </record>
+
+    <record id="action_pos_screen" model="ir.actions.client">
+        <field name="name">Velkio Easy POS</field>
+        <field name="tag">velkio_easy_pos_with_whatsapp_integration.screen</field>
+    </record>
+
+</odoo>

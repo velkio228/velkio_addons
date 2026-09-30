@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============ Counter ============ -->
+    <record id="view_pos_screen_config_tree" model="ir.ui.view">
+        <field name="name">pos.screen.config.tree</field>
+        <field name="model">pos.screen.config</field>
+        <field name="arch" type="xml">
+            <tree string="Counters">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="location_src_id"/>
+                <field name="picking_type_id"/>
+                <field name="deliver_on_payment" widget="boolean_toggle"/>
+                <field name="receipt_paper"/>
+                <field name="company_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"
+                       optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_pos_screen_config_form" model="ir.ui.view">
+        <field name="name">pos.screen.config.form</field>
+        <field name="model">pos.screen.config</field>
+        <field name="arch" type="xml">
+            <form string="Counter">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Main Counter"/></h1>
+                    </div>
+                    <field name="active" invisible="1"/>
+                    <group>
+                        <group string="Stock">
+                            <field name="deliver_on_payment"/>
+                            <field name="picking_type_id"
+                                   options="{'no_create': True}"
+                                   required="deliver_on_payment"/>
+                            <field name="location_src_id"
+                                   options="{'no_create': True}"
+                                   required="deliver_on_payment"/>
+                            <field name="location_dest_id"
+                                   options="{'no_create': True}"
+                                   required="deliver_on_payment"/>
+                            <field name="allow_negative_stock"/>
+                        </group>
+                        <group string="Pricing &amp; Access">
+                            <field name="pricelist_id" options="{'no_create': True}"/>
+                            <field name="product_domain_extra"
+                                   placeholder="[('categ_id', 'child_of', 5)]"/>
+                            <field name="user_ids" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Search Columns" name="columns">
+                            <p class="text-muted">
+                                Choose which product fields the cashier sees in
+                                the search suggestion list, and in what order.
+                            </p>
+                            <button name="action_reset_columns" type="object"
+                                    string="Reset to Default Columns"
+                                    class="btn-link mb-2"
+                                    confirm="This replaces the current columns with the default set. Continue?"/>
+                            <field name="search_field_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="field_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="field_name" readonly="1"
+                                           optional="show"/>
+                                    <field name="label"/>
+                                    <field name="width"/>
+                                    <field name="align"/>
+                                    <field name="show_currency"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Payment Methods" name="payment">
+                            <field name="payment_method_ids" widget="many2many">
+                                <tree>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="payment_type"/>
+                                    <field name="machine_name"/>
+                                    <field name="machine_code"/>
+                                    <field name="journal_id"/>
+                                    <field name="company_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Receipt" name="receipt">
+                            <group>
+                                <group>
+                                    <field name="receipt_paper"/>
+                                    <field name="receipt_show_tax_breakup"/>
+                                    <field name="auto_print"/>
+                                </group>
+                            </group>
+                            <label for="receipt_header"/>
+                            <field name="receipt_header"
+                                   placeholder="Shop name, address, GSTIN..."/>
+                            <label for="receipt_footer"/>
+                            <field name="receipt_footer"
+                                   placeholder="Thank you, visit again!"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pos_screen_config" model="ir.actions.act_window">
+        <field name="name">Counters</field>
+        <field name="res_model">pos.screen.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Set up a counter</p>
+            <p>A counter decides which stock location the goods leave from,
+               which columns the search list shows, the payment methods on
+               offer and how the receipt prints.</p>
+        </field>
+    </record>
+
+    <!-- ============ Payment method ============ -->
+    <record id="view_pos_screen_payment_method_tree" model="ir.ui.view">
+        <field name="name">pos.screen.payment.method.tree</field>
+        <field name="model">pos.screen.payment.method</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Methods" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="payment_type"/>
+                <field name="machine_name"/>
+                <field name="machine_code"/>
+                <field name="journal_id" options="{'no_create': True}"/>
+                <field name="note" optional="hide"/>
+                <field name="company_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"
+                       optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_pos_screen_payment_method_form" model="ir.ui.view">
+        <field name="name">pos.screen.payment.method.form</field>
+        <field name="model">pos.screen.payment.method</field>
+        <field name="arch" type="xml">
+            <form string="Payment Method">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. HDFC Card"/></h1>
+                    </div>
+                    <field name="active" invisible="1"/>
+                    <group>
+                        <group string="Method">
+                            <field name="payment_type"/>
+                            <field name="journal_id" options="{'no_create': True}"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Machine / Terminal">
+                            <field name="machine_name"
+                                   placeholder="e.g. Swipe Machine 1"/>
+                            <field name="machine_code" placeholder="e.g. TERM-01"/>
+                            <field name="is_cash"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Internal note..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pos_screen_payment_method" model="ir.actions.act_window">
+        <field name="name">Payment Methods</field>
+        <field name="res_model">pos.screen.payment.method</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add a payment method</p>
+            <p>Record the card machine or UPI terminal each method uses, so
+               takings can be reconciled per machine.</p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_screen_order_user,pos.screen.order.user,model_pos_screen_order,group_pos_screen_user,1,1,1,0
+access_pos_screen_order_manager,pos.screen.order.manager,model_pos_screen_order,group_pos_screen_manager,1,1,1,1
+access_pos_screen_order_line_user,pos.screen.order.line.user,model_pos_screen_order_line,group_pos_screen_user,1,1,1,1
+access_pos_screen_order_line_manager,pos.screen.order.line.manager,model_pos_screen_order_line,group_pos_screen_manager,1,1,1,1
+access_pos_screen_config_user,pos.screen.config.user,model_pos_screen_config,group_pos_screen_user,1,0,0,0
+access_pos_screen_config_manager,pos.screen.config.manager,model_pos_screen_config,group_pos_screen_manager,1,1,1,1
+access_pos_screen_config_field_user,pos.screen.config.field.user,model_pos_screen_config_field,group_pos_screen_user,1,0,0,0
+access_pos_screen_config_field_manager,pos.screen.config.field.manager,model_pos_screen_config_field,group_pos_screen_manager,1,1,1,1
+access_pos_screen_payment_method_user,pos.screen.payment.method.user,model_pos_screen_payment_method,group_pos_screen_user,1,0,0,0
+access_pos_screen_payment_method_manager,pos.screen.payment.method.manager,model_pos_screen_payment_method,group_pos_screen_manager,1,1,1,1
+access_product_fields_pos_user,Velkio product field metadata,base.model_ir_model_fields,group_pos_screen_user,1,0,0,0

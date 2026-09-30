@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "checks": [
+    "Cashier billing screen loads",
+    "Product/customer search and draft save",
+    "Parked bill reload preserves WhatsApp override",
+    "Payment persists bill and receipt number",
+    "Actual PDF receipt generated (28597 bytes)",
+    "Paid receipt opens WhatsApp composer",
+    "Manager counter configuration loads"
+  ],
+  "errors": []
+}
