@@ -1,7 +1,7 @@
 """Odoo 17 presentation copy checked against the shipped models and views."""
 APPS = {
  'reminders': {
-  'module': 'velkio_reminders_notification', 'name': 'Reminders & Notifications', 'version': '17.0.1.1.0', 'license': 'LGPL-3',
+  'module': 'velkio_reminders_notification', 'name': 'Velkio Reminders & Notifications', 'version': '17.0.1.1.0', 'license': 'LGPL-3',
   'headline': 'Timely reminders. Clear communication.',
   'intro': 'Create personal reminders and send team notices that appear inside Odoo while people work. Choose when a notice appears, how it looks and whether the reader must acknowledge it.',
   'chips': ['Personal reminders', 'On-screen popups', 'Snooze and acknowledgement'],
@@ -24,7 +24,7 @@ APPS = {
   'faqs': [('Who can send team notices?','Notification Managers can send to selected internal users or everyone. Other internal users can create personal reminders.'),('Does it work with a closed browser?','The on-screen popup requires an Odoo browser session. Pending notices can be recovered when Odoo is opened again.'),('Can a required notice be snoozed?','No. Requiring acknowledgement disables snooze and auto-close for that notice.'),('Is the module free?','Yes. The module is distributed under LGPL-3. Hosting and any installation services are separate.')],
  },
  'access': {
-  'module': 'velkio_simplify_access_management', 'name': 'Simplify Access Management', 'version': '17.0.6.0.0', 'license': 'OPL-1',
+  'module': 'velkio_simplify_access_management', 'name': 'Velkio Simplify Access Management', 'version': '17.0.6.0.0', 'license': 'OPL-1',
   'headline': 'Clear controls. Focused workspaces.',
   'intro': 'Configure what selected users can see and do from Access Studio. Organize menu visibility, field behavior, interface actions and domain-based record permissions by user and company.',
   'chips': ['Menus, fields and views', 'Domain-based record permissions', 'User and company scope'],

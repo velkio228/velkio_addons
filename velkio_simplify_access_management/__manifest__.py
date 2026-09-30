@@ -8,7 +8,7 @@
 #  it, in whole or in part, for any purpose.
 #############################################################################
 {
-    'name': 'Simplify Access Manager',
+    'name': 'Velkio Simplify Access Management',
     'version': '17.0.6.0.0',
     'category': 'Tools',
     'sequence': 5,
@@ -73,7 +73,7 @@ multi company access, Odoo 17 security.
         'static/description/screenshot_form.png',
         'static/description/icon.png',
     ],
-    'price': 22.22,
+    'price': 1.0,
     'currency': 'USD',
 
     'depends': [

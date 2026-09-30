@@ -21,8 +21,10 @@ Upgrade each module on a separate Odoo 17 test database to refresh the app-menu 
 
 Reminders retains its existing demonstration images. Access Studio retains its existing illustrated UI mockups, explicitly labeled in the page. Capture actual Access Studio screens from a test database before describing those images as screenshots. Neither marketing banner is a screen capture.
 
-Check desktop and mobile presentation, and verify reminder delivery, manager permissions, access rules and company scope using separate test accounts. This local package does not publish to Odoo Apps or push to GitHub. Pricing and licenses are preserved.
+Check desktop and mobile presentation, and verify reminder delivery, manager permissions, access rules and company scope using separate test accounts. This local package does not publish to Odoo Apps or push to GitHub. OPL modules are priced at USD 1.00. LGPL modules remain free; licenses are preserved.
 
 ## Artwork
 
 The four new raster images were generated with the built-in image generation tool. Exact production prompts are saved in `artwork/branding/presentation-prompts.md`. Icon masters are resized to 512 × 512 for the module assets; banners retain their generated resolution.
+
+All application display names use the Velkio prefix.
