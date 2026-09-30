@@ -1,7 +1,8 @@
 # Odoo Apps presentation handoff
 
-The Precision brand is applied to both module icons, publisher logos, banners,
-index headers/footers and the relevant backend brand area. Module code retains
+The Precision Velkio logo appears on both banners, index headers/footers and the
+relevant backend brand area. App icons are module-specific: a storefront and sync
+image for WooCommerce, and an accounting ledger image for TallyPrime. Module code retains
 its synchronization behavior. Versions are 19.0.1.0.1 (WooCommerce) and
 19.0.1.2.1 (TallyPrime).
 

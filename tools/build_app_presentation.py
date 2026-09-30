@@ -117,7 +117,8 @@ def build(kind, out):
     out.mkdir(parents=True, exist_ok=True)
     for source, targets in [
         ('velkio-precision-logo.png', ['velkio_logo.png']),
-        ('velkio-precision-mark.png', ['icon.png', 'img.png', 'velkio_mark.png']),
+        ('woocommerce-app-icon.png' if kind == 'woo' else 'tally-app-icon.png', ['icon.png', 'img.png']),
+        ('velkio-precision-mark.png', ['velkio_mark.png']),
         ('woocommerce-banner.png' if kind == 'woo' else 'tally-banner.png', ['banner.png']),
     ]:
         for target in targets:
