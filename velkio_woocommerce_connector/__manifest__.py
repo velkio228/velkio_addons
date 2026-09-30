@@ -13,7 +13,7 @@ connections, manual actions, mappings, sync logs and an operational dashboard.
 Requires a reachable WooCommerce store and REST API credentials. Customer and
 order synchronization is inbound only. Imports read up to 1,000 records per resource.
     """,
-    "author": "Velkio - Odoo Solutions",
+    "author": "Velkio",
     "website": "https://apps.odoo.com/apps/modules/browse?author=Velkio%20-%20Odoo%20Solutions",
     "support": "velkio.odoosolution@gmail.com",
     "license": "OPL-1",

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_velkio_state_access_list" model="ir.ui.view">
+        <field name="name">velkio.state.access.list</field>
+        <field name="model">velkio.state.access</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="state_field_name" string="State Field"/>
+                <field name="apply_to_all" string="Everyone"/>
+                <field name="rule_count" string="Restrictions"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"
+                       optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_velkio_state_access_form" model="ir.ui.view">
+        <field name="name">velkio.state.access.form</field>
+        <field name="model">velkio.state.access</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_sync_helpers" type="object" class="oe_stat_button"
+                                icon="fa-refresh">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Sync</span>
+                                <span class="o_stat_text">States &amp; Nodes</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Sales - lock confirmed orders"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="state_field_id"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   context="{'default_model_id': model_id}"/>
+                            <field name="state_field_ttype" invisible="1"/>
+                            <field name="state_field_name" invisible="1"/>
+                            <field name="value_ids" widget="many2many_tags"
+                                   options="{'no_create': True}"
+                                   domain="[('field_id', '=', state_field_id)]"
+                                   readonly="not state_field_id"
+                                   placeholder="Leave empty = every state"/>
+                        </group>
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="sequence"/>
+                            <field name="company_ids" widget="many2many_tags"
+                                   options="{'no_create': True}"
+                                   groups="base.group_multi_company"/>
+                            <field name="apply_to_all" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Apply to Users">
+                            <field name="user_ids" nolabel="1" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group string="Apply to Groups">
+                            <field name="group_ids" nolabel="1" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Fields" name="fields">
+                            <field name="field_line_ids">
+                                <list editable="bottom">
+                                    <field name="field_ids" widget="many2many_tags"
+                                           options="{'no_create': True}"
+                                           domain="[('model_id', '=', parent.model_id), ('store', '=', True)]"/>
+                                    <field name="invisible"/>
+                                    <field name="readonly"/>
+                                    <field name="required"/>
+                                </list>
+                            </field>
+                            <p class="text-muted">
+                                In the selected states the chosen fields become
+                                invisible / read-only / required for the targeted
+                                users. Leave "Applies in States" empty to always apply.
+                            </p>
+                        </page>
+                        <page string="Tabs &amp; Buttons" name="nodes">
+                            <group>
+                                <field name="hide_page_ids" widget="many2many_tags"
+                                       options="{'no_create': True}"/>
+                                <field name="hide_button_ids" widget="many2many_tags"
+                                       options="{'no_create': True}"/>
+                            </group>
+                        </page>
+                        <page string="Form &amp; Chatter" name="misc">
+                            <group>
+                                <field name="readonly_form"/>
+                                <field name="hide_chatter"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" nolabel="1" placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_velkio_state_access_search" model="ir.ui.view">
+        <field name="name">velkio.state.access.search</field>
+        <field name="model">velkio.state.access</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="user_ids"/>
+                <field name="group_ids"/>
+                <filter name="filter_inactive" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="group_model" string="Model" context="{'group_by': 'model_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_velkio_state_access" model="ir.actions.act_window">
+        <field name="name">State Based Access Rules</field>
+        <field name="res_model">velkio.state.access</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a state based access rule</p>
+            <p>Pick a model and its state field, choose which states the rule
+               covers, then list the fields, tabs and buttons to hide or lock
+               for selected users or groups.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_velkio_state_access_root" name="State Based Access"
+              web_icon="velkio_state_based_access,static/description/icon.png"
+              groups="group_velkio_state_access_manager" sequence="95"/>
+    <menuitem id="menu_velkio_state_access" name="Access Rules"
+              parent="menu_velkio_state_access_root"
+              action="action_velkio_state_access" sequence="10"/>
+
+</odoo>

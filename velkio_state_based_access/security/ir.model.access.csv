@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_velkio_state_access_mgr,velkio.state.access.manager,model_velkio_state_access,group_velkio_state_access_manager,1,1,1,1
+access_velkio_state_access_field_line_mgr,velkio.state.access.field.line.manager,model_velkio_state_access_field_line,group_velkio_state_access_manager,1,1,1,1
+access_velkio_state_access_value_mgr,velkio.state.access.value.manager,model_velkio_state_access_value,group_velkio_state_access_manager,1,1,1,1
+access_velkio_state_access_node_mgr,velkio.state.access.node.manager,model_velkio_state_access_node,group_velkio_state_access_manager,1,1,1,1
+access_velkio_state_access_value_all,velkio.state.access.value.all,model_velkio_state_access_value,base.group_user,1,0,0,0
+access_velkio_state_access_node_all,velkio.state.access.node.all,model_velkio_state_access_node,base.group_user,1,0,0,0
