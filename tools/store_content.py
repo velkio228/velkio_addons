@@ -7,7 +7,7 @@ COMMON = {
 APPS = {
     'woo': {
         'module': 'velkio_woocommerce_connector',
-        'name': 'WooCommerce Connector',
+        'name': 'Velkio WooCommerce Connector',
         'edition': 'Odoo 19 · Community & Enterprise',
         'license': 'OPL-1', 'version': '19.0.1.0.1',
         'accent': '#714B67', 'tint': '#F6F1F6',
@@ -71,7 +71,7 @@ APPS = {
     },
     'tally': {
         'module': 'velkio_tally_integration',
-        'name': 'TallyPrime Connector',
+        'name': 'Velkio TallyPrime Connector',
         'edition': 'Odoo 19 · Community & Enterprise',
         'license': 'LGPL-3', 'version': '19.0.1.2.1',
         'accent': '#714B67', 'tint': '#F8F5EF',

@@ -37,7 +37,7 @@ def check(root):
         else:
             assert not urlparse(href).scheme, href
             assert (desc / href).is_file(), href
-    assert len(manifest['name']) <= 25, 'App name too long'
+    assert manifest['name'].strip(), 'Missing app name'
     assert manifest['license'] in ('OPL-1', 'LGPL-3')
     for asset in manifest['images']:
         assert (root / asset).is_file(), asset

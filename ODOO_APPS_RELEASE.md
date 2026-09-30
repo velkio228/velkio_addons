@@ -43,7 +43,7 @@ Use Ctrl+0 to reset browser zoom to 100%. Layout is bounded and centered.
 2. **Runtime verification:** these changes passed presentation checks, not full
    module installation or external-system integration testing. Install/upgrade
    both apps on an Odoo 19 test database and confirm views, permissions and sync.
-3. **Pricing:** existing terms were retained: WooCommerce USD 22.22 / OPL-1;
+3. **Pricing:** OPL module pricing is USD 1.00: WooCommerce USD 1.00 / OPL-1;
    TallyPrime LGPL-3 with no price set (a free listing unless configured otherwise).
 4. **Repository submission:** Tally is currently an untracked symlink in this
    workspace. Do not submit that symlink as module source. Use the generated
@@ -76,3 +76,5 @@ builder. Artwork is copied from approved files; it is not regenerated.
   key permissions, setup menu and permalink prerequisite.
 
 Image generation prompts are in `artwork/branding/applied-brand-prompts.md`.
+
+All application display names use the Velkio prefix.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    "name": "TallyPrime Connector",
+    "name": "Velkio TallyPrime Connector",
     "summary": "Connect TallyPrime masters and transactions with configurable sync direction",
     "description": """
 Velkio Odoo Tally Connector | TallyPrime Integration for Odoo 19
