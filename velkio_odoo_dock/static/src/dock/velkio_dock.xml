@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ============================================================ -->
+    <!-- One icon in the dock (pinned, recent or favourite menu)      -->
+    <!-- ============================================================ -->
+    <t t-name="velkio_odoo_dock.DockItem">
+        <a t-att-href="app.href"
+           class="o_velkio_dock_item"
+           t-att-class="{
+               'o_velkio_dock_active': app.kind !== 'fav' and app.id === state.currentAppId,
+               'o_velkio_dock_has_dot': app.recent,
+               'o_velkio_dock_recent_item': app.kind === 'recent',
+               'o_velkio_dock_fav_item': app.kind === 'fav',
+               'o_velkio_dock_dragging': app.id === state.dragId,
+               'o_velkio_dock_drop_target': app.id === state.dropTargetId,
+           }"
+           t-att-draggable="app.kind === 'fav' ? 'false' : 'true'"
+           t-att-aria-label="app.name"
+           t-on-click="(ev) => this.onAppClick(ev, app)"
+           t-on-mouseenter="(ev) => this.showTooltip(ev, this.itemTooltip(app))"
+           t-on-mouseleave="() => this.hideTooltip()"
+           t-on-contextmenu.prevent.stop="(ev) => this.onContextMenu(ev, app)"
+           t-on-dragstart="(ev) => this.onDragStart(ev, app)"
+           t-on-dragover.prevent="(ev) => this.onDragOver(ev, app)"
+           t-on-dragleave="() => this.onDragLeave()"
+           t-on-drop.prevent="() => this.onDrop(app)"
+           t-on-dragend="() => this.onDragEnd()">
+            <img t-if="app.iconSrc" class="o_velkio_dock_icon" t-att-src="app.iconSrc" alt="" draggable="false"/>
+            <span t-else="" class="o_velkio_dock_icon o_velkio_dock_fa" t-att-style="app.iconStyle">
+                <i t-att-class="app.iconClass"/>
+            </span>
+            <span t-if="app.kind === 'fav'" class="o_velkio_dock_fav_star"><i class="fa fa-star"/></span>
+            <span t-if="app.badge" class="o_velkio_dock_badge_count" t-esc="badgeText(app.badge)"/>
+        </a>
+    </t>
+
+    <!-- ============================================================ -->
+    <!-- App icon used in overview / dialogs                          -->
+    <!-- ============================================================ -->
+    <t t-name="velkio_odoo_dock.AppIcon">
+        <img t-if="app.iconSrc" class="o_velkio_dock_icon" t-att-src="app.iconSrc" alt="" draggable="false"/>
+        <span t-else="" class="o_velkio_dock_icon o_velkio_dock_fa" t-att-style="app.iconStyle">
+            <i t-att-class="app.iconClass"/>
+        </span>
+    </t>
+
+    <!-- ============================================================ -->
+    <!-- The dock                                                      -->
+    <!-- ============================================================ -->
+    <t t-name="velkio_odoo_dock.VelkioDock">
+        <!-- invisible strip on the screen edge that reveals an auto-hidden dock -->
+        <div t-if="state.settings.autohide and !state.homeVisible"
+             t-attf-class="o_velkio_dock_hotzone o_velkio_dock_hotzone_{{ state.settings.position }}"
+             t-on-mouseenter="() => this.reveal()"
+             t-on-mouseleave="() => this.scheduleHide()"
+             t-on-dragenter="() => this.reveal()"/>
+
+        <nav t-att-class="dockClass" t-att-style="dockStyle" aria-label="Velkio dock"
+             t-on-mouseenter="() => this.reveal()"
+             t-on-mouseleave="() => this.scheduleHide()"
+             t-on-contextmenu.prevent="() => this.openSettings()">
+            <div class="o_velkio_dock_items" t-on-wheel="onItemsWheel">
+                <t t-foreach="pinnedApps" t-as="app" t-key="'p' + app.id">
+                    <t t-call="velkio_odoo_dock.DockItem"/>
+                </t>
+
+                <t t-set="favs" t-value="dockFavorites"/>
+                <t t-if="favs.length">
+                    <span class="o_velkio_dock_separator"/>
+                    <t t-foreach="favs" t-as="app" t-key="'f' + app.id">
+                        <t t-call="velkio_odoo_dock.DockItem"/>
+                    </t>
+                </t>
+
+                <t t-set="recent" t-value="recentApps"/>
+                <t t-if="recent.length">
+                    <span class="o_velkio_dock_separator"/>
+                    <t t-foreach="recent" t-as="app" t-key="'r' + app.id">
+                        <t t-call="velkio_odoo_dock.DockItem"/>
+                    </t>
+                </t>
+
+                <button type="button" class="o_velkio_dock_item o_velkio_dock_add"
+                        t-att-class="{'o_velkio_dock_drop_target': state.dropTargetId === 'end'}"
+                        aria-label="Add or remove apps"
+                        t-on-click="openPicker"
+                        t-on-mouseenter="(ev) => this.showTooltip(ev, 'Add / Remove Apps')"
+                        t-on-mouseleave="() => this.hideTooltip()"
+                        t-on-dragover.prevent="(ev) => this.onDragOver(ev, null)"
+                        t-on-dragleave="() => this.onDragLeave()"
+                        t-on-drop.prevent="() => this.onDrop(null)">
+                    <span class="o_velkio_dock_icon o_velkio_dock_fa"><i class="fa fa-plus"/></span>
+                </button>
+            </div>
+
+            <div class="o_velkio_dock_tail">
+                <button type="button" class="o_velkio_dock_item o_velkio_dock_small_btn"
+                        aria-label="Dock settings"
+                        t-on-click="openSettings"
+                        t-on-mouseenter="(ev) => this.showTooltip(ev, 'Dock Settings')"
+                        t-on-mouseleave="() => this.hideTooltip()">
+                    <i class="fa fa-sliders"/>
+                </button>
+                <button type="button" class="o_velkio_dock_item o_velkio_dock_show_all"
+                        t-att-class="{'o_velkio_dock_active': state.overviewOpen}"
+                        aria-label="Show Applications"
+                        t-on-click.stop="toggleOverview"
+                        t-on-mouseenter="(ev) => this.showTooltip(ev, state.settings.shortcuts ? 'Show Applications  (Alt+Shift+O)' : 'Show Applications')"
+                        t-on-mouseleave="() => this.hideTooltip()">
+                    <span class="o_velkio_dock_icon o_velkio_dock_grid">
+                        <t t-foreach="[1,2,3,4,5,6,7,8,9]" t-as="dot" t-key="dot"><i/></t>
+                    </span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- tooltip lives outside the dock so it is never clipped -->
+        <div t-if="state.tooltip"
+             t-attf-class="o_velkio_dock_tooltip o_velkio_dock_tooltip_{{ state.settings.position }}"
+             t-att-style="state.tooltip.style"
+             t-esc="state.tooltip.text"/>
+
+        <!-- right-click menu -->
+        <div t-if="state.contextMenu" class="o_velkio_dock_context dropdown-menu show"
+             t-att-style="state.contextMenu.style"
+             t-on-click.stop="() => {}"
+             t-on-mouseenter="() => this.reveal()">
+            <t t-set="ctxApp" t-value="state.contextMenu.app"/>
+            <div class="dropdown-header d-flex align-items-center gap-2">
+                <t t-call="velkio_odoo_dock.AppIcon"><t t-set="app" t-value="ctxApp"/></t>
+                <span class="fw-bold text-truncate" t-esc="ctxApp.name"/>
+            </div>
+            <a href="#" class="dropdown-item" t-on-click.prevent="() => this.openApp(ctxApp)">
+                <i class="fa fa-external-link me-2"/>Open
+            </a>
+            <a href="#" class="dropdown-item" t-on-click.prevent="() => this.openInNewTab(ctxApp)">
+                <i class="fa fa-clone me-2"/>Open in New Tab
+            </a>
+            <t t-if="state.contextMenu.kind === 'pinned'">
+                <a href="#" class="dropdown-item" t-on-click.prevent="() => this.move(ctxApp, -1)">
+                    <i t-attf-class="fa me-2 {{ isHorizontal ? 'fa-arrow-left' : 'fa-arrow-up' }}"/>Move <t t-esc="isHorizontal ? 'left' : 'up'"/>
+                </a>
+                <a href="#" class="dropdown-item" t-on-click.prevent="() => this.move(ctxApp, 1)">
+                    <i t-attf-class="fa me-2 {{ isHorizontal ? 'fa-arrow-right' : 'fa-arrow-down' }}"/>Move <t t-esc="isHorizontal ? 'right' : 'down'"/>
+                </a>
+                <div class="dropdown-divider"/>
+                <a href="#" class="dropdown-item text-danger" t-on-click.prevent="() => this.unpin(ctxApp)">
+                    <i class="fa fa-thumb-tack me-2"/>Remove from Dock
+                </a>
+            </t>
+            <t t-elif="state.contextMenu.kind === 'fav'">
+                <a href="#" class="dropdown-item" t-on-click.prevent="() => this.moveFavorite(ctxApp, -1)">
+                    <i t-attf-class="fa me-2 {{ isHorizontal ? 'fa-arrow-left' : 'fa-arrow-up' }}"/>Move <t t-esc="isHorizontal ? 'left' : 'up'"/>
+                </a>
+                <a href="#" class="dropdown-item" t-on-click.prevent="() => this.moveFavorite(ctxApp, 1)">
+                    <i t-attf-class="fa me-2 {{ isHorizontal ? 'fa-arrow-right' : 'fa-arrow-down' }}"/>Move <t t-esc="isHorizontal ? 'right' : 'down'"/>
+                </a>
+                <div class="dropdown-divider"/>
+                <a href="#" class="dropdown-item text-danger" t-on-click.prevent="() => this.toggleFavorite(ctxApp)">
+                    <i class="fa fa-star-o me-2"/>Remove from Favourites
+                </a>
+            </t>
+            <t t-else="">
+                <a href="#" class="dropdown-item" t-on-click.prevent="() => this.pin(ctxApp)">
+                    <i class="fa fa-thumb-tack me-2"/>Pin to Dock
+                </a>
+                <div class="dropdown-divider"/>
+                <a href="#" class="dropdown-item text-danger" t-on-click.prevent="() => this.removeRecent(ctxApp)">
+                    <i class="fa fa-times me-2"/>Remove from Recent
+                </a>
+                <a href="#" class="dropdown-item text-danger" t-on-click.prevent="() => this.clearRecent()">
+                    <i class="fa fa-trash-o me-2"/>Clear All Recent
+                </a>
+            </t>
+            <div class="dropdown-divider"/>
+            <a href="#" class="dropdown-item" t-on-click.prevent="() => this.openSettings()">
+                <i class="fa fa-sliders me-2"/>Dock Settings…
+            </a>
+        </div>
+
+        <!-- A quiet landing page beside the dock, on Enterprise home only. -->
+        <main t-if="state.homeVisible and !state.overviewOpen"
+              class="o_velkio_workspace" t-att-class="{'o_velkio_workspace_light': workspaceIsLight}"
+              aria-label="Your workspace">
+            <div class="o_velkio_workspace_inner">
+                <header class="o_velkio_workspace_welcome">
+                    <div t-if="workspaceCompany" class="o_velkio_workspace_brand">
+                        <img t-if="!state.companyLogoFailed" t-att-src="workspaceCompanyLogo"
+                             t-att-alt="workspaceCompany.name"
+                             t-on-error="() => { state.companyLogoFailed = true; }"/>
+                        <strong t-else="" t-esc="workspaceCompany.name"/>
+                    </div>
+                    <div class="o_velkio_workspace_clock" t-esc="workspaceTime"/>
+                    <div class="o_velkio_workspace_date" t-esc="workspaceDate"/>
+                    <h1 t-esc="workspaceGreeting"/>
+                    <p class="o_velkio_workspace_intro">Your apps are one click away. Pick up where you left off.</p>
+                </header>
+                <button type="button" class="o_velkio_workspace_search" t-on-click="toggleOverview">
+                    <i class="fa fa-search"/>
+                    <span>Find apps, menus and recent records</span>
+                    <i class="fa fa-arrow-right"/>
+                </button>
+                <div class="o_velkio_workspace_actions">
+                    <button type="button" t-on-click="toggleOverview">
+                        <i class="fa fa-th-large"/><strong>Explore your apps</strong>
+                        <span>Browse everything you can access</span>
+                    </button>
+                    <button type="button" t-on-click="openPicker">
+                        <i class="fa fa-thumb-tack"/><strong>Make it yours</strong>
+                        <span>Pin your everyday apps to the dock</span>
+                    </button>
+                    <button type="button" t-on-click="openSettings">
+                        <i class="fa fa-sliders"/><strong>Adjust your dock</strong>
+                        <span>Choose your layout, style and behaviour</span>
+                    </button>
+                </div>
+                <section class="o_velkio_workspace_recent" aria-label="Recent records">
+                    <h2>Continue where you left off</h2>
+                    <div t-if="workspaceRecords.length" class="o_velkio_workspace_records">
+                        <a t-foreach="workspaceRecords" t-as="record" t-key="record.key"
+                           t-att-href="record.href" t-on-click="(ev) => this.onRecordClick(ev, record)">
+                            <i class="fa fa-file-text-o"/>
+                            <span><strong t-esc="record.name"/><small t-esc="record.model_name or record.appName"/></span>
+                            <i class="fa fa-angle-right"/>
+                        </a>
+                    </div>
+                    <div t-else="" class="o_velkio_workspace_empty">
+                        <i class="fa fa-history"/>
+                        <span>Your recently opened records will appear here.<small>Open a record in any app to get started.</small></span>
+                    </div>
+                </section>
+                <section t-if="state.settings.show_recent" class="o_velkio_workspace_recent_apps" aria-label="Recently opened apps">
+                    <h2>Recently opened apps</h2>
+                    <div t-if="overviewRecent.length" class="o_velkio_workspace_app_list">
+                        <a t-foreach="overviewRecent" t-as="app" t-key="app.id"
+                           t-att-href="app.href" t-on-click="(ev) => this.onAppClick(ev, app)">
+                            <t t-call="velkio_odoo_dock.AppIcon"/>
+                            <span t-esc="app.name"/>
+                        </a>
+                    </div>
+                    <p t-else="">Apps you open will appear here for quick access.</p>
+                </section>
+            </div>
+        </main>
+
+        <!-- Full-screen app overview -->
+        <div t-if="state.overviewOpen"
+             t-att-class="overviewClass"
+             t-on-click.self="closeOverview">
+            <div class="o_velkio_dock_overview_inner" t-on-click.self="closeOverview">
+                <div class="o_velkio_dock_overview_search">
+                    <i class="fa fa-search"/>
+                    <input type="text" t-ref="overviewSearch"
+                           placeholder="Type to search apps, menus and recent records…"
+                           t-model="state.overviewSearch"
+                           t-on-keydown="onOverviewSearchKeydown"/>
+                </div>
+
+                <!-- Recent apps -->
+                <section t-if="!state.overviewSearch and overviewRecent.length" class="o_velkio_dock_overview_section">
+                    <div class="o_velkio_dock_overview_section_head">
+                        <h6>Recent Apps</h6>
+                        <button type="button" class="o_velkio_dock_clear_btn" t-on-click.stop="clearRecent">
+                            <i class="fa fa-trash-o me-1"/>Clear
+                        </button>
+                    </div>
+                    <div class="o_velkio_dock_overview_recent">
+                        <t t-foreach="overviewRecent" t-as="app" t-key="'or' + app.id">
+                            <a t-att-href="app.href" class="o_velkio_dock_recent_card"
+                               t-att-class="{'o_current': app.id === state.currentAppId}"
+                               t-on-click="(ev) => this.onAppClick(ev, app)">
+                                <div class="o_velkio_dock_recent_card_preview">
+                                    <t t-call="velkio_odoo_dock.AppIcon"/>
+                                    <span t-if="app.badge" class="o_velkio_dock_badge_count" t-esc="badgeText(app.badge)"/>
+                                </div>
+                                <div class="o_velkio_dock_recent_card_footer">
+                                    <span class="text-truncate" t-esc="app.name"/>
+                                    <span t-if="app.id === state.currentAppId" class="o_velkio_dock_badge">Current</span>
+                                </div>
+                                <button type="button" class="o_velkio_dock_pin_btn"
+                                        t-att-class="{'o_pinned': app.pinned}"
+                                        t-att-title="app.pinned ? 'Unpin from dock' : 'Pin to dock'"
+                                        t-on-click.stop.prevent="() => this.togglePin(app)">
+                                    <i class="fa fa-thumb-tack"/>
+                                </button>
+                            </a>
+                        </t>
+                    </div>
+                </section>
+
+                <!-- favourite menus -->
+                <section t-if="overviewFavorites.length" class="o_velkio_dock_overview_section">
+                    <h6>Favourite Menus</h6>
+                    <div class="o_velkio_dock_overview_menus">
+                        <t t-foreach="overviewFavorites" t-as="menu" t-key="'of' + menu.id">
+                            <a t-att-href="menu.href" class="o_velkio_dock_menu_result o_velkio_dock_fav_chip"
+                               t-on-click="(ev) => this.onAppClick(ev, menu)">
+                                <t t-call="velkio_odoo_dock.AppIcon"><t t-set="app" t-value="menu"/></t>
+                                <span class="o_velkio_dock_menu_app" t-esc="menu.appName"/>
+                                <i class="fa fa-angle-right mx-1"/>
+                                <span t-esc="menu.shortName"/>
+                                <button type="button" class="o_velkio_dock_chip_remove" title="Remove from favourites"
+                                        t-on-click.stop.prevent="() => this.toggleFavorite(menu)">
+                                    <i class="fa fa-times"/>
+                                </button>
+                            </a>
+                        </t>
+                    </div>
+                </section>
+
+                <!-- matching menus while searching -->
+                <section t-if="overviewMenus.length" class="o_velkio_dock_overview_section">
+                    <h6>Menus <small class="o_velkio_dock_hint">click ☆ to add a menu to your dock</small></h6>
+                    <div class="o_velkio_dock_overview_menus">
+                        <t t-foreach="overviewMenus" t-as="menu" t-key="'m' + menu.id">
+                            <a t-att-href="menu.href" class="o_velkio_dock_menu_result"
+                               t-on-click="(ev) => this.onMenuClick(ev, menu)">
+                                <span class="o_velkio_dock_menu_app" t-esc="menu.appName"/>
+                                <i class="fa fa-angle-right mx-1"/>
+                                <span t-esc="menu.name"/>
+                                <button type="button" class="o_velkio_dock_chip_star"
+                                        t-att-class="{'o_favorite': menu.favorite}"
+                                        t-att-title="menu.favorite ? 'Remove from favourites' : 'Add to favourites'"
+                                        t-on-click.stop.prevent="() => this.toggleFavorite(menu)">
+                                    <i t-att-class="menu.favorite ? 'fa fa-star' : 'fa fa-star-o'"/>
+                                </button>
+                            </a>
+                        </t>
+                    </div>
+                </section>
+
+                <!-- recently opened records -->
+                <section t-if="overviewRecords.length" class="o_velkio_dock_overview_section">
+                    <div class="o_velkio_dock_overview_section_head">
+                        <h6>Recent Records</h6>
+                        <button t-if="!state.overviewSearch" type="button" class="o_velkio_dock_clear_btn"
+                                t-on-click.stop="clearRecentRecords">
+                            <i class="fa fa-trash-o me-1"/>Clear
+                        </button>
+                    </div>
+                    <div class="o_velkio_dock_overview_records">
+                        <t t-foreach="overviewRecords" t-as="record" t-key="record.key">
+                            <a t-att-href="record.href" class="o_velkio_dock_record"
+                               t-on-click="(ev) => this.onRecordClick(ev, record)">
+                                <t t-call="velkio_odoo_dock.AppIcon"><t t-set="app" t-value="record"/></t>
+                                <span class="o_velkio_dock_record_text">
+                                    <span class="o_velkio_dock_record_name text-truncate" t-esc="record.name"/>
+                                    <span class="o_velkio_dock_record_model text-truncate"
+                                          t-esc="record.model_name || record.appName || record.model"/>
+                                </span>
+                                <button type="button" class="o_velkio_dock_chip_remove" title="Remove"
+                                        t-on-click.stop.prevent="() => this.removeRecentRecord(record)">
+                                    <i class="fa fa-times"/>
+                                </button>
+                            </a>
+                        </t>
+                    </div>
+                </section>
+
+                <section class="o_velkio_dock_overview_section">
+                    <h6>All Applications</h6>
+                    <div class="o_velkio_dock_overview_grid">
+                        <t t-foreach="overviewApps" t-as="app" t-key="'oa' + app.id">
+                            <a t-att-href="app.href" class="o_velkio_dock_overview_app"
+                               t-on-click="(ev) => this.onAppClick(ev, app)">
+                                <span class="o_velkio_dock_overview_app_icon">
+                                    <t t-call="velkio_odoo_dock.AppIcon"/>
+                                    <span t-if="app.badge" class="o_velkio_dock_badge_count" t-esc="badgeText(app.badge)"/>
+                                </span>
+                                <span class="o_velkio_dock_overview_app_name" t-esc="app.name"/>
+                                <button type="button" class="o_velkio_dock_pin_btn"
+                                        t-att-class="{'o_pinned': app.pinned}"
+                                        t-att-title="app.pinned ? 'Unpin from dock' : 'Pin to dock'"
+                                        t-on-click.stop.prevent="() => this.togglePin(app)">
+                                    <i class="fa fa-thumb-tack"/>
+                                </button>
+                            </a>
+                        </t>
+                        <div t-if="!overviewApps.length and !overviewMenus.length and !overviewRecords.length and !overviewFavorites.length"
+                             class="o_velkio_dock_overview_empty">
+                            Nothing matches “<t t-esc="state.overviewSearch"/>”
+                        </div>
+                    </div>
+                </section>
+
+                <div class="o_velkio_dock_overview_actions">
+                    <button type="button" class="btn btn-sm" t-on-click="openPicker">
+                        <i class="fa fa-th-large me-1"/>Choose Dock Apps
+                    </button>
+                    <button type="button" class="btn btn-sm" t-on-click="openSettings">
+                        <i class="fa fa-sliders me-1"/>Dock Settings
+                    </button>
+                    <button type="button" class="btn btn-sm" t-on-click="openOdooHome">
+                        <i class="fa fa-home me-1"/>Odoo Home
+                    </button>
+                </div>
+                <div t-if="state.settings.shortcuts" class="o_velkio_dock_overview_shortcuts">
+                    <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd> overview ·
+                    <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>1</kbd>…<kbd>9</kbd> pinned apps ·
+                    <kbd>Esc</kbd> close · middle-click opens in a new tab
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- ============================================================ -->
+    <!-- Choose apps dialog                                           -->
+    <!-- ============================================================ -->
+    <t t-name="velkio_odoo_dock.VelkioDockPicker">
+        <Dialog title="'Choose Dock Apps'" size="'lg'">
+            <div class="d-flex gap-2 mb-3">
+                <input type="text" class="form-control" placeholder="Search apps..."
+                       t-model="state.search"/>
+                <button class="btn btn-secondary text-nowrap" t-on-click="selectAll">Select all</button>
+                <button class="btn btn-secondary text-nowrap" t-on-click="clearAll">Clear</button>
+            </div>
+            <div class="o_velkio_dock_picker">
+                <t t-foreach="filteredApps" t-as="app" t-key="app.id">
+                    <div class="o_velkio_dock_picker_item"
+                         t-att-class="{'o_selected': isSelected(app)}"
+                         t-on-click="() => this.toggle(app)">
+                        <t t-call="velkio_odoo_dock.AppIcon"/>
+                        <span class="o_velkio_dock_picker_name" t-esc="app.name"/>
+                        <i t-if="isSelected(app)" class="fa fa-check-circle o_velkio_dock_picker_check"/>
+                    </div>
+                </t>
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="save">Save</button>
+                <button class="btn btn-secondary" t-on-click="props.close">Cancel</button>
+                <span class="ms-auto text-muted small">
+                    <t t-esc="state.selected.length"/> app(s) selected · drag icons in the dock to reorder
+                </span>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ -->
+    <!-- Settings dialog                                              -->
+    <!-- ============================================================ -->
+    <t t-name="velkio_odoo_dock.VelkioDockSettings">
+        <Dialog title="'Dock Settings'" size="'lg'" contentClass="'o_velkio_settings_dialog'">
+            <div class="o_velkio_dock_settings">
+                <div class="o_velkio_settings_intro">
+                    <div><h3>Make your dock feel like yours</h3><p>Choose a look and a layout that fit the way you work.</p></div>
+                    <span class="o_velkio_live_badge"><i class="fa fa-circle"/>Live preview</span>
+                </div>
+                <div class="o_velkio_settings_tabs" role="tablist" aria-label="Dock settings sections">
+                    <button type="button" role="tab" id="dock_appearance_tab" aria-controls="dock_appearance_panel"
+                            t-att-aria-selected="ui.tab === 'appearance' ? 'true' : 'false'"
+                            t-att-class="{'o_active': ui.tab === 'appearance'}" t-on-click="() => { this.ui.tab = 'appearance'; }">
+                        <i class="fa fa-paint-brush"/>Appearance
+                    </button>
+                    <button type="button" role="tab" id="dock_behavior_tab" aria-controls="dock_behavior_panel"
+                            t-att-aria-selected="ui.tab === 'behavior' ? 'true' : 'false'"
+                            t-att-class="{'o_active': ui.tab === 'behavior'}" t-on-click="() => { this.ui.tab = 'behavior'; }">
+                        <i class="fa fa-sliders"/>Behaviour
+                    </button>
+                </div>
+                <div t-if="ui.tab === 'appearance'" id="dock_appearance_panel" role="tabpanel" aria-labelledby="dock_appearance_tab" class="o_velkio_settings_panel">
+                    <section class="o_velkio_settings_section">
+                        <div class="o_velkio_section_heading"><div><h4>Dock position</h4><p>Keep your apps on the side you prefer.</p></div></div>
+                        <div class="o_velkio_dock_settings_positions">
+                            <t t-foreach="POSITIONS" t-as="pos" t-key="pos.value">
+                                <button type="button" class="o_velkio_dock_settings_tile o_position_tile"
+                                        t-att-class="{'o_selected': state.position === pos.value}"
+                                        t-att-aria-pressed="state.position === pos.value ? 'true' : 'false'"
+                                        t-on-click="() => this.set('position', pos.value)">
+                                    <span t-attf-class="o_velkio_dock_mini_screen o_mini_{{ pos.value }}" aria-hidden="true"><span class="o_mini_content"/><span class="o_mini_bar"/></span>
+                                    <span t-esc="pos.label"/><i t-if="state.position === pos.value" class="fa fa-check o_tile_check" aria-hidden="true"/>
+                                </button>
+                            </t>
+                        </div>
+                    </section>
+                    <section class="o_velkio_settings_section">
+                        <div class="o_velkio_section_heading"><div><h4>Dock style</h4><p>A subtle backdrop or a little more colour.</p></div></div>
+                        <div class="o_velkio_dock_settings_styles">
+                            <t t-foreach="STYLES" t-as="st" t-key="st.value">
+                                <button type="button" class="o_velkio_dock_settings_tile o_style_tile"
+                                        t-att-class="{'o_selected': state.style === st.value}"
+                                        t-att-aria-pressed="state.style === st.value ? 'true' : 'false'"
+                                        t-on-click="() => this.set('style', st.value)">
+                                    <span class="o_velkio_dock_mini_wallpaper" aria-hidden="true"><span t-attf-class="o_velkio_dock_mini_dock o_velkio_dock_style_{{ st.value }}" t-attf-style="--dock-accent: {{ state.accent_color }};"><i/><i/><i/><i/></span></span>
+                                    <span class="o_style_caption"><strong t-esc="st.label"/><small t-esc="{dark: 'Clean and understated', floating: 'Compact with rounded edges', glass: 'Soft and translucent', light: 'Bright and minimal', odoo: 'Classic Odoo colour', accent: 'Your chosen accent'}[st.value]"/></span>
+                                    <i t-if="state.style === st.value" class="fa fa-check o_tile_check" aria-hidden="true"/>
+                                </button>
+                            </t>
+                        </div>
+                    </section>
+                    <div class="o_velkio_settings_pair">
+                        <section class="o_velkio_settings_section"><h4>Icon size</h4><p>Find a comfortable balance.</p>
+                            <div class="o_velkio_segmented" role="group" aria-label="Icon size">
+                                <t t-foreach="ICON_SIZES" t-as="sz" t-key="sz.value"><button type="button" t-att-class="{'o_selected': state.icon_size === sz.value}" t-att-aria-pressed="state.icon_size === sz.value ? 'true' : 'false'" t-on-click="() => this.set('icon_size', sz.value)" t-esc="sz.label"/></t>
+                            </div>
+                        </section>
+                        <section class="o_velkio_settings_section"><h4>Accent colour</h4><p>Used for highlights and the Accent style.</p>
+                            <div class="o_velkio_palette">
+                                <t t-foreach="ACCENT_PRESETS" t-as="color" t-key="color"><button type="button" class="o_velkio_dock_swatch" t-att-class="{'o_selected': state.accent_color.toLowerCase() === color.toLowerCase()}" t-attf-style="--swatch: {{ color }};" t-att-title="color" t-att-aria-label="'Accent colour ' + color" t-att-aria-pressed="state.accent_color.toLowerCase() === color.toLowerCase() ? 'true' : 'false'" t-on-click="() => this.set('accent_color', color)"><i t-if="state.accent_color.toLowerCase() === color.toLowerCase()" class="fa fa-check"/></button></t>
+                                <label class="o_velkio_custom_colour" title="Choose a custom colour"><i class="fa fa-plus"/><input type="color" class="o_velkio_dock_color_input" aria-label="Custom accent colour" t-att-value="state.accent_color" t-on-input="(ev) => this.set('accent_color', ev.target.value)"/></label>
+                            </div>
+                        </section>
+                    </div>
+                    <section class="o_velkio_settings_section o_overview_setting"><div><h4>Application overview</h4><p>Auto follows Odoo's light or dark mode.</p></div>
+                        <div class="o_velkio_segmented" role="group" aria-label="Overview theme"><t t-foreach="OVERVIEW_THEMES" t-as="th" t-key="th.value"><button type="button" t-att-class="{'o_selected': state.overview_theme === th.value}" t-att-aria-pressed="state.overview_theme === th.value ? 'true' : 'false'" t-on-click="() => this.set('overview_theme', th.value)" t-esc="th.label"/></t></div>
+                    </section>
+                </div>
+                <div t-if="ui.tab === 'behavior'" id="dock_behavior_panel" role="tabpanel" aria-labelledby="dock_behavior_tab" class="o_velkio_settings_panel">
+                    <section class="o_velkio_settings_section"><h4>Make everyday navigation easier</h4><p>Turn on the extras that help you work.</p>
+                        <div class="o_velkio_preferences">
+                            <t t-foreach="[
+                                ['autohide', 'Auto-hide dock', 'Reveal the dock when your pointer reaches the screen edge.', 'fa-eye-slash'],
+                                ['magnify', 'Magnify on hover', 'Make an app icon larger when you point at it.', 'fa-search-plus'],
+                                ['show_badges', 'Notification badges', 'See unread messages and due activities in supported apps.', 'fa-bell-o'],
+                                ['show_favorites', 'Favourite menus', 'Keep your starred menus beside your pinned apps.', 'fa-star-o'],
+                                ['shortcuts', 'Keyboard shortcuts', 'Alt + Shift + O for overview; Alt + Shift + 1–9 for apps.', 'fa-keyboard-o'],
+                            ]" t-as="opt" t-key="opt[0]">
+                                <label class="o_velkio_preference" t-att-for="'o_dock_' + opt[0]">
+                                    <span class="o_preference_icon"><i t-attf-class="fa {{ opt[3] }}"/></span>
+                                    <span class="o_preference_copy"><strong t-esc="opt[1]"/><small t-esc="opt[2]"/></span>
+                                    <span class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" t-att-id="'o_dock_' + opt[0]" t-att-checked="state[opt[0]]" t-on-change="(ev) => this.set(opt[0], ev.target.checked)"/></span>
+                                </label>
+                            </t>
+                        </div>
+                    </section>
+                    <section class="o_velkio_settings_section"><h4>Recently opened apps</h4><p>Jump back to the apps you have been using.</p>
+                        <label class="o_velkio_preference" for="o_dock_show_recent"><span class="o_preference_icon"><i class="fa fa-history"/></span><span class="o_preference_copy"><strong>Show recent apps</strong><small>Display unpinned recent apps after your pinned shortcuts.</small></span><span class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="o_dock_show_recent" t-att-checked="state.show_recent" t-on-change="(ev) => this.set('show_recent', ev.target.checked)"/></span></label>
+                        <div t-if="state.show_recent" class="o_velkio_recent_count"><label for="o_dock_recent_limit">Number of recent apps</label><input type="number" min="0" max="15" id="o_dock_recent_limit" class="form-control" t-att-value="state.recent_limit" t-on-change="onRecentLimit"/><span>0–15 apps</span></div>
+                    </section>
+                    <section class="o_velkio_settings_section o_history_setting"><div><h4>Clear your history</h4><p>Clears saved history immediately. Your pinned apps stay in place.</p></div><div class="o_history_actions"><button type="button" t-on-click="() => this.props.onClearRecent()"><i class="fa fa-eraser"/>Clear recent apps</button><button type="button" t-on-click="() => this.props.onClearRecentRecords()"><i class="fa fa-eraser"/>Clear recent records</button></div></section>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <div class="o_velkio_settings_footer"><button type="button" class="o_reset_settings" t-on-click="reset"><i class="fa fa-undo"/>Reset appearance &amp; behaviour</button><div><button type="button" class="btn btn-secondary" t-on-click="props.close">Cancel</button><button type="button" class="btn btn-primary" t-on-click="save">Save changes</button></div></div>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

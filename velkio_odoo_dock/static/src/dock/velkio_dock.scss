@@ -1,0 +1,1039 @@
+// =====================================================================
+// Velkio Odoo Dock
+// Runtime CSS variables (set from JS on the <nav>):
+//   --dock-item, --dock-icon, --dock-thickness, --dock-accent
+// and on <body>: --o-velkio-dock-space, --o-velkio-dock-accent
+// =====================================================================
+
+$o-velkio-dock-z: 1040; // above navbar/content, below modals (1050)
+
+// Home workspace preserves the user's Odoo background and the dock placement.
+.o_velkio_workspace {
+    position: fixed; inset: 60px 0 0; z-index: $o-velkio-dock-z - 3;
+    --workspace-fg: #f4f2f8;
+    --workspace-card: rgba(255,255,255,.035);
+    --workspace-search: rgba(255,255,255,.08);
+    --workspace-hover: rgba(255,255,255,.13);
+    --workspace-border: rgba(255,255,255,.18);
+    --workspace-icon: #e7cbe2;
+    --workspace-icon-bg: rgba(170,130,165,.22);
+    --workspace-focus: #c6a3c0;
+    &.o_velkio_workspace_light {
+        --workspace-fg: #29263d;
+        --workspace-card: rgba(255,255,255,.62);
+        --workspace-search: rgba(255,255,255,.8);
+        --workspace-hover: rgba(255,255,255,.95);
+        --workspace-border: rgba(55,45,75,.2);
+        --workspace-icon: #714b67;
+        --workspace-icon-bg: rgba(113,75,103,.12);
+        --workspace-focus: #714b67;
+    }
+    padding: 3vh 48px 28px; overflow-y: auto; color: var(--workspace-fg);
+    scrollbar-width: thin; scrollbar-color: var(--workspace-border) transparent;
+    .o_velkio_dock_side_left & { left: var(--o-velkio-dock-space, 0px); }
+    .o_velkio_dock_side_right & { right: var(--o-velkio-dock-space, 0px); }
+    .o_velkio_dock_side_top & { top: calc(60px + var(--o-velkio-dock-space, 0px)); }
+    .o_velkio_dock_side_bottom & { bottom: var(--o-velkio-dock-space, 0px); }
+    button, a { color: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--workspace-focus); outline-offset: 4px; }
+}
+.o_velkio_workspace_inner { max-width: 920px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+.o_velkio_workspace_welcome { text-align: center; }
+.o_velkio_workspace_brand {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 64px; max-width: 250px; padding: 12px 22px; margin-bottom: 20px;
+    border-radius: 14px; background: #fff; color: #292333;
+    img { max-width: 200px; max-height: 56px; object-fit: contain; }
+}
+.o_velkio_workspace_clock { font-size: clamp(32px, 4vw, 48px); line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: .025em; margin-bottom: 8px; }
+.o_velkio_workspace_date { font-size: 13px; letter-spacing: .04em; opacity: .7; margin-bottom: 12px; }
+.o_velkio_workspace h1 { font-size: clamp(26px, 3vw, 38px); font-weight: 600; color: inherit; margin: 0 0 12px; }
+.o_velkio_workspace_intro { font-size: 15px; opacity: .75; margin-bottom: 24px; }
+.o_velkio_workspace_search {
+    display: flex; align-items: center; gap: 16px; width: 100%; padding: 20px 22px;
+    background: var(--workspace-search); border: 1px solid var(--workspace-border); border-radius: 14px;
+    text-align: left; font-size: 15px; backdrop-filter: blur(12px);
+    span { flex: 1; } > i:last-child { opacity: .6; }
+    &:hover { background: var(--workspace-hover); }
+}
+.o_velkio_workspace_actions {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0 28px;
+    button { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 22px;
+        text-align: left; background: var(--workspace-card); border: 1px solid var(--workspace-border); border-radius: 14px;
+        > i { display: grid; place-items: center; width: 36px; height: 36px; background: var(--workspace-icon-bg); color: var(--workspace-icon); border-radius: 10px; font-size: 17px; }
+        strong { font-size: 15px; font-weight: 600; } span { font-size: 12px; opacity: .7; }
+        &:hover { background: var(--workspace-search); border-color: var(--workspace-focus); }
+    }
+}
+.o_velkio_workspace_recent {
+    h2 { font-size: 17px; font-weight: 600; color: inherit; margin-bottom: 18px; }
+}
+.o_velkio_workspace_records a, .o_velkio_workspace_empty {
+    display: flex; align-items: center; gap: 16px; padding: 16px 18px; border: 1px solid var(--workspace-border); border-radius: 12px;
+    background: var(--workspace-card); margin-bottom: 8px; text-decoration: none;
+    > i { opacity: .65; font-size: 20px; } > span { flex: 1; min-width: 0; font-size: 13px; }
+    strong { display: block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    small { display: block; font-size: 12px; opacity: .65; margin-top: 4px; }
+}
+.o_velkio_workspace_records a:hover { background: var(--workspace-search); }
+.o_velkio_workspace_recent_apps {
+    margin-top: auto; padding-top: 32px;
+    h2 { color: inherit; font-size: 15px; font-weight: 600; margin: 0 0 16px; }
+    > p { font-size: 13px; opacity: .65; }
+}
+.o_velkio_workspace_app_list {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    a { display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+        border: 1px solid var(--workspace-border); border-radius: 12px;
+        background: var(--workspace-card); text-decoration: none; font-size: 13px;
+        &:hover { background: var(--workspace-hover); }
+    }
+    .o_velkio_dock_icon { width: 30px; height: 30px; font-size: 20px; flex-shrink: 0; }
+}
+@media (max-width: 1000px) { .o_velkio_workspace { padding: 32px 24px; } .o_velkio_workspace_actions { gap: 10px; button { padding: 16px; } } }
+@media (max-width: 767px) { .o_velkio_workspace { display: none; } }
+
+// ---------------------------------------------------------------------
+// Make room for the dock
+// ---------------------------------------------------------------------
+body.o_velkio_dock_enabled.o_web_client {
+    transition: padding 0.2s ease;
+    &.o_velkio_dock_side_left   { padding-left: var(--o-velkio-dock-space, 0px); }
+    &.o_velkio_dock_side_right  { padding-right: var(--o-velkio-dock-space, 0px); }
+    &.o_velkio_dock_side_top    { padding-top: var(--o-velkio-dock-space, 0px); }
+    &.o_velkio_dock_side_bottom { padding-bottom: var(--o-velkio-dock-space, 0px); }
+}
+
+// ---------------------------------------------------------------------
+// Styles (theme variables) — shared by the dock and the settings preview
+// ---------------------------------------------------------------------
+// Desktop uses the dock's application overview. Keep the native home grid
+// on small screens where the dock is unavailable, and retain admin panels.
+@media (min-width: 768px) {
+    body.o_velkio_dock_enabled.o_home_menu_background .o_home_menu {
+        .o_apps, .o_no_result, .o_search_hidden { display: none !important; }
+        // Odoo's standard trial notice must remain usable above the workspace.
+        .database_expiration_panel { position: relative; z-index: $o-velkio-dock-z + 1; }
+    }
+}
+
+.o_velkio_dock,
+.o_velkio_dock_mini_dock {
+    --dock-bg: rgba(28, 28, 32, 0.94);
+    --dock-fg: #ffffff;
+    --dock-hover: rgba(255, 255, 255, 0.14);
+    --dock-active-bg: rgba(255, 255, 255, 0.2);
+    --dock-sep: rgba(255, 255, 255, 0.25);
+    --dock-dot: rgba(255, 255, 255, 0.85);
+    --dock-indicator: var(--dock-accent, #E95420);
+    --dock-radius: 0px;
+    --dock-shadow: 1px 0 6px rgba(0, 0, 0, 0.25);
+}
+
+.o_velkio_dock_style_dark {
+    --dock-bg: rgba(28, 28, 32, 0.94);
+}
+.o_velkio_dock_style_floating {
+    --dock-bg: rgba(36, 36, 40, 0.88);
+    --dock-radius: 20px;
+    --dock-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+.o_velkio_dock_style_glass {
+    --dock-bg: rgba(255, 255, 255, 0.45);
+    --dock-fg: #1f2328;
+    --dock-hover: rgba(0, 0, 0, 0.07);
+    --dock-active-bg: rgba(0, 0, 0, 0.1);
+    --dock-sep: rgba(0, 0, 0, 0.18);
+    --dock-dot: rgba(0, 0, 0, 0.6);
+    --dock-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+.o_velkio_dock_style_light {
+    --dock-bg: #f8f9fa;
+    --dock-fg: #374151;
+    --dock-hover: rgba(0, 0, 0, 0.06);
+    --dock-active-bg: rgba(0, 0, 0, 0.09);
+    --dock-sep: rgba(0, 0, 0, 0.15);
+    --dock-dot: rgba(0, 0, 0, 0.55);
+    --dock-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.o_velkio_dock_style_odoo {
+    --dock-bg: #714B67;
+    --dock-hover: rgba(255, 255, 255, 0.16);
+    --dock-active-bg: rgba(255, 255, 255, 0.24);
+    --dock-indicator: #ffffff;
+}
+.o_velkio_dock_style_accent {
+    --dock-bg: var(--dock-accent, #E95420);
+    --dock-hover: rgba(255, 255, 255, 0.18);
+    --dock-active-bg: rgba(255, 255, 255, 0.28);
+    --dock-indicator: #ffffff;
+}
+
+// ---------------------------------------------------------------------
+// Dock container
+// ---------------------------------------------------------------------
+.o_velkio_dock {
+    position: fixed;
+    z-index: $o-velkio-dock-z;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    background: var(--dock-bg);
+    color: var(--dock-fg);
+    border-radius: var(--dock-radius);
+    box-shadow: var(--dock-shadow);
+    backdrop-filter: blur(10px);
+    transition: transform 0.25s ease, background-color 0.2s ease;
+
+    &.o_velkio_dock_vertical {
+        flex-direction: column;
+        top: 0;
+        bottom: 0;
+        width: var(--dock-thickness);
+    }
+    &.o_velkio_dock_horizontal {
+        flex-direction: row;
+        left: 0;
+        right: 0;
+        height: var(--dock-thickness);
+    }
+    &.o_velkio_dock_pos_left   { left: 0; }
+    &.o_velkio_dock_pos_right  { right: 0; }
+    &.o_velkio_dock_pos_top    { top: 0; }
+    &.o_velkio_dock_pos_bottom { bottom: 0; }
+
+    .o_velkio_dock_items,
+    .o_velkio_dock_tail {
+        display: flex;
+        flex-direction: inherit;
+        align-items: center;
+        gap: 6px;
+    }
+    .o_velkio_dock_items {
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+    }
+    &.o_velkio_dock_vertical .o_velkio_dock_items   { overflow-y: auto; overflow-x: hidden; padding: 0 6px; margin: 0 -6px; }
+    &.o_velkio_dock_horizontal .o_velkio_dock_items { overflow-x: auto; overflow-y: hidden; padding: 6px 0; margin: -6px 0; }
+    .o_velkio_dock_tail { flex: 0 0 auto; }
+
+    // ---- Floating: detached, rounded, centred on its edge ----
+    &.o_velkio_dock_style_floating {
+        .o_velkio_dock_items { flex: 0 1 auto; }
+        &.o_velkio_dock_vertical {
+            height: fit-content;
+            max-height: calc(100vh - 16px);
+            margin: auto 0;
+        }
+        &.o_velkio_dock_horizontal {
+            width: fit-content;
+            max-width: calc(100vw - 16px);
+            margin: 0 auto;
+        }
+        &.o_velkio_dock_pos_left   { left: 8px; }
+        &.o_velkio_dock_pos_right  { right: 8px; }
+        &.o_velkio_dock_pos_top    { top: 8px; }
+        &.o_velkio_dock_pos_bottom { bottom: 8px; }
+    }
+
+    // ---- Edge shadows for full-length docks ----
+    &.o_velkio_dock_pos_right:not(.o_velkio_dock_style_floating)  { --dock-shadow: -1px 0 6px rgba(0, 0, 0, 0.25); }
+    &.o_velkio_dock_pos_top:not(.o_velkio_dock_style_floating)    { --dock-shadow: 0 1px 6px rgba(0, 0, 0, 0.25); }
+    &.o_velkio_dock_pos_bottom:not(.o_velkio_dock_style_floating) { --dock-shadow: 0 -1px 6px rgba(0, 0, 0, 0.25); }
+
+    // ---- Auto-hide ----
+    &.o_velkio_dock_autohide {
+        &.o_velkio_dock_pos_left   { transform: translateX(calc(-100% - 16px)); }
+        &.o_velkio_dock_pos_right  { transform: translateX(calc(100% + 16px)); }
+        &.o_velkio_dock_pos_top    { transform: translateY(calc(-100% - 16px)); }
+        &.o_velkio_dock_pos_bottom { transform: translateY(calc(100% + 16px)); }
+        &.o_velkio_dock_revealed   { transform: none; }
+    }
+}
+
+.o_velkio_dock_hotzone {
+    position: fixed;
+    z-index: $o-velkio-dock-z - 1;
+    &.o_velkio_dock_hotzone_left   { left: 0; top: 0; bottom: 0; width: 6px; }
+    &.o_velkio_dock_hotzone_right  { right: 0; top: 0; bottom: 0; width: 6px; }
+    &.o_velkio_dock_hotzone_top    { top: 0; left: 0; right: 0; height: 6px; }
+    &.o_velkio_dock_hotzone_bottom { bottom: 0; left: 0; right: 0; height: 6px; }
+}
+
+// ---------------------------------------------------------------------
+// Dock items
+// ---------------------------------------------------------------------
+.o_velkio_dock_item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dock-item, 52px);
+    height: var(--dock-item, 52px);
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--dock-fg);
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+        background: var(--dock-hover);
+        color: var(--dock-fg);
+        outline: none;
+    }
+    &:active { transform: scale(0.92); }
+    &.o_velkio_dock_active { background: var(--dock-active-bg); }
+    &.o_velkio_dock_dragging { opacity: 0.35; }
+    &.o_velkio_dock_drop_target { box-shadow: inset 0 0 0 2px var(--dock-indicator); }
+
+    // "running" dot (recently used) and active pill
+    &.o_velkio_dock_has_dot::after,
+    &.o_velkio_dock_active:not(.o_velkio_dock_show_all)::after {
+        content: "";
+        position: absolute;
+        border-radius: 3px;
+        background: var(--dock-dot);
+        width: 5px;
+        height: 5px;
+        transition: all 0.2s ease;
+    }
+    &.o_velkio_dock_active:not(.o_velkio_dock_show_all)::after {
+        background: var(--dock-indicator);
+    }
+}
+
+// dot placement depends on the dock side
+.o_velkio_dock_vertical .o_velkio_dock_item::after {
+    top: 50%;
+    transform: translateY(-50%);
+}
+.o_velkio_dock_horizontal .o_velkio_dock_item::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+.o_velkio_dock_pos_left   .o_velkio_dock_item::after { left: -6px; }
+.o_velkio_dock_pos_right  .o_velkio_dock_item::after { right: -6px; }
+.o_velkio_dock_pos_top    .o_velkio_dock_item::after { top: -6px; }
+.o_velkio_dock_pos_bottom .o_velkio_dock_item::after { bottom: -6px; }
+.o_velkio_dock_vertical   .o_velkio_dock_item.o_velkio_dock_active::after { height: 16px; width: 4px; }
+.o_velkio_dock_horizontal .o_velkio_dock_item.o_velkio_dock_active::after { width: 16px; height: 4px; }
+
+.o_velkio_dock_recent_item .o_velkio_dock_icon { opacity: 0.9; }
+
+.o_velkio_dock_separator {
+    flex: 0 0 auto;
+    background: var(--dock-sep);
+    border-radius: 1px;
+    .o_velkio_dock_vertical &   { width: 60%; height: 1px; margin: 2px 0; }
+    .o_velkio_dock_horizontal & { height: 60%; width: 1px; margin: 0 2px; }
+}
+
+.o_velkio_dock_icon {
+    width: var(--dock-icon, 40px);
+    height: var(--dock-icon, 40px);
+    flex: 0 0 auto;
+    border-radius: 8px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.o_velkio_dock_fa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--dock-icon, 40px) * 0.5);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.o_velkio_dock_add .o_velkio_dock_fa {
+    background: transparent;
+    border: 2px dashed var(--dock-sep);
+    color: var(--dock-fg);
+    opacity: 0.75;
+}
+
+.o_velkio_dock_small_btn {
+    font-size: calc(var(--dock-icon, 40px) * 0.42);
+    opacity: 0.8;
+    &:hover { opacity: 1; }
+}
+
+// 3x3 dots "Show Applications"
+.o_velkio_dock_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18%;
+    padding: 22%;
+    i {
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--dock-fg);
+    }
+}
+
+// notification badge (dock + overview)
+.o_velkio_dock_badge_count {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: #e5383b;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 0 0 2px var(--dock-bg, rgba(28, 28, 32, 0.94));
+    pointer-events: none;
+    z-index: 1;
+}
+.o_velkio_dock_overview .o_velkio_dock_badge_count { top: -6px; right: -8px; box-shadow: none; }
+
+// favourite menu: app icon + small star
+.o_velkio_dock_fav_star {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f5b301;
+    color: #fff;
+    font-size: 9px;
+    pointer-events: none;
+}
+
+// magnify on hover (macOS-like): hovered icon grows, neighbours a bit
+.o_velkio_dock_magnify {
+    .o_velkio_dock_item {
+        transition: transform 0.18s ease, background-color 0.15s ease;
+        &:hover { transform: scale(1.3); z-index: 2; }
+        &:hover + .o_velkio_dock_item,
+        &:has(+ .o_velkio_dock_item:hover) { transform: scale(1.12); z-index: 1; }
+    }
+    &.o_velkio_dock_pos_left   .o_velkio_dock_item { transform-origin: left center; }
+    &.o_velkio_dock_pos_right  .o_velkio_dock_item { transform-origin: right center; }
+    &.o_velkio_dock_pos_top    .o_velkio_dock_item { transform-origin: center top; }
+    &.o_velkio_dock_pos_bottom .o_velkio_dock_item { transform-origin: center bottom; }
+    // Room for the grown icons (and their badges) inside the scrollable list,
+    // which would clip them otherwise. The extra area overlaps the page, so it
+    // lets clicks through; only the icons themselves catch the pointer.
+    .o_velkio_dock_items {
+        pointer-events: none;
+        > * { pointer-events: auto; }
+    }
+    &.o_velkio_dock_vertical .o_velkio_dock_items   { padding: 14px 26px; margin: -14px -26px; }
+    &.o_velkio_dock_horizontal .o_velkio_dock_items { padding: 26px 14px; margin: -26px -14px; }
+}
+
+// ---------------------------------------------------------------------
+// Tooltip & context menu (rendered outside the dock so never clipped)
+// ---------------------------------------------------------------------
+.o_velkio_dock_tooltip {
+    position: fixed;
+    z-index: $o-velkio-dock-z + 7;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(20, 20, 24, 0.95);
+    color: #fff;
+    font-size: 13px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: o_velkio_dock_fade 0.12s ease;
+    &.o_velkio_dock_tooltip_left,
+    &.o_velkio_dock_tooltip_right { transform: translateY(-50%); }
+    &.o_velkio_dock_tooltip_top,
+    &.o_velkio_dock_tooltip_bottom { transform: translateX(-50%); }
+}
+
+.o_velkio_dock_context.dropdown-menu {
+    position: fixed;
+    z-index: $o-velkio-dock-z + 8;
+    min-width: 220px;
+    margin: 0;
+    animation: o_velkio_dock_fade 0.12s ease;
+    .dropdown-header .o_velkio_dock_icon {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+}
+
+@keyframes o_velkio_dock_fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+// ---------------------------------------------------------------------
+// Activities overview (dark by default, light theme via CSS variables)
+// ---------------------------------------------------------------------
+.o_velkio_dock_overview {
+    --ov-gap: #{"max(var(--o-velkio-dock-space, 0px), 80px)"};
+    --ov-bg: rgba(18, 18, 22, 0.72);
+    --ov-fg: #ffffff;
+    --ov-muted: rgba(255, 255, 255, 0.65);
+    --ov-surface: rgba(255, 255, 255, 0.1);
+    --ov-surface-hover: rgba(255, 255, 255, 0.2);
+    --ov-card: rgba(255, 255, 255, 0.08);
+    --ov-card-hover: rgba(255, 255, 255, 0.14);
+    --ov-border: rgba(255, 255, 255, 0.08);
+    --ov-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    --ov-glow: rgba(255, 255, 255, 0.16);
+    position: fixed;
+    inset: 0;
+    z-index: $o-velkio-dock-z - 2; // dock stays on top of the overview
+    padding: 0 16px;
+    overflow-y: auto; // scroll the whole overlay so the scrollbar sits on the screen edge
+    scrollbar-width: thin;
+    background: var(--ov-bg);
+    backdrop-filter: blur(16px);
+    color: var(--ov-fg);
+    animation: o_velkio_dock_fade 0.18s ease;
+
+    &.o_velkio_dock_overview_left   { padding-left: calc(var(--ov-gap) + 8px); }
+    // keep the scrollbar visible next to (not under) a right-side dock
+    &.o_velkio_dock_overview_right  { right: var(--o-velkio-dock-space, 0px); }
+    &.o_velkio_dock_overview_top    { padding-top: var(--ov-gap); }
+    &.o_velkio_dock_overview_bottom { padding-bottom: var(--ov-gap); }
+
+    &.o_velkio_dock_overview_light {
+        --ov-bg: rgba(243, 244, 247, 0.82);
+        --ov-fg: #1f2328;
+        --ov-muted: rgba(31, 35, 40, 0.6);
+        --ov-surface: rgba(0, 0, 0, 0.06);
+        --ov-surface-hover: rgba(0, 0, 0, 0.11);
+        --ov-card: rgba(255, 255, 255, 0.85);
+        --ov-card-hover: #ffffff;
+        --ov-border: rgba(0, 0, 0, 0.08);
+        --ov-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        --ov-glow: rgba(0, 0, 0, 0.05);
+    }
+
+    a,
+    a:hover {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+.o_velkio_dock_overview_inner {
+    max-width: 1120px;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 32px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.o_velkio_dock_overview_section h6 {
+    margin-bottom: 12px;
+    color: var(--ov-muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.o_velkio_dock_hint {
+    margin-left: 8px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    opacity: 0.8;
+}
+
+.o_velkio_dock_overview_section_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    h6 { margin-bottom: 0; }
+}
+
+.o_velkio_dock_clear_btn {
+    padding: 3px 12px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ov-surface);
+    color: var(--ov-muted);
+    font-size: 12px;
+    &:hover { background: var(--ov-surface-hover); color: var(--ov-fg); }
+}
+
+.o_velkio_dock_overview_search {
+    align-self: center;
+    width: #{"min(540px, 100%)"};
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: var(--ov-surface);
+    box-shadow: inset 0 0 0 1px var(--ov-border);
+    i { opacity: 0.7; }
+    input {
+        flex: 1;
+        border: 0;
+        outline: none;
+        background: transparent;
+        color: var(--ov-fg);
+        font-size: 16px;
+        &::placeholder { color: var(--ov-muted); }
+    }
+    &:focus-within { box-shadow: inset 0 0 0 2px var(--o-velkio-dock-accent, #E95420); }
+}
+
+// recent app cards
+.o_velkio_dock_overview_recent {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 16px;
+}
+
+.o_velkio_dock_recent_card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--ov-card);
+    box-shadow: var(--ov-shadow);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    &:hover {
+        transform: translateY(-3px);
+        background: var(--ov-card-hover);
+        .o_velkio_dock_pin_btn { opacity: 1; }
+    }
+    &.o_current { box-shadow: 0 0 0 2px var(--o-velkio-dock-accent, #E95420), var(--ov-shadow); }
+
+    .o_velkio_dock_recent_card_preview {
+        position: relative;
+        height: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 50% 40%, var(--ov-glow), transparent 70%);
+        .o_velkio_dock_icon { width: 60px; height: 60px; font-size: 28px; border-radius: 14px; }
+        .o_velkio_dock_badge_count { top: 18px; right: auto; left: calc(50% + 18px); }
+    }
+    .o_velkio_dock_recent_card_footer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 12px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+}
+
+.o_velkio_dock_badge {
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--o-velkio-dock-accent, #E95420);
+    color: #fff;
+    font-size: 11px;
+}
+
+.o_velkio_dock_pin_btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+    &:hover { background: rgba(0, 0, 0, 0.6); }
+    &.o_pinned {
+        opacity: 1;
+        background: var(--o-velkio-dock-accent, #E95420);
+    }
+}
+
+.o_velkio_dock_overview_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    gap: 8px;
+}
+
+.o_velkio_dock_overview_app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 6px 12px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    &:hover {
+        background: var(--ov-surface);
+        .o_velkio_dock_pin_btn { opacity: 1; }
+    }
+    .o_velkio_dock_overview_app_icon { position: relative; display: inline-flex; }
+    .o_velkio_dock_icon { width: 56px; height: 56px; font-size: 26px; border-radius: 12px; }
+    // pin on the left: the notification badge sits on the icon's top-right corner
+    .o_velkio_dock_pin_btn { top: 6px; right: auto; left: 6px; width: 24px; height: 24px; font-size: 11px; }
+}
+
+.o_velkio_dock_overview_app_name {
+    font-size: 13px;
+    line-height: 1.25;
+    text-align: center;
+    word-break: break-word;
+}
+
+.o_velkio_dock_overview_menus {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.o_velkio_dock_menu_result {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--ov-surface);
+    font-size: 13px;
+    &:hover { background: var(--ov-surface-hover); }
+    .o_velkio_dock_menu_app { opacity: 0.65; }
+    > .o_velkio_dock_icon { width: 18px; height: 18px; margin-right: 6px; font-size: 10px; border-radius: 4px; }
+}
+
+.o_velkio_dock_fav_chip { padding-left: 8px; }
+
+.o_velkio_dock_chip_star,
+.o_velkio_dock_chip_remove {
+    width: 22px;
+    height: 22px;
+    margin: -2px -8px -2px 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    font-size: 12px;
+    opacity: 0.55;
+    &:hover { opacity: 1; background: var(--ov-surface); }
+}
+.o_velkio_dock_chip_star.o_favorite { color: #f5b301; opacity: 1; }
+
+// recently opened records
+.o_velkio_dock_overview_records {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px;
+}
+
+.o_velkio_dock_record {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: var(--ov-card);
+    transition: background-color 0.15s ease;
+    &:hover {
+        background: var(--ov-card-hover);
+        .o_velkio_dock_chip_remove { opacity: 0.7; }
+    }
+    > .o_velkio_dock_icon { width: 30px; height: 30px; font-size: 15px; border-radius: 7px; }
+    .o_velkio_dock_chip_remove { margin: 0 0 0 auto; opacity: 0; flex: 0 0 auto; }
+}
+
+.o_velkio_dock_record_text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+.o_velkio_dock_record_name { font-size: 13px; font-weight: 500; }
+.o_velkio_dock_record_model { font-size: 11px; color: var(--ov-muted); }
+
+.o_velkio_dock_overview_empty {
+    grid-column: 1 / -1;
+    padding: 24px;
+    text-align: center;
+    color: var(--ov-muted);
+}
+
+.o_velkio_dock_overview_actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: auto;
+    .btn {
+        border-radius: 999px;
+        background: var(--ov-surface);
+        color: var(--ov-fg);
+        &:hover { background: var(--ov-surface-hover); }
+    }
+}
+
+.o_velkio_dock_overview_shortcuts {
+    margin-top: -16px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--ov-muted);
+    kbd {
+        padding: 1px 5px;
+        border-radius: 4px;
+        background: var(--ov-surface);
+        color: var(--ov-fg);
+        font-size: 10px;
+        box-shadow: none;
+    }
+}
+
+// ---------------------------------------------------------------------
+// Choose apps dialog
+// ---------------------------------------------------------------------
+.o_velkio_dock_picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.o_velkio_dock_picker_item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+    &:hover { background: rgba(0, 0, 0, 0.04); }
+    &.o_selected {
+        border-color: var(--o-velkio-dock-accent, #E95420);
+        background: rgba(233, 84, 32, 0.06);
+    }
+    .o_velkio_dock_icon { width: 48px; height: 48px; font-size: 22px; }
+    .o_velkio_dock_picker_name { font-size: 12px; line-height: 1.2; }
+    .o_velkio_dock_picker_check {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        color: var(--o-velkio-dock-accent, #E95420);
+    }
+}
+
+// ---------------------------------------------------------------------
+// Settings dialog
+// ---------------------------------------------------------------------
+// Personal dock settings, shared by Odoo's light and dark themes.
+.o_velkio_settings_dialog {
+    --settings-accent: #8c6285;
+    --settings-border: color-mix(in srgb, currentColor 15%, transparent);
+    --settings-surface: color-mix(in srgb, currentColor 3%, transparent);
+    border-radius: 18px;
+    overflow: hidden;
+    .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--settings-border); }
+    .modal-title { font-size: 18px; font-weight: 600; }
+    .modal-body {
+        padding: 22px 24px; max-height: 74vh; overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in srgb, currentColor 25%, transparent) transparent;
+    }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--settings-border); }
+    button:focus-visible, input:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--settings-accent) 65%, transparent);
+        outline-offset: 3px;
+    }
+}
+
+.o_velkio_dock_settings {
+    font-size: 14px;
+    h3 { margin: 0 0 5px; font-size: 21px; font-weight: 650; line-height: 1.35; color: inherit; }
+    h4 { margin: 0 0 4px; font-size: 15px; font-weight: 650; color: inherit; }
+    p { margin: 0; font-size: 13px; line-height: 1.55; color: inherit; opacity: .78; }
+    .o_velkio_settings_section > p { margin-bottom: 14px; }
+    button { color: inherit; }
+}
+.o_velkio_settings_intro {
+    display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 20px;
+}
+.o_velkio_live_badge {
+    display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+    border: 1px solid var(--settings-border); border-radius: 30px; padding: 6px 10px; font-size: 12px;
+    i { color: #35af87; font-size: 7px; }
+}
+.o_velkio_settings_tabs {
+    display: flex; gap: 4px; padding: 4px; background: var(--settings-surface);
+    border: 1px solid var(--settings-border); border-radius: 10px; margin-bottom: 20px;
+    button {
+        flex: 1; display: flex; align-items: center; justify-content: center; gap: 9px;
+        padding: 10px 16px; border: 1px solid transparent; border-radius: 7px; background: transparent; font-weight: 600;
+        &:hover { background: var(--settings-surface); }
+        &.o_active { border-color: var(--settings-border); background: color-mix(in srgb, var(--settings-accent) 15%, transparent); }
+    }
+}
+.o_velkio_settings_panel { display: grid; gap: 16px; }
+.o_velkio_settings_section { border: 1px solid var(--settings-border); border-radius: 12px; padding: 16px; }
+.o_velkio_section_heading { margin-bottom: 14px; }
+.o_velkio_dock_settings_positions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.o_velkio_dock_settings_styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.o_velkio_dock_settings_tile {
+    position: relative; display: flex; align-items: center; justify-content: center; gap: 9px;
+    border: 1px solid var(--settings-border); border-radius: 9px; padding: 12px;
+    background: transparent; font-size: 13px; transition: background .15s ease, border-color .15s ease;
+    &:hover { background: var(--settings-surface); border-color: var(--settings-accent); }
+    &.o_selected { border-color: var(--settings-accent); background: color-mix(in srgb, var(--settings-accent) 11%, transparent); }
+    &.o_position_tile { flex-direction: column; }
+    &.o_style_tile { justify-content: flex-start; text-align: left; padding-right: 24px; }
+    .o_tile_check { position: absolute; top: 6px; right: 7px; font-size: 10px; color: var(--settings-accent); }
+}
+.o_style_caption {
+    display: flex; flex-direction: column; gap: 3px; min-width: 0;
+    strong { font-size: 13px; font-weight: 600; }
+    small { font-size: 11px; line-height: 1.35; opacity: .78; }
+}
+.o_velkio_dock_mini_screen {
+    position: relative; width: 70px; height: 42px; border-radius: 5px; background: #e9edf3; overflow: hidden;
+    box-shadow: inset 0 0 0 1px #cdd3de;
+    .o_mini_content { position: absolute; inset: 8px 16px; border-radius: 2px; background: #cdd4e1; }
+    .o_mini_bar { position: absolute; background: var(--settings-accent); }
+    &.o_mini_left .o_mini_bar { left: 0; top: 0; bottom: 0; width: 8px; }
+    &.o_mini_right .o_mini_bar { right: 0; top: 0; bottom: 0; width: 8px; }
+    &.o_mini_top .o_mini_bar { top: 0; left: 0; right: 0; height: 7px; }
+    &.o_mini_bottom .o_mini_bar { bottom: 0; left: 0; right: 0; height: 7px; }
+}
+.o_velkio_dock_mini_wallpaper {
+    width: 62px; height: 46px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center;
+    border-radius: 6px; background: linear-gradient(145deg, #e4e9f1, #d2d8e5); overflow: hidden;
+}
+.o_velkio_dock_mini_dock {
+    display: flex; gap: 3px; width: 100%; justify-content: center; padding: 5px 3px;
+    background: var(--dock-bg); box-shadow: var(--dock-shadow);
+    i { width: 8px; height: 8px; border-radius: 2px; background: var(--dock-fg); opacity: .85;
+        &:first-child { background: var(--dock-accent, #E95420); opacity: 1; }
+    }
+    &.o_velkio_dock_style_floating { width: auto; margin-bottom: 5px; border-radius: 6px; }
+    &.o_velkio_dock_style_odoo i:first-child, &.o_velkio_dock_style_accent i:first-child { background: #fff; }
+}
+.o_velkio_settings_pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.o_velkio_segmented {
+    display: flex; padding: 3px; border: 1px solid var(--settings-border); border-radius: 8px; background: var(--settings-surface);
+    button { flex: 1; padding: 7px 12px; background: transparent; border: 1px solid transparent; border-radius: 5px; font-size: 13px;
+        &.o_selected { background: color-mix(in srgb, var(--settings-accent) 19%, transparent); border-color: color-mix(in srgb, var(--settings-accent) 50%, transparent); font-weight: 600; }
+    }
+}
+.o_velkio_palette { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; padding: 3px 0; }
+.o_velkio_dock_swatch {
+    width: 25px; height: 25px; display: grid; place-items: center; padding: 0;
+    background: var(--swatch); color: white !important; border: 2px solid color-mix(in srgb, currentColor 40%, transparent); border-radius: 50%;
+    &.o_selected { outline: 2px solid var(--settings-accent); outline-offset: 3px; }
+    i { font-size: 10px; }
+}
+.o_velkio_custom_colour {
+    position: relative; width: 27px; height: 27px; display: grid; place-items: center;
+    border: 1px dashed currentColor; border-radius: 50%; cursor: pointer;
+    .o_velkio_dock_color_input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+}
+.o_overview_setting { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    .o_velkio_segmented { min-width: 240px; }
+}
+.o_velkio_preference {
+    display: flex; align-items: center; gap: 12px; padding: 13px 0; cursor: pointer;
+    + .o_velkio_preference { border-top: 1px solid var(--settings-border); }
+    .o_preference_icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 8px; background: var(--settings-surface); flex-shrink: 0; font-size: 16px; }
+    .o_preference_copy { display: flex; flex-direction: column; gap: 3px; flex: 1;
+        strong { font-size: 14px; font-weight: 600; }
+        small { font-size: 12px; opacity: .78; line-height: 1.5; }
+    }
+    .form-check { margin: 0; padding: 0; min-height: 0; }
+    .form-check-input { margin: 0; float: none; width: 34px; height: 19px; cursor: pointer; }
+    .form-check-input:checked { background-color: var(--settings-accent); border-color: var(--settings-accent); }
+}
+.o_velkio_recent_count { display: flex; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid var(--settings-border);
+    label { flex: 1; font-size: 13px; }
+    input { width: 78px; border-radius: 7px; }
+    span { font-size: 12px; opacity: .75; }
+}
+.o_history_actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;
+    button { border: 1px solid var(--settings-border); border-radius: 7px; background: transparent; padding: 8px 12px; font-size: 12px;
+        i { margin-right: 7px; } &:hover { background: var(--settings-surface); }
+    }
+}
+.o_velkio_settings_footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%;
+    > div { display: flex; gap: 8px; }
+    .btn { border-radius: 7px; padding: 8px 16px; font-size: 13px; }
+    .o_reset_settings { border: 0; background: transparent; color: inherit; opacity: .8; padding: 5px 0; font-size: 12px; i { margin-right: 7px; } &:hover { opacity: 1; } }
+}
+@media (max-width: 650px) {
+    .o_velkio_settings_dialog .modal-body { padding: 16px; max-height: 74vh; }
+    .o_velkio_settings_intro { align-items: flex-start; .o_velkio_live_badge { display: none; } }
+    .o_velkio_dock_settings h3 { font-size: 18px; }
+    .o_velkio_dock_settings_positions { grid-template-columns: repeat(2, 1fr); }
+    .o_velkio_dock_settings_styles { grid-template-columns: repeat(2, 1fr); }
+    .o_velkio_settings_pair { grid-template-columns: 1fr; }
+    .o_overview_setting { flex-direction: column; align-items: stretch; }
+    .o_velkio_settings_footer { flex-wrap: wrap; > div { margin-left: auto; } }
+}
+
+// ---------------------------------------------------------------------
+// Users who asked their OS for less motion: no slides, fades or zoom
+// ---------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+    body.o_velkio_dock_enabled.o_web_client,
+    .o_velkio_dock,
+    .o_velkio_dock_item,
+    .o_velkio_dock_overview,
+    .o_velkio_dock_tooltip,
+    .o_velkio_dock_context,
+    .o_velkio_dock_recent_card {
+        transition: none !important;
+        animation: none !important;
+    }
+    .o_velkio_dock_magnify .o_velkio_dock_item { transform: none !important; }
+    .o_velkio_dock_recent_card:hover { transform: none; }
+}
+
+// ---------------------------------------------------------------------
+// Phones: Odoo already has a mobile app switcher
+// ---------------------------------------------------------------------
+@media (max-width: 767.98px) {
+    .o_velkio_dock,
+    .o_velkio_dock_hotzone { display: none; }
+    body.o_velkio_dock_enabled.o_web_client {
+        padding: 0 !important;
+    }
+}

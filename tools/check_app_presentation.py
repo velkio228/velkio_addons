@@ -34,9 +34,16 @@ def check(root):
             assert href[1:] in ids, href
         elif href.startswith('mailto:'):
             assert '@' in href
+        elif href.startswith('/' + root.name + '/static/description/'):
+            assert (desc / href.rsplit('/', 1)[-1]).is_file(), href
         else:
             assert not urlparse(href).scheme, href
             assert (desc / href).is_file(), href
+    for video in page.xpath('//video'):
+        assert 'controls' in video.attrib, 'Video needs playback controls'
+        assert (desc / video.get('src')).is_file(), 'Missing video file'
+        if video.get('poster'):
+            assert (desc / video.get('poster')).is_file(), 'Missing video poster'
     assert manifest['name'].strip(), 'Missing app name'
     assert manifest['license'] in ('OPL-1', 'LGPL-3')
     for asset in manifest['images']:
