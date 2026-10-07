@@ -25,7 +25,7 @@ screen.
     "version": "19.0.1.1.10",
     "images": ["static/description/banner.png"],
     "category": "Productivity",
-    "author": "Velkio - Odoo Solutions",
+    "author": "Velkio",
     "website": "https://velkio.com",
     "license": "LGPL-3",
     "price": 19.0,
