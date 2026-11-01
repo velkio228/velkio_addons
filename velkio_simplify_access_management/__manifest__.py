@@ -73,8 +73,6 @@ multi company access, Odoo 17 security.
         'static/description/screenshot_form.png',
         'static/description/icon.png',
     ],
-    'price': 1.0,
-    'currency': 'USD',
 
     'depends': [
         'web',
