@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tag every wizard/picker dialog opened from an Access Studio record with
+    `o_velkio_studio_dialog` on its `.modal-content`, so velkio_theme.scss can
+    style it without affecting dialogs anywhere else in Odoo.
+
+    - SelectCreateDialog / FormViewDialog : the `velkio_studio` flag rides down
+      from the window-action context into each relational field's context,
+      which the dialog receives as `props.context`.
+    - X2ManyFieldDialog : already derives a class from the sub-form arch, so we
+      key off the `velkio_access_studio` class we put on that <form>.
+-->
+<templates xml:space="preserve">
+
+    <t t-inherit="web.SelectCreateDialog" t-inherit-mode="extension">
+        <xpath expr="//Dialog" position="attributes">
+            <attribute name="contentClass">(props.context or {}).velkio_studio ? 'o_velkio_studio_dialog' : ''</attribute>
+        </xpath>
+    </t>
+
+    <t t-inherit="web.FormViewDialog" t-inherit-mode="extension">
+        <xpath expr="//Dialog" position="attributes">
+            <attribute name="contentClass">(props.context or {}).velkio_studio ? 'o_velkio_studio_dialog' : ''</attribute>
+        </xpath>
+    </t>
+
+    <t t-inherit="web.X2ManyFieldDialog" t-inherit-mode="extension">
+        <xpath expr="//Dialog" position="attributes">
+            <attribute name="contentClass">contentClass + (contentClass.includes('velkio_access_studio') ? ' o_velkio_studio_dialog' : '')</attribute>
+        </xpath>
+    </t>
+
+</templates>
