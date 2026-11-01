@@ -1,43 +1,63 @@
-"""Export real module folders (resolving Tally's symlink) and an installable ZIP.
+"""Export every Velkio module as real files and build an installable ZIP per Odoo version.
 
-Run after presentation checks. This prepares local files; it does not publish.
+Run from anywhere: python3 tools/package_apps.py
+Prepares local files only; it does not publish or push anything.
 """
 from pathlib import Path
+import ast
 import shutil
 import zipfile
 from lxml import html
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'release' / 'odoo-apps-19.0'
-MODULES = ('velkio_woocommerce_connector', 'velkio_tally_integration')
+SKIP_DIRS = {'__pycache__', '.git', 'release', 'tools', 'artwork'}
+BASE_ASSETS = {'index.html', 'icon.png', 'img.png', 'velkio_mark.png', 'velkio_logo.png', 'workflow.png'}
+
+
+def modules():
+    return sorted(p for p in ROOT.iterdir() if p.name not in SKIP_DIRS and (p / '__manifest__.py').is_file())
+
+
+def wanted_assets(source):
+    desc = source / 'static' / 'description'
+    page = html.fromstring((desc / 'index.html').read_text())
+    keep = set(BASE_ASSETS)
+    keep |= {n.get('src') for n in page.xpath('//img|//video|//source') if n.get('src')}
+    keep |= {n.get('poster') for n in page.xpath('//video') if n.get('poster')}
+    keep |= {n.get('href') for n in page.xpath('//a') if n.get('href') and not n.get('href').startswith(('#', 'mailto:'))}
+    manifest = ast.literal_eval((source / '__manifest__.py').read_text())
+    keep |= {Path(i).relative_to('static/description').as_posix() for i in manifest.get('images', []) if i.startswith('static/description/')}
+    return keep
 
 
 def package():
-    OUT.mkdir(parents=True, exist_ok=True)
-    for name in MODULES:
-        source = ROOT / name
-        target = OUT / name
-        # Keep only current presentation assets, not superseded marketing artwork.
-        desc = source / 'static' / 'description'
-        page = html.fromstring((desc / 'index.html').read_text())
-        assets = {node.get('src') for node in page.xpath('//img')}
-        assets |= {'index.html', 'icon.png', 'img.png', 'velkio_mark.png', 'velkio_logo.png', 'workflow.png'}
+    first = ast.literal_eval((modules()[0] / '__manifest__.py').read_text())
+    series = '.'.join(first['version'].split('.')[:2])
+    out = ROOT / 'release' / f'odoo-apps-{series}'
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    for source in modules():
+        keep = wanted_assets(source)
         for item in source.rglob('*'):
-            relative = item.relative_to(source)
-            if not item.is_file() or any(x in relative.parts for x in ('__pycache__', '.git')) or item.suffix in ('.pyc', '.pyo'):
+            rel = item.relative_to(source)
+            if not item.is_file() or any(x in rel.parts for x in SKIP_DIRS) or item.suffix in ('.pyc', '.pyo'):
                 continue
-            if relative.parts[:2] == ('static', 'description') and relative.relative_to('static/description').as_posix() not in assets:
+            if rel.parts[:2] == ('static', 'description') and rel.relative_to('static/description').as_posix() not in keep:
                 continue
-            destination = target / relative
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(item, destination)
-    shutil.copy2(ROOT / 'ODOO_APPS_RELEASE.md', OUT / 'PUBLISHING_NOTES.md')
-    archive = ROOT / 'release' / 'odoo-apps-19.0.zip'
-    with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as result:
-        for file in sorted(OUT.rglob('*')):
-            if file.is_file():
-                result.write(file, file.relative_to(OUT))
-    print(archive)
+            dest = out / source.name / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, dest)
+    for note in ('ODOO_APPS_RELEASE.md', 'README.md'):
+        if (ROOT / note).is_file():
+            shutil.copy2(ROOT / note, out / ('PUBLISHING_NOTES.md' if note.startswith('ODOO') else 'README.md'))
+            break
+    archive = ROOT / 'release' / f'odoo-apps-{series}.zip'
+    with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as z:
+        for f in sorted(out.rglob('*')):
+            if f.is_file():
+                z.write(f, f.relative_to(out))
+    print(archive, [m.name for m in modules()])
 
 
 if __name__ == '__main__':
