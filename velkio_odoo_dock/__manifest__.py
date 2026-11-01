@@ -28,8 +28,6 @@ screen.
     "author": "Velkio",
     "website": "https://velkio.com",
     "license": "LGPL-3",
-    "price": 19.0,
-    "currency": "USD",
     "depends": ["web"],
     "data": [
         "security/ir.model.access.csv",

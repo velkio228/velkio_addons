@@ -17,8 +17,6 @@ order synchronization is inbound only. Imports read up to 1,000 records per reso
     "website": "https://apps.odoo.com/apps/modules/browse?author=Velkio%20-%20Odoo%20Solutions",
     "support": "velkio.odoosolution@gmail.com",
     "license": "OPL-1",
-    'price': 1.0,
-    'currency': 'USD',
     "depends": ["base", "sale_management", "stock", "web"],
     "data": [
         "security/ir.model.access.csv",

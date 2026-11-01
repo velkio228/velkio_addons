@@ -43,8 +43,8 @@ Use Ctrl+0 to reset browser zoom to 100%. Layout is bounded and centered.
 2. **Runtime verification:** these changes passed presentation checks, not full
    module installation or external-system integration testing. Install/upgrade
    both apps on an Odoo 19 test database and confirm views, permissions and sync.
-3. **Pricing:** OPL module pricing is USD 1.00: WooCommerce USD 1.00 / OPL-1;
-   TallyPrime LGPL-3 with no price set (a free listing unless configured otherwise).
+3. **Pricing:** all modules are free listings (no price set); licenses are
+   unchanged (WooCommerce OPL-1, Dock and TallyPrime LGPL-3).
 4. **Repository submission:** Tally is currently an untracked symlink in this
    workspace. Do not submit that symlink as module source. Use the generated
    `release/odoo-apps-19.0/` real directories in your release repository's 19.0
