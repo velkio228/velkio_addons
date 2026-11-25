@@ -11,7 +11,8 @@ Extends Zenvio WooCommerce Connector with scheduled incremental sync, real-time
 webhooks, stock push from Odoo, product variations and images, shipping and fee
 lines, tax-rate mapping, delivery addresses and two-way order status updates.
     """,
-    "author": "Zenvio",
+    "author": "Zenvio - Odoo Solutions",
+    "maintainer": "Zenvio - Odoo Solutions",
     "website": "https://apps.odoo.com/apps/modules/browse?author=Zenvio%20-%20Odoo%20Solutions",
     "support": "zenvio.odoosolution@gmail.com",
     "license": "OPL-1",
