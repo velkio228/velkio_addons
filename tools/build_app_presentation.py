@@ -27,8 +27,8 @@ def image(src,alt,width=None):
 def page(data,out):
     name=data['name']
     chunks=['<section class="oe_container" style="font-family:Arial,Helvetica,sans-serif;color:#282532;background-color:#FFFFFF;">','<div class="container py-3">']
-    chunks.append('<div class="row align-items-center mb-3"><div class="col-sm-4">'+image('velkio_logo.png','Velkio Odoo Solutions — Precision identity',165)+'</div><div class="col-sm-8 text-sm-right"><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Odoo 17</span><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Community &amp; Enterprise</span></div></div>')
-    intro=f'<div class="text-center mb-4"><p style="color:#9A7135;font-size:12px;letter-spacing:2px;">VELKIO ODOO SOLUTIONS</p><h1 style="font-size:42px;line-height:1.15;color:#282532;">{e(name)}</h1><p style="font-size:20px;color:#714B67;">{e(data["headline"])}</p></div><div class="row mb-4">'
+    chunks.append('<div class="row align-items-center mb-3"><div class="col-sm-4">'+image('zenvio_logo.png','Zenvio Odoo Solutions — Precision identity',165)+'</div><div class="col-sm-8 text-sm-right"><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Odoo 17</span><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Community &amp; Enterprise</span></div></div>')
+    intro=f'<div class="text-center mb-4"><p style="color:#9A7135;font-size:12px;letter-spacing:2px;">ZENVIO ODOO SOLUTIONS</p><h1 style="font-size:42px;line-height:1.15;color:#282532;">{e(name)}</h1><p style="font-size:20px;color:#714B67;">{e(data["headline"])}</p></div><div class="row mb-4">'
     specs=[('17.0','Odoo version'),('CE / EE','Editions'),('Odoo.sh','Cloud hosting'),('On-premise','Self-hosted'),(data['license'],'License'),('User controls','App focus')]
     for val,label in specs:
         intro+=f'<div class="col-6 col-md-4 col-lg-2 mb-2"><div class="h-100 p-3 text-center rounded" style="background-color:#302236;"><div style="color:#E5BE7E;font-size:20px;font-weight:700;">{e(val)}</div><div style="color:#F5EFF6;font-size:13px;">{e(label)}</div></div></div>'
@@ -52,15 +52,15 @@ def page(data,out):
     chunks.append(section('documentation','Documentation','Your guides, in one place',docs,True))
     chunks.append(section('troubleshooting','Troubleshooting','When something needs attention',cards(data['troubleshooting'])))
     chunks.append(section('faq','Questions & answers','Check the details before installing',cards(data['faqs'],'col-md-6'),True))
-    support=para('For setup or configuration help, include your Odoo version, module version, affected action and exact error. Remove passwords and personal data from shared images.')+'<div class="p-4 rounded my-3" style="background-color:#302236;"><h3 style="font-size:24px;color:#FFFFFF;">Get help from Velkio</h3><a href="mailto:velkio.odoosolution@gmail.com" class="btn p-3" style="background-color:#FFFFFF;color:#714B67;font-weight:700;border-radius:8px;">Email support</a></div>'+image('velkio_logo.png','Velkio Odoo Solutions',180)+para('velkio.odoosolution@gmail.com')
-    chunks.append(section('support','Velkio support','Get help with your app',support))
+    support=para('For setup or configuration help, include your Odoo version, module version, affected action and exact error. Remove passwords and personal data from shared images.')+'<div class="p-4 rounded my-3" style="background-color:#302236;"><h3 style="font-size:24px;color:#FFFFFF;">Get help from Zenvio</h3><a href="mailto:zenvio.odoosolution@gmail.com" class="btn p-3" style="background-color:#FFFFFF;color:#714B67;font-weight:700;border-radius:8px;">Email support</a></div>'+image('zenvio_logo.png','Zenvio Odoo Solutions',180)+para('zenvio.odoosolution@gmail.com')
+    chunks.append(section('support','Zenvio support','Get help with your app',support))
     chunks.append(section('release','Release information','Version '+data['version'],para('Module license: '+data['license']+'. This presentation includes Precision publisher branding, a module-specific app icon, an illustrated banner and setup documentation.')))
     return inline_layout('\n'.join(chunks+['</div>','</section>'])+'\n')
 
 def build(kind,out):
     data=APPS[kind]
     out.mkdir(parents=True,exist_ok=True)
-    assets=[('velkio-precision-logo.png',['velkio_logo.png']),('velkio-precision-mark.png',['velkio_mark.png']),(kind+'-app-icon.png',['icon.png','img.png']),(kind+'-banner.png',['banner.png'])]
+    assets=[('zenvio-precision-logo.png',['zenvio_logo.png']),('zenvio-precision-mark.png',['zenvio_mark.png']),(kind+'-app-icon.png',['icon.png','img.png']),(kind+'-banner.png',['banner.png'])]
     for source,targets in assets:
         for target in targets:
             shutil.copy2(BRAND/source,out/target)

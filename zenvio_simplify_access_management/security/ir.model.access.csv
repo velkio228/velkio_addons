@@ -1,0 +1,29 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_access_management,access.access.management,model_access_management,base.group_user,1,0,0,0
+access_access_management_manager,access.access.management manager,model_access_management,group_access_management_spt,1,1,1,1
+access_access_management_system,access.access.management system,model_access_management,base.group_system,1,1,1,1
+access_remove_action,access.remove.action,model_remove_action,base.group_user,1,0,0,0
+access_remove_action_manager,access.remove.action manager,model_remove_action,group_access_management_spt,1,1,1,1
+access_remove_action_system,access.remove.action system,model_remove_action,base.group_system,1,1,1,1
+access_hide_field,access.hide.field,model_hide_field,base.group_user,1,0,0,0
+access_hide_field_manager,access.hide.field manager,model_hide_field,group_access_management_spt,1,1,1,1
+access_hide_field_system,access.hide.field system,model_hide_field,base.group_system,1,1,1,1
+access_action_data,access.action.data,model_action_data,base.group_user,1,1,1,1
+access_view_data,access.view.data,model_view_data,base.group_user,1,1,1,1
+access_access_domain_ah,access.access.domain.ah,model_access_domain_ah,base.group_user,1,0,0,0
+access_access_domain_ah_manager,access.access.domain.ah manager,model_access_domain_ah,group_access_management_spt,1,1,1,1
+access_access_domain_ah_system,access.access.domain.ah system,model_access_domain_ah,base.group_system,1,1,1,1
+access_hide_view_nodes,access.hide.view.nodes,model_hide_view_nodes,base.group_user,1,0,0,0
+access_hide_view_nodes_manager,access.hide.view.nodes manager,model_hide_view_nodes,group_access_management_spt,1,1,1,1
+access_hide_view_nodes_system,access.hide.view.nodes system,model_hide_view_nodes,base.group_system,1,1,1,1
+access_store_model_nodes,access.store.model.nodes,model_store_model_nodes,base.group_user,1,1,1,1
+access_hide_filters_groups,access_hide_filters_groups,model_hide_filters_groups,base.group_user,1,0,0,0
+access_hide_filters_groups_manager,access_hide_filters_groups manager,model_hide_filters_groups,group_access_management_spt,1,1,1,1
+access_hide_filters_groups_system,access_hide_filters_groups system,model_hide_filters_groups,base.group_system,1,1,1,1
+access_store_filters_groups,access_store_filters_groups,model_store_filters_groups,base.group_user,1,1,1,1
+access_hide_chatter,access.hide.chatter,model_hide_chatter,base.group_user,1,0,0,0
+access_hide_chatter_manager,access.hide.chatter manager,model_hide_chatter,group_access_management_spt,1,1,1,1
+access_hide_chatter_system,access.hide.chatter system,model_hide_chatter,base.group_system,1,1,1,1
+access_menu_item,access.menu.item,model_menu_item,base.group_user,1,0,0,0
+access_menu_item_manager,access.menu.item manager,model_menu_item,group_access_management_spt,1,1,1,1
+access_menu_item_system,access.menu.item system,model_menu_item,base.group_system,1,1,1,1

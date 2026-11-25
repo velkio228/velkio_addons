@@ -5,7 +5,7 @@ from store_content import APPS
 ROOT=Path(__file__).resolve().parents[1]
 out=ROOT/'release'/'previews'
 out.mkdir(parents=True,exist_ok=True)
-profile=Path('/tmp/velkio17-firefox-profile')
+profile=Path('/tmp/zenvio17-firefox-profile')
 profile.mkdir(exist_ok=True)
 for key,data in APPS.items():
     page=ROOT/data['module']/'static'/'description'/'index.html'

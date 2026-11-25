@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="zenvio_reminders_notification.Dashboard">
+    <div class="zenvio-dash">
+
+        <div class="zenvio-dash-head">
+            <div>
+                <h1 class="zenvio-dash-title">Reminders</h1>
+                <p class="zenvio-dash-sub">Everything on your calendar, at a glance.</p>
+            </div>
+            <div class="zenvio-dash-actions">
+                <button class="zenvio-dash-btn zenvio-dash-btn-ghost"
+                        t-on-click="() => this.openCalendar()">
+                    <i class="fa fa-calendar" role="img" aria-hidden="true"/> Calendar
+                </button>
+                <button class="zenvio-dash-btn zenvio-dash-btn-ghost"
+                        t-on-click="() => this.openTemplates()">
+                    <i class="fa fa-clone" role="img" aria-hidden="true"/> Templates
+                </button>
+                <button class="zenvio-dash-btn zenvio-dash-btn-primary"
+                        t-on-click="() => this.newReminder()">
+                    <i class="fa fa-plus" role="img" aria-hidden="true"/> New reminder
+                </button>
+            </div>
+        </div>
+
+        <div t-if="state.loading" class="zenvio-dash-loading">
+            <i class="fa fa-circle-o-notch fa-spin" role="img" aria-hidden="true"/> Loading…
+        </div>
+
+        <div t-else="" class="zenvio-dash-grid">
+            <t t-foreach="state.buckets" t-as="bucket" t-key="bucket.key">
+                <button t-attf-class="zenvio-tile zenvio-accent-{{bucket.accent}}"
+                        t-on-click="() => this.openBucket(bucket)">
+                    <span class="zenvio-tile-icon">
+                        <i t-attf-class="fa {{bucket.icon}}" role="img" aria-hidden="true"/>
+                    </span>
+                    <span class="zenvio-tile-count"><t t-esc="bucket.count"/></span>
+                    <span class="zenvio-tile-label"><t t-esc="bucket.label"/></span>
+                    <span class="zenvio-tile-help"><t t-esc="bucket.help"/></span>
+                    <span class="zenvio-tile-go">
+                        <i class="fa fa-arrow-right" role="img" aria-hidden="true"/>
+                    </span>
+                </button>
+            </t>
+        </div>
+
+        <div t-if="!state.loading" class="zenvio-dash-next">
+            <div class="zenvio-dash-next-head">
+                <h2>Coming up</h2>
+                <span class="zenvio-dash-next-count">
+                    <t t-esc="state.nextUp.length"/> scheduled
+                </span>
+            </div>
+
+            <div t-if="!state.nextUp.length" class="zenvio-dash-empty">
+                <i class="fa fa-check-circle" role="img" aria-hidden="true"/>
+                <span>Nothing scheduled. You are all clear.</span>
+            </div>
+
+            <div t-else="" class="zenvio-dash-rows">
+                <t t-foreach="state.nextUp" t-as="row" t-key="row.id">
+                    <button t-attf-class="zenvio-row zenvio-row-{{row.level}}"
+                            t-on-click="() => this.openRecord(row)">
+                        <span class="zenvio-row-dot"/>
+                        <span class="zenvio-row-name">
+                            <t t-esc="row.name"/>
+                            <i t-if="row.flagged" class="fa fa-star zenvio-row-flag"
+                               role="img" aria-label="Flagged"/>
+                        </span>
+                        <span class="zenvio-row-level"><t t-esc="levelLabel(row.level)"/></span>
+                        <span class="zenvio-row-when"><t t-esc="whenLabel(row.notify_datetime)"/></span>
+                    </button>
+                </t>
+            </div>
+        </div>
+
+    </div>
+</t>
+
+</templates>

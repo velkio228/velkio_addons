@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!-- Mounted once for the whole web client, so it floats over every screen. -->
+<t t-name="zenvio_reminders_notification.PopupManager">
+    <div class="zenvio-layer">
+        <t t-foreach="stacks" t-as="stack" t-key="stack.position">
+            <div t-attf-class="zenvio-stack zenvio-at-{{stack.position}}"
+                 t-att-style="stackStyle(stack)">
+                <t t-foreach="stack.popups" t-as="popup" t-key="popup.key">
+                    <ZenvioPopupCard
+                        data="popup"
+                        onSeen="(id) => this.markSeen(id)"
+                        onClose="(id) => this.close(id)"
+                        onDone="(id, ack) => this.done(id, ack)"
+                        onSnooze="(id, minutes) => this.snooze(id, minutes)"
+                    />
+                </t>
+                <div t-if="stack.showOverflow or showCloseAll" class="zenvio-tray">
+                    <button t-if="stack.showOverflow" class="zenvio-more"
+                            t-on-click="() => this.openWaiting()">
+                        <span class="zenvio-more-dot"/>
+                        <t t-esc="hiddenCount"/> more waiting
+                        <i class="fa fa-arrow-right" role="img" aria-hidden="true"/>
+                    </button>
+                    <button t-if="showCloseAll" class="zenvio-clear"
+                            t-att-disabled="ui.clearing"
+                            t-on-click="() => this.closeAll()">
+                        <i class="fa fa-check-circle" role="img" aria-hidden="true"/>
+                        Close all
+                    </button>
+                </div>
+            </div>
+        </t>
+    </div>
+</t>
+
+<t t-name="zenvio_reminders_notification.PopupCard">
+<div t-att-class="rootClass" t-att-style="rootStyle"
+     role="alertdialog" aria-live="assertive" t-att-aria-label="props.data.title">
+
+    <!-- Decorative confetti, purely visual. -->
+    <span class="zenvio-dot zenvio-dot-1"/>
+    <span class="zenvio-dot zenvio-dot-2"/>
+    <span class="zenvio-dot zenvio-dot-3"/>
+    <span class="zenvio-dot zenvio-dot-4"/>
+
+    <!-- Round close button, top right -->
+    <span t-if="state.countdown > 0" class="zenvio-timer">
+        <t t-esc="state.countdown"/>s
+    </span>
+
+    <button t-if="!props.data.require_ack" class="zenvio-x"
+            t-att-disabled="state.busy" t-on-click="() => this.onClose()"
+            aria-label="Close">
+        <i class="fa fa-times" role="img" aria-hidden="true"/>
+    </button>
+
+    <!-- ── THE BELL ────────────────────────────────────── -->
+    <div t-if="showIcon" class="zenvio-bell">
+        <span class="zenvio-bell-glow"/>
+        <i t-attf-class="fa {{heroIcon}} zenvio-bell-icon" role="img" aria-hidden="true"/>
+        <span class="zenvio-bell-badge">1</span>
+        <span class="zenvio-bell-ring zenvio-bell-ring-l"/>
+        <span class="zenvio-bell-ring zenvio-bell-ring-r"/>
+    </div>
+
+    <div class="zenvio-main">
+        <div class="zenvio-head">
+            <div class="zenvio-heading">
+                <span t-if="showAuthor or showChip" class="zenvio-from">
+                    <t t-if="showAuthor"><t t-esc="subtitle"/></t>
+                    <span t-if="showChip" class="zenvio-chip"><t t-esc="levelLabel"/></span>
+                </span>
+                <strong class="zenvio-title"><t t-esc="props.data.title"/></strong>
+            </div>
+        </div>
+
+        <div class="zenvio-body" t-out="bodyMarkup"/>
+
+        <div class="zenvio-foot">
+            <!-- "Later" and its menu share a wrapper: the menu is positioned
+                 against that, not against the whole footer. -->
+            <div t-if="props.data.allow_snooze" class="zenvio-snooze">
+                <button class="zenvio-btn zenvio-btn-ghost" t-att-disabled="state.busy"
+                        t-on-click="() => this.toggleSnooze()"
+                        t-att-aria-expanded="state.snoozeOpen">
+                    <i class="fa fa-clock-o" role="img" aria-hidden="true"/>
+                    <span>Later</span>
+                </button>
+                <div t-if="state.snoozeOpen" class="zenvio-snooze-menu" role="menu">
+                    <t t-foreach="snoozeChoices" t-as="minutes" t-key="minutes">
+                        <button class="zenvio-snooze-option" role="menuitem"
+                                t-on-click="() => this.onSnooze(minutes)">
+                            <i class="fa fa-bell-o" role="img" aria-hidden="true"/>
+                            <t t-esc="snoozeLabel(minutes)"/>
+                        </button>
+                    </t>
+                </div>
+            </div>
+
+            <button t-elif="!props.data.require_ack" class="zenvio-btn zenvio-btn-ghost"
+                    t-att-disabled="state.busy" t-on-click="() => this.onClose()">
+                <span>Close</span>
+            </button>
+
+            <button class="zenvio-btn zenvio-btn-primary" t-att-disabled="state.busy"
+                    t-on-click="() => this.onAcknowledge()">
+                <i class="fa fa-check" role="img" aria-hidden="true"/>
+                <span>Got it</span>
+            </button>
+        </div>
+
+        <!-- The close cross is deliberately absent on these, so say why
+             rather than leaving the reader hunting for it. -->
+        <span t-if="props.data.require_ack" class="zenvio-ack-note">
+            <i class="fa fa-lock" role="img" aria-hidden="true"/>
+            This one has to be acknowledged — use <b>Got it</b> to close it.
+        </span>
+
+        <!-- Offer system notifications, once, when the browser has not been
+             asked yet. Browsers only accept the request from a real click. -->
+        <button t-if="canOfferDesktop" class="zenvio-desktop-ask"
+                t-on-click="() => this.enableDesktop()">
+            <i class="fa fa-desktop" role="img" aria-hidden="true"/>
+            Also show these in my system notifications
+        </button>
+    </div>
+
+    <div t-if="showProgress" class="zenvio-progress">
+        <span class="zenvio-progress-fill"
+              t-attf-style="animation-duration: #{props.data.duration}s;"/>
+    </div>
+
+</div>
+</t>
+
+</templates>

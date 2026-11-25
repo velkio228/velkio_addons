@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_zenvio_notification_user,zenvio.notification.user,model_zenvio_notification,base.group_user,1,1,1,1
+access_zenvio_notification_manager,zenvio.notification.manager,model_zenvio_notification,group_zenvio_manager,1,1,1,1
+access_zenvio_recipient_user,zenvio.notification.recipient.user,model_zenvio_notification_recipient,base.group_user,1,0,0,0
+access_zenvio_recipient_manager,zenvio.notification.recipient.manager,model_zenvio_notification_recipient,group_zenvio_manager,1,1,1,1
+access_zenvio_template_user,zenvio.template.user,model_zenvio_template,base.group_user,1,0,0,0
+access_zenvio_template_manager,zenvio.template.manager,model_zenvio_template,group_zenvio_manager,1,1,1,1
+access_zenvio_style_user,zenvio.popup.style.user,model_zenvio_popup_style,base.group_user,1,0,0,0
+access_zenvio_style_manager,zenvio.popup.style.manager,model_zenvio_popup_style,group_zenvio_manager,1,1,1,1
