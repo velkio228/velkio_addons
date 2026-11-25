@@ -23,7 +23,7 @@ subscription.
     'category': 'Productivity',
     'author': 'Zenvio - Odoo Solutions',
     'maintainer': 'Zenvio - Odoo Solutions',
-    'website': 'https://zenvio.com',
+    'website': 'https://apps.odoo.com/apps/modules/browse?author=Zenvio%20-%20Odoo%20Solutions',
     'support': 'zenvio.odoosolution@gmail.com',
     'license': 'OPL-1',
     'price': 49.0,

@@ -22,9 +22,9 @@ This module controls the view interface. It does not replace Odoo access rights
 or record rules for server-side data security. Chatter visibility is configured
 per rule and is not state-dependent.
 """,
-    'author': 'Zenvio',
-    'maintainer': 'Zenvio',
-    'website': 'https://zenvio.com',
+    'author': 'Zenvio - Odoo Solutions',
+    'maintainer': 'Zenvio - Odoo Solutions',
+    'website': 'https://apps.odoo.com/apps/modules/browse?author=Zenvio%20-%20Odoo%20Solutions',
     'support': 'zenvio.odoosolution@gmail.com',
     'category': 'Administration',
     'license': 'OPL-1',
