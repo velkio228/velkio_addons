@@ -1,4 +1,4 @@
-"""Export every Velkio module as real files and build an installable ZIP per Odoo version.
+"""Export every Zenvio module as real files and build an installable ZIP per Odoo version.
 
 Run from anywhere: python3 tools/package_apps.py
 Prepares local files only; it does not publish or push anything.
@@ -11,7 +11,7 @@ from lxml import html
 
 ROOT = Path(__file__).resolve().parents[1]
 SKIP_DIRS = {'__pycache__', '.git', 'release', 'tools', 'artwork'}
-BASE_ASSETS = {'index.html', 'icon.png', 'img.png', 'velkio_mark.png', 'velkio_logo.png', 'workflow.png'}
+BASE_ASSETS = {'index.html', 'icon.png', 'img.png', 'zenvio_mark.png', 'zenvio_logo.png', 'workflow.png'}
 
 
 def modules():
