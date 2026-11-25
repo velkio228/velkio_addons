@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="zenvio_department_login.DepartmentIdentity">
+        <div class="o_zenvio_identity">
+            <Dropdown position="'bottom-end'" onOpened="() => this.onOpened()" menuClass="'o_zenvio_identity_menu'">
+                <button t-if="info" t-attf-class="o_zenvio_chip {{ tint(info.color) }}"
+                        t-att-title="info.department + ' · ' + info.employee" aria-label="Department employee">
+                    <span class="o_zenvio_chip_avatar" t-esc="initials(info.employee)"/>
+                    <span class="o_zenvio_chip_text">
+                        <span class="o_zenvio_chip_name" t-esc="info.employee"/>
+                        <span class="o_zenvio_chip_dept">
+                            <i t-attf-class="fa {{ info.icon }} me-1" role="img" title="Department"/><t t-esc="info.department"/>
+                        </span>
+                    </span>
+                    <i class="fa fa-angle-down o_zenvio_chip_caret" role="img" title="Open"/>
+                </button>
+                <button t-else="" class="o_zenvio_chip o_zenvio_chip_switch" title="Open Odoo as a department employee"
+                        aria-label="Open as employee">
+                    <i class="fa fa-exchange" role="img" title="Switch"/>
+                    <span class="o_zenvio_chip_label">Switch</span>
+                </button>
+                <t t-set-slot="content">
+                    <!-- Who is working now -->
+                    <div t-if="info" class="o_zenvio_me">
+                        <span t-attf-class="o_zenvio_me_avatar {{ tint(info.color) }}" t-esc="initials(info.employee)"/>
+                        <div class="o_zenvio_me_text">
+                            <div class="o_zenvio_me_name">
+                                <t t-esc="info.employee"/>
+                                <span class="o_zenvio_role" t-att-class="info.role === 'Manager' ? 'is-manager' : ''" t-esc="info.role"/>
+                            </div>
+                            <div class="o_zenvio_me_meta">
+                                <i t-attf-class="fa {{ info.icon }} me-1" role="img" title="Department"/>
+                                <t t-esc="info.department"/> · <t t-esc="info.login_code"/>
+                            </div>
+                            <div t-if="info.switched_from" class="o_zenvio_me_meta">
+                                <i class="fa fa-user-secret me-1" role="img" title="Opened by"/>Opened by <t t-esc="info.switched_from"/>
+                            </div>
+                        </div>
+                        <button t-if="info.switched_from" class="btn btn-primary btn-sm o_zenvio_me_action" t-on-click="() => this.backToAdmin()">
+                            <i class="fa fa-reply me-1" role="img" title="Back"/>Back to <t t-esc="info.switched_from"/>
+                        </button>
+                        <button t-else="" class="btn btn-outline-secondary btn-sm o_zenvio_me_action" t-on-click="() => this.signInAsAnother()">
+                            <i class="fa fa-sign-in me-1" role="img" title="Sign in"/>Sign in as another employee
+                        </button>
+                    </div>
+
+                    <!-- Open Odoo as another employee -->
+                    <t t-if="canSwitch">
+                        <div class="o_zenvio_switch_head">
+                            <div class="o_zenvio_label">Open as employee</div>
+                            <label class="o_zenvio_search">
+                                <i class="fa fa-search" role="img" title="Search"/>
+                                <input type="search" placeholder="Department, employee or code" t-model="state.search"/>
+                            </label>
+                        </div>
+                        <div class="o_zenvio_switch_list">
+                            <div t-if="state.loading" class="o_zenvio_empty">
+                                <i class="fa fa-circle-o-notch fa-spin me-2" role="img" title="Loading"/>Loading employees...
+                            </div>
+                            <div t-elif="!filtered.length" class="o_zenvio_empty">No employees found.</div>
+                            <t t-foreach="filtered" t-as="dept" t-key="dept.id">
+                                <div t-attf-class="o_zenvio_dept {{ tint(dept.color) }}">
+                                    <span class="o_zenvio_dept_icon"><i t-attf-class="fa {{ dept.icon }}" role="img" title="Department"/></span>
+                                    <span class="o_zenvio_dept_name" t-esc="dept.name"/>
+                                    <span class="o_zenvio_dept_count" t-esc="dept.employees.length"/>
+                                    <span class="o_zenvio_dept_owner" t-esc="dept.owner" title="Top Management"/>
+                                </div>
+                                <t t-foreach="dept.employees" t-as="emp" t-key="emp.line_id">
+                                    <DropdownItem onSelected="() => this.switchTo(emp)"
+                                                  class="{ 'o_zenvio_emp': true, 'is-current': emp.current, 'is-disabled': emp.login_disabled }">
+                                        <span t-attf-class="o_zenvio_emp_avatar {{ tint(dept.color) }}" t-esc="initials(emp.name)"/>
+                                        <span class="o_zenvio_emp_text">
+                                            <span class="o_zenvio_emp_name" t-esc="emp.name"/>
+                                            <span class="o_zenvio_emp_code" t-esc="emp.code"/>
+                                        </span>
+                                        <span class="o_zenvio_role" t-att-class="emp.role === 'Manager' ? 'is-manager' : ''" t-esc="emp.role"/>
+                                        <i t-if="emp.current" class="fa fa-check-circle o_zenvio_emp_end text-success" role="img" title="Current"/>
+                                        <i t-elif="emp.login_disabled" class="fa fa-ban o_zenvio_emp_end text-danger" role="img" title="Login disabled"/>
+                                        <i t-else="" class="fa fa-arrow-right o_zenvio_emp_end o_zenvio_emp_go" role="img" title="Open"/>
+                                    </DropdownItem>
+                                </t>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </Dropdown>
+        </div>
+    </t>
+</templates>

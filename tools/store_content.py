@@ -1,13 +1,13 @@
 """Store-page copy checked against the connector models and views."""
 COMMON = {
-    'publisher': 'Velkio Odoo Solutions',
-    'email': 'velkio.odoosolution@gmail.com',
+    'publisher': 'Zenvio Odoo Solutions',
+    'email': 'zenvio.odoosolution@gmail.com',
     'hosting': 'Odoo 19 on Odoo.sh or on-premise, with custom Python add-ons enabled. Standard Odoo Online does not support these modules.',
 }
 APPS = {
     'woo': {
-        'module': 'velkio_woocommerce_connector',
-        'name': 'Velkio WooCommerce Connector',
+        'module': 'zenvio_woocommerce_connector',
+        'name': 'Zenvio WooCommerce Connector',
         'edition': 'Odoo 19 · Community & Enterprise',
         'license': 'OPL-1', 'version': '19.0.1.0.1',
         'accent': '#714B67', 'tint': '#F6F1F6',
@@ -70,8 +70,8 @@ APPS = {
         ],
     },
     'tally': {
-        'module': 'velkio_tally_integration',
-        'name': 'Velkio TallyPrime Connector',
+        'module': 'zenvio_tally_integration',
+        'name': 'Zenvio TallyPrime Connector',
         'edition': 'Odoo 19 · Community & Enterprise',
         'license': 'LGPL-3', 'version': '19.0.1.2.1',
         'accent': '#714B67', 'tint': '#F8F5EF',

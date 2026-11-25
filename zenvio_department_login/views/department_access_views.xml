@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zenvio_department_access_kanban" model="ir.ui.view">
+        <field name="name">zenvio.department.access.kanban</field>
+        <field name="model">zenvio.department.access</field>
+        <field name="arch" type="xml">
+            <kanban class="o_zenvio_department_board">
+                <field name="color"/>
+                <field name="icon"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="o_zenvio_dept_card o_zenvio_tint_#{record.color.raw_value || 0}">
+                            <span class="o_zenvio_dept_icon"><i t-attf-class="fa #{record.icon.raw_value || 'fa-building'}" role="img" title="Department"/></span>
+                            <div class="min-w-0 flex-grow-1">
+                                <div class="o_zenvio_dept_name"><field name="name"/></div>
+                                <div class="o_zenvio_dept_count"><field name="employee_count"/> active employees</div>
+                            </div>
+                            <a type="open" role="button" class="btn o_zenvio_manage" title="Manage department"><i class="fa fa-arrow-right" role="img" title="Manage department"/></a>
+                        </div>
+                        <footer class="px-3 pb-3 pt-2"><span class="text-muted small">Top Management</span><field name="owner_id" widget="many2one_avatar_user" class="ms-auto"/></footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_zenvio_department_access_list" model="ir.ui.view">
+        <field name="name">zenvio.department.access.list</field>
+        <field name="model">zenvio.department.access</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="employee_count"/>
+                <field name="owner_id" widget="many2one_avatar_user"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_zenvio_department_access_form" model="ir.ui.view">
+        <field name="name">zenvio.department.access.form</field>
+        <field name="model">zenvio.department.access</field>
+        <field name="arch" type="xml">
+            <form string="Manage Department" class="o_zenvio_department_form">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_logs" type="object" class="oe_stat_button" icon="fa-history">
+                            <field name="log_count" widget="statinfo" string="Logins"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="o_zenvio_department_hero">
+                        <field name="icon" widget="zenvio_department_icon" readonly="1" nolabel="1" class="o_zenvio_hero_icon"/>
+                        <div class="o_zenvio_department_identity">
+                            <label for="department_id" string="Department Name"/>
+                            <h1><field name="department_id" placeholder="Choose or create a department"/></h1>
+                            <span class="o_zenvio_employee_pill"><i class="fa fa-users" title="Employees"/>
+                                <field name="employee_count"/> active employees
+                            </span>
+                        </div>
+                        <div class="o_zenvio_appearance">
+                            <label for="icon" string="Department Icon"/>
+                            <field name="icon" widget="zenvio_department_icon"/>
+                            <label for="color" string="Department Color"/>
+                            <field name="color" widget="zenvio_department_color"/>
+                        </div>
+                    </div>
+                    <notebook>
+                        <page string="Employees &amp; Access" name="employees">
+                            <div class="o_zenvio_help_banner">
+                                <i class="fa fa-info-circle" title="Info"/>
+                                <div class="flex-grow-1">
+                                    <strong>Add Employees and Set Access</strong>
+                                    <p>Add an employee below, choose their role and set a password of at least 6 characters.
+                                       They sign in with their <b>Login Code</b> and password.</p>
+                                    <small>Use the lock button for personal access, or reset to restore the role's access.</small>
+                                </div>
+                                <button name="action_load_department_employees" type="object" string="Add Department Employees"
+                                        icon="fa-users" class="btn btn-outline-primary" invisible="not id"
+                                        help="Add all unmapped employees of this HR department and its sub-departments"/>
+                            </div>
+                            <field name="line_ids" class="o_zenvio_employee_table" context="{'active_test': False}">
+                                <list editable="bottom" decoration-muted="not active">
+                                    <control><create string="Add Employee"/></control>
+                                    <field name="employee_id"/>
+                                    <field name="role" class="o_zenvio_role"/>
+                                    <field name="profile_id" string="Personal Access" readonly="1" optional="hide"/>
+                                    <field name="login_code"/>
+                                    <field name="password" password="True" placeholder="Type to set / change"/>
+                                    <field name="has_password" widget="zenvio_password_status" width="110px"/>
+                                    <field name="last_login"/>
+                                    <field name="active" string="Active" widget="boolean_toggle"/>
+                                    <field name="can_switch" widget="boolean_toggle" optional="show"
+                                           help="This employee gets the Switch option to open Odoo as other employees"/>
+                                    <field name="switch_access_ids" widget="many2many_tags" optional="show"
+                                           readonly="not can_switch" placeholder="All departments"
+                                           domain="[('owner_id', '=', parent.owner_id)]" options="{'no_create': True}"/>
+                                    <button name="action_open_access" type="object" icon="fa-lock"
+                                            title="Personal access for this employee (starts as a copy of their role's access)"/>
+                                    <button name="action_reset_access" type="object" icon="fa-undo" invisible="not profile_id"
+                                            title="Remove personal access: back to their role's access"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Access Rights" name="access">
+                            <field name="user_profile_id" invisible="1"/>
+                            <field name="manager_profile_id" invisible="1"/>
+                            <notebook class="o_zenvio_role_tabs">
+                                <page string="User Access" name="user_access">
+                                    <div class="o_zenvio_access_top">
+                                        <group>
+                                            <group>
+                                                <field name="user_readonly" string="Read-Only"/>
+                                                <field name="user_disable_relational_edit" string="Disable Relational Create/Edit"/>
+                                            </group>
+                                        </group>
+                                    </div>
+                                    <notebook class="o_zenvio_access_tabs">
+                                        <page string="Hide Menu" name="user_tab_menu">
+                                            <field name="user_hide_menu_ids" nolabel="1" options="{'no_create': True}">
+                                                <list>
+                                                    <field name="complete_name" string="Menu"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Model Access" name="user_tab_model">
+                                            <field name="user_model_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="perm_read"/>
+                                                    <field name="perm_create" readonly="not perm_read"/>
+                                                    <field name="perm_write" readonly="not perm_read"/>
+                                                    <field name="perm_unlink" readonly="not perm_read"/>
+                                                    <field name="hide_archive" string="Archive" optional="show"/>
+                                                    <field name="hide_duplicate" string="Duplicate" optional="show"/>
+                                                    <field name="hide_import" string="Import" optional="show"/>
+                                                    <field name="hide_export" string="Export" optional="show"/>
+                                                    <field name="hide_print" string="Reports" optional="show"/>
+                                                    <field name="hide_actions" string="Actions" optional="show"/>
+                                                </list>
+                                            </field>
+                                            <div class="text-muted small">Untick Read / Create / Edit / Delete to refuse them. The other columns hide that option on the model's screens.</div>
+                                        </page>
+                                        <page string="Field Access" name="user_tab_field">
+                                            <field name="user_field_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="field_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="invisible"/>
+                                                    <field name="readonly"/>
+                                                    <field name="required"/>
+                                                    <field name="no_open" string="Remove Link"/>
+                                                    <field name="state_field_id" optional="hide" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="state_value_ids" widget="many2many_tags" optional="hide" options="{'no_create': True}"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Domain Access" name="user_tab_domain">
+                                            <field name="user_domain_line_ids" nolabel="1">
+                                                <list>
+                                                    <field name="model_id"/>
+                                                    <field name="domain" string="Only These Records"/>
+                                                </list>
+                                                <form string="Domain Access">
+                                                    <group>
+                                                        <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        <field name="model_name" invisible="1"/>
+                                                    </group>
+                                                    <field name="domain" widget="domain" invisible="not model_name" options="{'model': 'model_name', 'in_dialog': True}"/>
+                                                    <div class="text-muted small">In the code editor you can use <code>employee</code> (the logged-in employee), <code>department</code> and <code>user</code>, e.g. <code>[('employee_id', '=', employee.id)]</code>.</div>
+                                                </form>
+                                            </field>
+                                        </page>
+                                        <page string="Button/Tab Access" name="user_tab_button">
+                                            <field name="user_button_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="hide_button_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="hide_page_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="state_field_id" optional="show" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="state_value_ids" widget="many2many_tags" optional="show" options="{'no_create': True}"/>
+                                                </list>
+                                            </field>
+                                            <div class="text-muted small">Hidden buttons are also refused on the server. With <b>Only In States</b> the rule applies only while the record is in those states.</div>
+                                        </page>
+                                        <page string="Hide Filter/Group By" name="user_tab_filter">
+                                            <field name="user_filter_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="hide_filter_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="hide_groupby_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Chatter" name="user_tab_chatter">
+                                            <field name="user_chatter_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="hide_chatter"/>
+                                                    <field name="hide_send_message"/>
+                                                    <field name="hide_log_note"/>
+                                                    <field name="hide_activity"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Global" name="user_tab_global">
+                                            <group>
+                                                <group string="Chatter">
+                                                    <field name="user_hide_chatter" string="Hide Chatter"/>
+                                                    <field name="user_hide_send_message" string="Hide Send Message"/>
+                                                    <field name="user_hide_log_note" string="Hide Log Notes"/>
+                                                    <field name="user_hide_activity" string="Hide Schedule Activity"/>
+                                                </group>
+                                                <group string="Import &amp; Export">
+                                                    <field name="user_hide_import" string="Hide Import"/>
+                                                    <field name="user_hide_export" string="Hide Export"/>
+                                                    <field name="user_hide_spreadsheet" string="Hide Spreadsheet"/>
+                                                    <field name="user_hide_add_property" string="Hide Add Property"/>
+                                                </group>
+                                                <group string="Others">
+                                                    <field name="user_disable_login" string="Disable Login"/>
+                                                    <field name="user_disable_debug" string="Disable Developer Mode"/>
+                                                </group>
+                                            </group>
+                                            <div class="alert alert-info mb-0" role="status">
+                                                <i class="fa fa-info-circle me-1" title="Info"/> These switches apply to every model.
+                                                Hide chatter, send message, log notes, schedule activities, import and export everywhere with a single tick.
+                                            </div>
+                                        </page>
+                                    </notebook>
+                                </page>
+                                <page string="Manager Access" name="manager_access">
+                                    <div class="o_zenvio_access_top">
+                                        <group>
+                                            <group>
+                                                <field name="manager_readonly" string="Read-Only"/>
+                                                <field name="manager_disable_relational_edit" string="Disable Relational Create/Edit"/>
+                                            </group>
+                                        </group>
+                                    </div>
+                                    <notebook class="o_zenvio_access_tabs">
+                                        <page string="Hide Menu" name="manager_tab_menu">
+                                            <field name="manager_hide_menu_ids" nolabel="1" options="{'no_create': True}">
+                                                <list>
+                                                    <field name="complete_name" string="Menu"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Model Access" name="manager_tab_model">
+                                            <field name="manager_model_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="perm_read"/>
+                                                    <field name="perm_create" readonly="not perm_read"/>
+                                                    <field name="perm_write" readonly="not perm_read"/>
+                                                    <field name="perm_unlink" readonly="not perm_read"/>
+                                                    <field name="hide_archive" string="Archive" optional="show"/>
+                                                    <field name="hide_duplicate" string="Duplicate" optional="show"/>
+                                                    <field name="hide_import" string="Import" optional="show"/>
+                                                    <field name="hide_export" string="Export" optional="show"/>
+                                                    <field name="hide_print" string="Reports" optional="show"/>
+                                                    <field name="hide_actions" string="Actions" optional="show"/>
+                                                </list>
+                                            </field>
+                                            <div class="text-muted small">Untick Read / Create / Edit / Delete to refuse them. The other columns hide that option on the model's screens.</div>
+                                        </page>
+                                        <page string="Field Access" name="manager_tab_field">
+                                            <field name="manager_field_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="field_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="invisible"/>
+                                                    <field name="readonly"/>
+                                                    <field name="required"/>
+                                                    <field name="no_open" string="Remove Link"/>
+                                                    <field name="state_field_id" optional="hide" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="state_value_ids" widget="many2many_tags" optional="hide" options="{'no_create': True}"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Domain Access" name="manager_tab_domain">
+                                            <field name="manager_domain_line_ids" nolabel="1">
+                                                <list>
+                                                    <field name="model_id"/>
+                                                    <field name="domain" string="Only These Records"/>
+                                                </list>
+                                                <form string="Domain Access">
+                                                    <group>
+                                                        <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        <field name="model_name" invisible="1"/>
+                                                    </group>
+                                                    <field name="domain" widget="domain" invisible="not model_name" options="{'model': 'model_name', 'in_dialog': True}"/>
+                                                    <div class="text-muted small">In the code editor you can use <code>employee</code> (the logged-in employee), <code>department</code> and <code>user</code>, e.g. <code>[('employee_id', '=', employee.id)]</code>.</div>
+                                                </form>
+                                            </field>
+                                        </page>
+                                        <page string="Button/Tab Access" name="manager_tab_button">
+                                            <field name="manager_button_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="hide_button_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="hide_page_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="state_field_id" optional="show" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="state_value_ids" widget="many2many_tags" optional="show" options="{'no_create': True}"/>
+                                                </list>
+                                            </field>
+                                            <div class="text-muted small">Hidden buttons are also refused on the server. With <b>Only In States</b> the rule applies only while the record is in those states.</div>
+                                        </page>
+                                        <page string="Hide Filter/Group By" name="manager_tab_filter">
+                                            <field name="manager_filter_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="hide_filter_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                    <field name="hide_groupby_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Chatter" name="manager_tab_chatter">
+                                            <field name="manager_chatter_line_ids" nolabel="1">
+                                                <list editable="bottom">
+                                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="hide_chatter"/>
+                                                    <field name="hide_send_message"/>
+                                                    <field name="hide_log_note"/>
+                                                    <field name="hide_activity"/>
+                                                </list>
+                                            </field>
+                                        </page>
+                                        <page string="Global" name="manager_tab_global">
+                                            <group>
+                                                <group string="Chatter">
+                                                    <field name="manager_hide_chatter" string="Hide Chatter"/>
+                                                    <field name="manager_hide_send_message" string="Hide Send Message"/>
+                                                    <field name="manager_hide_log_note" string="Hide Log Notes"/>
+                                                    <field name="manager_hide_activity" string="Hide Schedule Activity"/>
+                                                </group>
+                                                <group string="Import &amp; Export">
+                                                    <field name="manager_hide_import" string="Hide Import"/>
+                                                    <field name="manager_hide_export" string="Hide Export"/>
+                                                    <field name="manager_hide_spreadsheet" string="Hide Spreadsheet"/>
+                                                    <field name="manager_hide_add_property" string="Hide Add Property"/>
+                                                </group>
+                                                <group string="Others">
+                                                    <field name="manager_disable_login" string="Disable Login"/>
+                                                    <field name="manager_disable_debug" string="Disable Developer Mode"/>
+                                                </group>
+                                            </group>
+                                            <div class="alert alert-info mb-0" role="status">
+                                                <i class="fa fa-info-circle me-1" title="Info"/> These switches apply to every model.
+                                                Hide chatter, send message, log notes, schedule activities, import and export everywhere with a single tick.
+                                            </div>
+                                        </page>
+                                    </notebook>
+                                </page>
+                            </notebook>
+                        </page>
+                        <page string="Preferences" name="preferences">
+                            <group string="Department Settings">
+                                <group>
+                                    <field name="owner_id" groups="base.group_system" options="{'no_create': True}"
+                                           invisible="context.get('zenvio_from_user')"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zenvio_department_access_search" model="ir.ui.view">
+        <field name="name">zenvio.department.access.search</field>
+        <field name="model">zenvio.department.access</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="department_id"/>
+                <field name="owner_id"/>
+                <field name="line_ids" string="Employee" filter_domain="[('line_ids.employee_id', 'ilike', self)]"/>
+                <filter name="my_departments" string="My Departments" domain="[('owner_id', '=', uid)]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_ceo" string="Top Management" context="{'group_by': 'owner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_zenvio_department_access" model="ir.actions.act_window">
+        <field name="name">Departments</field>
+        <field name="res_model">zenvio.department.access</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first department</p>
+            <p>Create each department (Engineering, Planning, Production, HR ...),
+               then add its employees and give each one a password.</p>
+        </field>
+    </record>
+
+    <record id="view_zenvio_department_employee_list" model="ir.ui.view">
+        <field name="name">zenvio.department.employee.list</field>
+        <field name="model">zenvio.department.employee</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" decoration-muted="not active">
+                                    <control><create string="Add Employee"/></control>
+                <field name="access_id"/>
+                <field name="employee_id"/>
+                <field name="role" class="o_zenvio_role"/>
+                <field name="profile_id" optional="show"/>
+                <field name="login_code"/>
+                <field name="password" password="True" placeholder="Type to set / change"/>
+                <field name="can_switch" widget="boolean_toggle" optional="hide"/>
+                <field name="switch_access_ids" widget="many2many_tags" optional="hide" readonly="not can_switch"
+                       placeholder="All departments" options="{'no_create': True}"/>
+                <field name="has_password" widget="zenvio_password_status" width="110px"/>
+                <field name="last_login"/>
+                <field name="active" string="Active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_zenvio_department_employee_search" model="ir.ui.view">
+        <field name="name">zenvio.department.employee.search</field>
+        <field name="model">zenvio.department.employee</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="login_code"/>
+                <field name="access_id"/>
+                <filter name="no_password" string="Without Password" domain="[('has_password', '=', False)]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_access" string="Department" context="{'group_by': 'access_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_zenvio_department_employee" model="ir.actions.act_window">
+        <field name="name">Mapped Employees</field>
+        <field name="res_model">zenvio.department.employee</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_group_access': 1}</field>
+    </record>
+</odoo>

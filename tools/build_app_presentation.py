@@ -47,8 +47,8 @@ def page(kind, data, out):
     visual_id = 'screenshots' if data['screenshots'] else 'workspace'
     links = [('overview','Overview'),('features','Capabilities'),('coverage','What syncs'),('setup','Setup'),(visual_id,'Screenshots' if data['screenshots'] else 'Workspace'),('documentation','Documentation'),('faq','FAQs'),('support','Support')]
     chunks = ['<section class="oe_container" style="font-family:Arial,Helvetica,sans-serif;color:#282532;background-color:#FFFFFF;">','<div class="container py-3">']
-    chunks.append(f'<div class="row align-items-center mb-3"><div class="col-sm-4"><img src="velkio_logo.png" alt="Velkio Odoo Solutions — Precision logo" width="165" class="img-fluid"/></div><div class="col-sm-8 text-sm-right text-sm-end"><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Odoo 19</span><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Community &amp; Enterprise</span></div></div>')
-    overview = f'<div class="text-center mb-4"><p style="font-size:12px;letter-spacing:2px;color:#9A7135;font-weight:700;">VELKIO ODOO SOLUTIONS</p><h1 style="font-size:42px;line-height:1.15;font-weight:800;color:#282532;">{escape(data["name"])}</h1><p style="font-size:20px;line-height:1.5;color:#714B67;">{escape(data["headline"])}</p></div>'
+    chunks.append(f'<div class="row align-items-center mb-3"><div class="col-sm-4"><img src="zenvio_logo.png" alt="Zenvio Odoo Solutions — Precision logo" width="165" class="img-fluid"/></div><div class="col-sm-8 text-sm-right text-sm-end"><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Odoo 19</span><span class="badge p-2 m-1" style="color:#714B67;background-color:#F6F1F6;">Community &amp; Enterprise</span></div></div>')
+    overview = f'<div class="text-center mb-4"><p style="font-size:12px;letter-spacing:2px;color:#9A7135;font-weight:700;">ZENVIO ODOO SOLUTIONS</p><h1 style="font-size:42px;line-height:1.15;font-weight:800;color:#282532;">{escape(data["name"])}</h1><p style="font-size:20px;line-height:1.5;color:#714B67;">{escape(data["headline"])}</p></div>'
     specs = [('19.0','Odoo version'),('CE / EE','Editions'),('Odoo.sh','Cloud deployment'),('On-premise','Self-hosted'),(data['license'],'Module license'),('Sync','Manual' if is_woo else 'Configurable')]
     overview += '<div class="row mb-4">'
     for value,label in specs:
@@ -104,11 +104,11 @@ def page(kind, data, out):
     for n,(q,a) in enumerate(data['faqs'],1):
         faq += f'<div class="col-md-6 mb-3"><div class="h-100 border rounded p-4"><p style="font-size:12px;color:#9A7135;font-weight:700;">{n:02d}</p><h3 style="font-size:19px;color:#282532;">{escape(q)}</h3>{para(a)}</div></div>'
     chunks.append(section('faq',faq+'</div>'))
-    support = heading('Velkio support','Get help with your connector')+cards([('Setup questions','Describe your deployment and the step you need help with.'),('Operation troubleshooting','Share the action, exact error and relevant log details.'),('Scope & configuration','Ask about supported record types, directions and configuration options.')])
-    support += callout('Tell us what you need help with','Include your Odoo and module versions. Remove passwords, API keys and personal data from shared screenshots.','mailto:'+COMMON['email'],'Email Velkio support')
-    support += f'<div class="row align-items-center"><div class="col-md-4"><img src="velkio_logo.png" alt="Velkio Odoo Solutions" width="180" class="img-fluid"/></div><div class="col-md-8">{para(COMMON["email"])}{para("Independent integration by Velkio Odoo Solutions. Product names belong to their respective owners.","small")}</div></div>'
+    support = heading('Zenvio support','Get help with your connector')+cards([('Setup questions','Describe your deployment and the step you need help with.'),('Operation troubleshooting','Share the action, exact error and relevant log details.'),('Scope & configuration','Ask about supported record types, directions and configuration options.')])
+    support += callout('Tell us what you need help with','Include your Odoo and module versions. Remove passwords, API keys and personal data from shared screenshots.','mailto:'+COMMON['email'],'Email Zenvio support')
+    support += f'<div class="row align-items-center"><div class="col-md-4"><img src="zenvio_logo.png" alt="Zenvio Odoo Solutions" width="180" class="img-fluid"/></div><div class="col-md-8">{para(COMMON["email"])}{para("Independent integration by Zenvio Odoo Solutions. Product names belong to their respective owners.","small")}</div></div>'
     chunks.append(section('support',support,True))
-    chunks.append(section('release',heading('Release information','Version '+data['version'])+para('This release includes the Velkio Precision identity, illustrated banners, setup documentation and synchronization scope. License: '+data['license']+'.')))
+    chunks.append(section('release',heading('Release information','Version '+data['version'])+para('This release includes the Zenvio Precision identity, illustrated banners, setup documentation and synchronization scope. License: '+data['license']+'.')))
     chunks.extend(['</div>','</section>'])
     return '\n'.join(chunks)+'\n'
 
@@ -116,9 +116,9 @@ def page(kind, data, out):
 def build(kind, out):
     out.mkdir(parents=True, exist_ok=True)
     for source, targets in [
-        ('velkio-precision-logo.png', ['velkio_logo.png']),
+        ('zenvio-precision-logo.png', ['zenvio_logo.png']),
         ('woocommerce-app-icon.png' if kind == 'woo' else 'tally-app-icon.png', ['icon.png', 'img.png']),
-        ('velkio-precision-mark.png', ['velkio_mark.png']),
+        ('zenvio-precision-mark.png', ['zenvio_mark.png']),
         ('woocommerce-banner.png' if kind == 'woo' else 'tally-banner.png', ['banner.png']),
     ]:
         for target in targets:

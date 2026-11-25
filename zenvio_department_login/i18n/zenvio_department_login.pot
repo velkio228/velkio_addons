@@ -1,0 +1,2320 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zenvio_department_login
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-04 06:08+0000\n"
+"PO-Revision-Date: 2026-11-04 06:08+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_employee.py:0
+msgid ""
+"%(employee)s is already in %(department)s. Change their Role there instead "
+"of adding them again."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/access_profile.py:0
+msgid ""
+"%(model)s: an employee who cannot read records cannot create, edit or delete"
+" them either."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_employee.py:0
+msgid "%s can only switch to departments of the same Top Management user."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_access.py:0
+#: code:addons/zenvio_department_login/models/res_users.py:0
+#: code:addons/zenvio_department_login/wizard/department_move.py:0
+msgid "%s is not an internal user and cannot be Top Management."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/res_users.py:0
+msgid ""
+"%s still has departments. Move them to another Top Management user first "
+"(their employees and access move with them), or delete them."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_access.py:0
+msgid "%s – Employees"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/access_profile.py:0
+msgid ""
+"%s: tick at least one of Invisible, Read-Only, Required or Remove External "
+"Link."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_kanban
+msgid "<i class=\"fa fa-arrow-right\" role=\"img\" title=\"Manage department\"/>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"<i class=\"fa fa-info-circle me-1\" title=\"Info\"/> These switches apply to every model.\n"
+"                                                Hide chatter, send message, log notes, schedule activities, import and export everywhere with a single tick."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+msgid ""
+"<i class=\"fa fa-info-circle me-1\" title=\"Info\"/> These switches apply to every model.\n"
+"                                Hide chatter, send message, log notes, schedule activities, import and export everywhere with a single tick."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "<i class=\"fa fa-info-circle\" title=\"Info\"/>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "<i class=\"fa fa-pencil\" role=\"img\" title=\"Edit\"/>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "<i class=\"fa fa-trash\" role=\"img\" title=\"Delete\"/>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "<i class=\"fa fa-trophy\" role=\"img\" title=\"Top Management\"/>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "<i class=\"fa fa-users\" role=\"img\" title=\"Employees\"/>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "<i class=\"fa fa-users\" title=\"Employees\"/>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"<small>Use the lock button for personal access, or reset to restore the "
+"role's access.</small>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid ""
+"<span class=\"o_zenvio_assign_icon\"><i class=\"fa fa-building\" "
+"role=\"img\" title=\"Departments\"/></span>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_kanban
+msgid "<span class=\"text-muted small\">Top Management</span>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "<strong>Add Employees and Set Access</strong>"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.actions.act_window,help:zenvio_department_login.action_zenvio_access_profile
+msgid ""
+"A profile decides what an employee may do: which menus they see, which records they can\n"
+"               read or change, and which buttons, tabs and fields they get. Use it for a department role\n"
+"               (User / Manager) or for a single employee."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.actions.act_window,name:zenvio_department_login.action_zenvio_access_profile
+#: model:ir.ui.menu,name:zenvio_department_login.menu_zenvio_access_profile
+msgid "Access Profiles"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Access Rights"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_employee__profile_id
+msgid ""
+"Access for this employee only. Empty: the access of their role in the "
+"department."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_employee.py:0
+msgid "Access of %s"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_profile_id
+msgid ""
+"Access of the employees with the Manager role. Empty: the Top Management "
+"user's full rights."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_profile_id
+msgid ""
+"Access of the employees with the User role. Empty: the Top Management user's"
+" full rights."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-calculator
+msgid "Accounts"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Actions"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__active
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__active
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__active
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_employee_list
+msgid "Active"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_mail_activity
+msgid "Activity"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/res_users.py:0
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "Add Department"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Add Department Employees"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_employee_list
+msgid "Add Employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"Add all unmapped employees of this HR department and its sub-departments"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"Add an employee below, choose their role and set a password of at least 6 characters.\n"
+"                                       They sign in with their <b>Login Code</b> and password."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.department_login
+msgid "Admin / user login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_login_log__switched_by_id
+msgid ""
+"Administrator or Top Management user who opened this employee's session."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__all_selected
+msgid "All Selected"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_employee_list
+msgid "All departments"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Archive"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_search
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_search
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_employee_search
+msgid "Archived"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "Assign Departments"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Back"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Back to"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_base
+msgid "Base"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-building
+msgid "Building"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_access_view_node__node_type__button
+msgid "Button"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__button_line_ids
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Button/Tab Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__can_switch
+msgid "Can Switch"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Cancel"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_add_property
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_add_property
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_add_property
+msgid "Cannot add custom properties to records."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_export
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_export
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_export
+msgid "Cannot export records anywhere."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_import
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_import
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_import
+msgid "Cannot import records anywhere."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_log_note
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_log_note
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_log_note
+msgid "Cannot log internal notes anywhere."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_activity
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_activity
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_activity
+msgid "Cannot schedule activities anywhere."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_send_message
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_send_message
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_send_message
+msgid "Cannot send messages to followers anywhere."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__chatter_line_ids
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Chatter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__department_id
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_employee__department_id
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_login_log__department_id
+msgid "Choose an existing department or type a new name to create it."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/wizard/department_move.py:0
+msgid "Choose another user to move the departments to."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Choose or create a department"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_employee__login_code
+msgid ""
+"Code the employee types on the employee login page (defaults to the badge "
+"ID)."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__color
+msgid "Color"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__company_id
+msgid "Company"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__perm_create
+msgid "Create"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.actions.act_window,help:zenvio_department_login.action_zenvio_department_access
+msgid ""
+"Create each department (Engineering, Planning, Production, HR ...),\n"
+"               then add its employees and give each one a password."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.actions.act_window,help:zenvio_department_login.action_zenvio_access_profile
+msgid "Create your first access profile"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.actions.act_window,help:zenvio_department_login.action_zenvio_department_access
+msgid "Create your first department"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__create_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__create_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Current"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__perm_unlink
+msgid "Delete"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+#: model:ir.model.fields,field_description:zenvio_department_login.field_res_users__zenvio_owned_department_ids
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__department_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__department_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__department_id
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_kanban
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_employee_search
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_login_log_search
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Department"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "Department Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile
+msgid "Department Access Profile"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_button
+msgid "Department Access Profile - Button/Tab Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_chatter
+msgid "Department Access Profile - Chatter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_domain
+msgid "Department Access Profile - Domain Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_field
+msgid "Department Access Profile - Field Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_filter
+msgid "Department Access Profile - Hide Filter/Group By"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_model
+msgid "Department Access Profile - Model Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_line
+msgid "Department Access Profile - Rule"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_profile_state_mixin
+msgid "Department Access Profile - State Condition"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_state_value
+msgid "Department Access Profile - State Value"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_access_view_node
+msgid "Department Access Profile - View Node"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Department Color"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Department Icon"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_department_access
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__access_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__access_id
+#: model:ir.ui.menu,name:zenvio_department_login.menu_zenvio_department_root
+msgid "Department Login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_department_employee
+msgid "Department Login Employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_department_login_log
+msgid "Department Login Log"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:res.groups,name:zenvio_department_login.group_department_manager
+msgid "Department Login: Top Management"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__name
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Department Name"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Department Settings"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Department employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_fields.xml:0
+msgid "Department icon"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Department, employee or code"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.actions.act_window,name:zenvio_department_login.action_zenvio_department_access
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__department_ids
+#: model:ir.ui.menu,name:zenvio_department_login.menu_zenvio_department_access
+msgid "Departments"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Departments to Move"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_move__department_ids
+msgid ""
+"Departments to move. Their employees, login codes, passwords and access "
+"rights move with them."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_employee__switch_access_ids
+msgid ""
+"Departments whose employees this employee can switch to. Empty: all "
+"departments of the same Top Management user."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-pencil-square-o
+msgid "Design"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__disable_debug
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_disable_debug
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_disable_debug
+msgid "Developer mode (?debug=1) is switched off for these employees."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__disable_debug
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Disable Developer Mode"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__disable_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Disable Login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__disable_relational_edit
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Disable Relational Create/Edit"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__display_label
+msgid "Display Label"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_http__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_model_access__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_rule__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_ui_menu__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_mail_activity__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_mail_message__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_res_users__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_line__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_state_mixin__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__display_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__domain_line_ids
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Domain Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Duplicate"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.constraint,message:zenvio_department_login.constraint_zenvio_department_employee_login_code_uniq
+msgid "Each employee login code must be unique."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.constraint,message:zenvio_department_login.constraint_zenvio_access_profile_model_profile_model_uniq
+msgid "Each model can only have one Model Access line per profile."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__perm_write
+msgid "Edit"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "Edit employees, passwords and access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.login_employee_code
+msgid "Email / Employee Code"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_mail_thread
+msgid "Email Thread"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.login_employee_code
+msgid "Email, or employee code (e.g. E0003)"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__employee_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__employee_id
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_search
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_login_log_search
+msgid "Employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_login_log__switched_by_employee_id
+msgid "Employee (with Can Switch) who opened this colleague's session."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.department_login
+msgid "Employee Code"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__employee_count
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__employee_count
+msgid "Employee Count"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.department_login
+msgid "Employee Login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.login_employee_link
+msgid "Employee login (code + password)"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__line_ids
+#: model:ir.ui.menu,name:zenvio_department_login.menu_zenvio_department_employee
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Employees"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Employees & Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "Employees and login codes"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/res_users.py:0
+msgid ""
+"Employees logged in through a department cannot change users or passwords."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__disable_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_disable_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_disable_login
+msgid "Employees with this access cannot log in; open sessions end."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+msgid ""
+"Employees work through their Top Management user. An access profile only takes rights away\n"
+"                        from that user: it can never give an employee more than that user has."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid ""
+"Employees, login codes, passwords and access rights move with each department.\n"
+"                        Employees keep their codes and passwords, but must sign in again after the move."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.department_login
+msgid "Enter your password"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Export"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_login_log_search
+msgid "Failed"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__field_line_ids
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Field Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__state_field_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__state_field_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_state_mixin__state_field_name
+msgid "Field Name"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__state_field_ttype
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__state_field_ttype
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_state_mixin__state_field_ttype
+msgid "Field Type"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_button__state_field_id
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_field__state_field_id
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_state_mixin__state_field_id
+msgid ""
+"Field holding the record's stage or status, to apply the rule only in some "
+"states."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__field_ids
+msgid "Fields"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_access_view_node__node_type__filter
+msgid "Filter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__from_user_id
+msgid "From"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:res.groups,comment:zenvio_department_login.group_department_manager
+msgid ""
+"Given by turning on Top Management on the user's Department Access tab."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Global"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_access_view_node__node_type__groupby
+msgid "Group By"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-users
+msgid "HR"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__hide_button_ids
+msgid "Hidden Buttons"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_res_users__zenvio_department_login
+msgid "Hidden Department Login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__hide_filter_ids
+msgid "Hidden Filters"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__hide_groupby_ids
+msgid "Hidden Group By"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_menu_ids
+msgid "Hidden Menus"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__hide_page_ids
+msgid "Hidden Tabs"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"Hidden buttons are also refused on the server. With <b>Only In States</b> "
+"the rule applies only while the record is in those states."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_res_users__zenvio_department_login
+msgid ""
+"Hidden login of a department role (User / Manager). Employees log in to it "
+"with their own code."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_button__hide_button_ids
+msgid ""
+"Hidden on screen, and refused on the server if someone calls them anyway."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__hide_actions
+msgid "Hide Actions"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_add_property
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Add Property"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__hide_archive
+msgid "Hide Archive/Unarchive"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_chatter
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__hide_chatter
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Chatter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__hide_duplicate
+msgid "Hide Duplicate"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_export
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__hide_export
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Export"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__filter_line_ids
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Filter/Group By"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_import
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__hide_import
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Import"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_log_note
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__hide_log_note
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Log Notes"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Menu"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__hide_print
+msgid "Hide Reports"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_activity
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__hide_activity
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Schedule Activity"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_send_message
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__hide_send_message
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Send Message"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__hide_spreadsheet
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Hide Spreadsheet"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_http__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_model_access__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_rule__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_ir_ui_menu__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_mail_activity__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_mail_message__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_mail_thread__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_res_users__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_line__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_state_mixin__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__id
+msgid "ID"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__ip_address
+msgid "IP Address"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-laptop
+msgid "IT"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__icon
+msgid "Icon"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__icon
+msgid "Icon shown on the department card."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__message_has_error
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Import"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Import & Export"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__disable_relational_edit
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_disable_relational_edit
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_disable_relational_edit
+msgid ""
+"In linked fields (e.g. Customer, Product) the employee cannot create, edit "
+"or open the linked record."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"In the code editor you can use <code>employee</code> (the logged-in "
+"employee), <code>department</code> and <code>user</code>, e.g. "
+"<code>[('employee_id', '=', employee.id)]</code>."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_move__to_user_id
+msgid ""
+"Internal user who takes over the departments. Becomes Top Management if not "
+"already."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__invisible
+msgid "Invisible"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__value_label
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__attr_string
+msgid "Label"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__last_login
+msgid "Last Login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__write_uid
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__write_date
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_field__no_open
+msgid "Linked fields: no create, edit or open of the linked record."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Loading"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Loading employees..."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__log_count
+msgid "Log Count"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.department_login
+msgid "Log in"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__login_code
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__login_code
+msgid "Login Code"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_access.py:0
+#: model:ir.actions.act_window,name:zenvio_department_login.action_zenvio_department_login_log
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__log_ids
+#: model:ir.ui.menu,name:zenvio_department_login.menu_zenvio_department_login_log
+msgid "Login Log"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__login_date
+msgid "Login Time"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_employee.py:0
+msgid ""
+"Login code %(code)s is already the login of an Odoo user. Choose another "
+"code for %(employee)s."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Login disabled"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+#: code:addons/zenvio_department_login/static/src/js/department_systray.js:0
+msgid "Login is disabled for %s's access."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+msgid "Login is disabled for your access. Please contact your manager."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Logins"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-truck
+msgid "Logistics"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-wrench
+msgid "Maintenance"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Manage Department"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_kanban
+msgid "Manage department"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_employee__role__manager
+msgid "Manager"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_profile_id
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Manager Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_button_line_ids
+msgid "Manager: Button/Tab Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_chatter_line_ids
+msgid "Manager: Chatter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_disable_debug
+msgid "Manager: Disable Developer Mode"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_disable_login
+msgid "Manager: Disable Login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_disable_relational_edit
+msgid "Manager: Disable Relational Create/Edit"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_domain_line_ids
+msgid "Manager: Domain Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_field_line_ids
+msgid "Manager: Field Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_menu_ids
+msgid "Manager: Hidden Menus"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_add_property
+msgid "Manager: Hide Add Property"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_chatter
+msgid "Manager: Hide Chatter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_export
+msgid "Manager: Hide Export"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_filter_line_ids
+msgid "Manager: Hide Filter/Group By"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_import
+msgid "Manager: Hide Import"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_log_note
+msgid "Manager: Hide Log Notes"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_activity
+msgid "Manager: Hide Schedule Activity"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_send_message
+msgid "Manager: Hide Send Message"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_hide_spreadsheet
+msgid "Manager: Hide Spreadsheet"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_model_line_ids
+msgid "Manager: Model Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__manager_readonly
+msgid "Manager: Read-Only"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.actions.act_window,name:zenvio_department_login.action_zenvio_department_employee
+msgid "Mapped Employees"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_ir_ui_menu
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Menu"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_menu_ids
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_menu_ids
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_menu_ids
+msgid "Menus (and their sub-menus) the employee does not see."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_mail_message
+msgid "Message"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__model_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__model_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__model_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__model_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__model_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_line__model_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__model_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__model_id
+msgid "Model"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_ir_model_access
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__model_line_ids
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Model Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__model_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__model_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__model_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__model_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__model_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_line__model_name
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__model_name
+msgid "Model Technical Name"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/res_users.py:0
+#: model:ir.actions.act_window,name:zenvio_department_login.action_zenvio_department_move
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Move Departments"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_zenvio_department_move
+msgid "Move Departments to Another Top Management User"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Move Summary"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__to_user_id
+msgid "Move To"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid ""
+"Move departments, with their employees and access, to another Top Management"
+" user"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_search
+msgid "My Departments"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__name
+msgid "Name"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_spreadsheet
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_spreadsheet
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_spreadsheet
+msgid "No 'Insert in spreadsheet'."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_model__hide_print
+msgid "No Print menu (reports) on this model."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.actions.act_window,help:zenvio_department_login.action_zenvio_ceo_users
+msgid "No Top Management user yet"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__hide_chatter
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_hide_chatter
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_hide_chatter
+msgid "No chatter on any form."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "No employees found."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_model__hide_actions
+msgid "No server actions in the Actions menu of this model."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_fields.xml:0
+msgid "Not set"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__note
+msgid "Note"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+msgid "Notes"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__state_value_ids
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__state_value_ids
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_state_mixin__state_value_ids
+msgid "Only In States"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__domain
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Only These Records"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Open"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Open Odoo as a department employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.actions.act_window,help:zenvio_department_login.action_zenvio_ceo_users
+msgid ""
+"Open a user in Settings → Users, go to the <b>Department Access</b> tab and turn on\n"
+"               <b>Top Management</b>. Employees of its departments then sign in through that user."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Open as employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Opened by"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Others"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__password
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.department_login
+msgid "Password"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__password_hash
+msgid "Password Hash"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__has_password
+msgid "Password Set"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__profile_id
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Personal Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"Personal access for this employee (starts as a copy of their role's access)"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Preferences"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-cogs
+msgid "Production"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__profile_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_chatter__profile_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_domain__profile_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__profile_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_filter__profile_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_line__profile_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__profile_id
+msgid "Profile"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-shopping-bag
+msgid "Purchase"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-flask
+msgid "Quality"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_model__perm_read
+msgid "Read"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__readonly
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__readonly
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Read-Only"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_ir_rule
+msgid "Record Rule"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__no_open
+msgid "Remove External Link"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Remove Link"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Remove Top Management from current user"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_move__remove_top_management
+msgid "Remove Top Management from the current user"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "Remove department"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Remove personal access: back to their role's access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "Reports"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__required
+msgid "Required"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__result
+msgid "Result"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__role
+msgid "Role"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-shopping-cart
+msgid "Sales"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "Save the user first, then add its departments."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Search"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid ""
+"Select existing departments or create a new one to map employees and set "
+"access."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Select the new Top Management user"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__sequence
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_fields.xml:0
+msgid "Set"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Sign in"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Sign in as another employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__is_smart
+msgid "Smart Button"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_button__state_field_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_field__state_field_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile_state_mixin__state_field_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__field_id
+msgid "State Field"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_access__icon__fa-cubes
+msgid "Stores"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_login_log__result__success
+msgid "Success"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+msgid "Switch"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_employee__switch_access_ids
+msgid "Switch Departments"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__switched_by_id
+msgid "Switched By"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__switched_by_employee_id
+msgid "Switched By Employee"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_login_log__result__switch
+msgid "Switched by administrator"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_access_view_node__node_type__page
+msgid "Tab"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__attr_name
+msgid "Technical Name"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_state_value__value_key
+msgid "Technical Value"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__readonly
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__manager_readonly
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__user_readonly
+msgid ""
+"The employee can look at everything allowed but cannot create, change or "
+"delete anything."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_domain__domain
+msgid ""
+"The employee only sees and changes the records matching this filter. You can"
+" use employee (the logged-in employee), department and user."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_employee.py:0
+msgid "The password of %(employee)s must have at least %(length)s characters."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_button__state_value_ids
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_field__state_value_ids
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile_state_mixin__state_value_ids
+msgid "The rule applies only in these states. Empty: in every state."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/access_profile.py:0
+msgid "The state field must belong to the selected model."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.constraint,message:zenvio_department_login.constraint_zenvio_department_access_department_uniq
+msgid "This department already has a department login."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_employee__can_switch
+msgid ""
+"This employee gets the Switch option in the top bar to open Odoo as other "
+"employees."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "This employee gets the Switch option to open Odoo as other employees"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.constraint,message:zenvio_department_login.constraint_zenvio_department_employee_department_employee_uniq
+msgid "This employee is already in this department."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/res_users.py:0
+msgid "This is a department login. Please log in with your employee code."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+msgid "This session was not opened by an administrator."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.constraint,message:zenvio_department_login.constraint_zenvio_access_state_value_field_value_uniq
+msgid "This state value already exists for the selected field."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid "This user can access and manage multiple departments."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_res_users__zenvio_is_ceo
+msgid ""
+"This user can access and manage multiple departments: employees of its "
+"departments sign in with their own code and password and work through this "
+"user."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_login_log_search
+msgid "Today"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+msgid ""
+"Too many failed attempts for this employee code. Please wait a minute and "
+"try again."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-javascript
+#: code:addons/zenvio_department_login/static/src/xml/department_systray.xml:0
+#: model:ir.actions.act_window,name:zenvio_department_login.action_zenvio_ceo_users
+#: model:ir.model.fields,field_description:zenvio_department_login.field_res_users__zenvio_is_ceo
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_profile__owner_id
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__owner_id
+#: model:ir.ui.menu,name:zenvio_department_login.menu_zenvio_department_ceo
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_search
+msgid "Top Management"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_access_profile__owner_id
+msgid "Top Management user whose employees use this profile."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_move_form
+msgid "Transfer"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_move__remove_top_management
+msgid ""
+"Turn off Top Management for the current user once all their departments are "
+"moved."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_users_form_department_login
+msgid ""
+"Turn on <b>Top Management</b> to let this user manage departments: employees of its\n"
+"                        departments sign in with their own code and password and work through this user,\n"
+"                        with the access you give each department and role."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_access_view_node__node_type
+msgid "Type"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_employee__password
+msgid ""
+"Type a new password (at least 6 characters) to set or change it. It is "
+"stored encrypted."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_employee_list
+msgid "Type to set / change"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid ""
+"Untick Read / Create / Edit / Delete to refuse them. The other columns hide "
+"that option on the model's screens."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model,name:zenvio_department_login.model_res_users
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_employee__role__user
+msgid "User"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_profile_id
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+msgid "User Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_login_log__user_agent
+msgid "User Agent"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_employee__role
+msgid ""
+"User or Manager: decides which access profile of the department the employee"
+" works with."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__owner_id
+msgid ""
+"User the employees of this department sign in through. They never get more "
+"rights than this user."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_button_line_ids
+msgid "User: Button/Tab Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_chatter_line_ids
+msgid "User: Chatter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_disable_debug
+msgid "User: Disable Developer Mode"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_disable_login
+msgid "User: Disable Login"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_disable_relational_edit
+msgid "User: Disable Relational Create/Edit"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_domain_line_ids
+msgid "User: Domain Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_field_line_ids
+msgid "User: Field Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_menu_ids
+msgid "User: Hidden Menus"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_add_property
+msgid "User: Hide Add Property"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_chatter
+msgid "User: Hide Chatter"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_export
+msgid "User: Hide Export"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_filter_line_ids
+msgid "User: Hide Filter/Group By"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_import
+msgid "User: Hide Import"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_log_note
+msgid "User: Hide Log Notes"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_activity
+msgid "User: Hide Schedule Activity"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_send_message
+msgid "User: Hide Send Message"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_hide_spreadsheet
+msgid "User: Hide Spreadsheet"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_model_line_ids
+msgid "User: Model Access"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__user_readonly
+msgid "User: Read-Only"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,field_description:zenvio_department_login.field_zenvio_department_access__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields,help:zenvio_department_login.field_zenvio_department_access__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+msgid "What this access is for..."
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_employee_search
+msgid "Without Password"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model:ir.model.fields.selection,name:zenvio_department_login.selection__zenvio_department_login_log__result__failed
+msgid "Wrong code or password"
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+msgid "Wrong employee code or password."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/access_hooks.py:0
+msgid "You are not allowed to export these records."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+msgid "You are not allowed to import records here."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/access_hooks.py:0
+msgid "You are not allowed to post here."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/access_hooks.py:0
+msgid "You are not allowed to schedule activities here."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/access_hooks.py:0
+msgid "You are not allowed to use this button."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+msgid "You cannot open this employee's session."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/controllers/main.py:0
+msgid "Your own department login is no longer valid."
+msgstr ""
+
+#. module: zenvio_department_login
+#. odoo-python
+#: code:addons/zenvio_department_login/models/department_access.py:0
+msgid "access_id"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_form
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_department_access_kanban
+msgid "active employees"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.department_login
+msgid "e.g. E0012"
+msgstr ""
+
+#. module: zenvio_department_login
+#: model_terms:ir.ui.view,arch_db:zenvio_department_login.view_zenvio_access_profile_form
+msgid "e.g. Production - User"
+msgstr ""

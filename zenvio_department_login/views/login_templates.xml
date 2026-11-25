@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="department_login" name="Department Employee Login">
+        <t t-call="web.login_layout">
+            <form class="oe_login_form" role="form" action="/web/department/login" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <h5 class="text-center mb-3">Employee Login</h5>
+                <div class="mb-3">
+                    <label for="login_code" class="form-label">Employee Code</label>
+                    <input type="text" name="login_code" id="login_code" t-att-value="login_code"
+                           class="form-control" placeholder="e.g. E0012" required="required"
+                           autofocus="autofocus" autocapitalize="characters" autocomplete="username"/>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password"
+                           required="required" maxlength="4096" autocomplete="current-password"/>
+                </div>
+                <p class="alert alert-danger" t-if="error" role="alert"><t t-esc="error"/></p>
+                <div class="oe_login_buttons text-center d-grid mb-1 pt-3">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                    <a href="/web/login" class="btn btn-link btn-sm">Admin / user login</a>
+                </div>
+                <input type="hidden" name="redirect" t-att-value="redirect"/>
+            </form>
+        </t>
+    </template>
+
+    <template id="login_employee_code" inherit_id="web.login" name="Email or Employee Code">
+        <xpath expr="//label[@for='login']" position="replace">
+            <label for="login" class="form-label d-flex justify-content-between">Email / Employee Code</label>
+        </xpath>
+        <xpath expr="//input[@name='login']" position="attributes">
+            <attribute name="placeholder">Email, or employee code (e.g. E0003)</attribute>
+        </xpath>
+    </template>
+
+    <template id="login_employee_link" inherit_id="web.login" name="Employee Login Link">
+        <xpath expr="//div[hasclass('oe_login_buttons')]" position="inside">
+            <a href="/web/department/login" class="btn btn-link btn-sm">Employee login (code + password)</a>
+        </xpath>
+    </template>
+</odoo>

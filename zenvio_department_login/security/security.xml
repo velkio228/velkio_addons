@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_department_manager" model="res.groups">
+        <field name="name">Department Access: Top Management</field>
+        <field name="privilege_id" eval="False"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+        <field name="comment">Given by turning on Top Management on the user's Department Access tab.</field>
+    </record>
+
+    <!-- A Top Management user sees only its own departments; the administrator sees all of them. -->
+    <record id="rule_department_access_owner" model="ir.rule">
+        <field name="name">Department Access: own departments</field>
+        <field name="model_id" ref="model_zenvio_department_access"/>
+        <field name="domain_force">[('owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_department_access_admin" model="ir.rule">
+        <field name="name">Department Access: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_department_access"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_department_employee_owner" model="ir.rule">
+        <field name="name">Department Access Employee: own departments</field>
+        <field name="model_id" ref="model_zenvio_department_employee"/>
+        <field name="domain_force">[('access_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_department_employee_admin" model="ir.rule">
+        <field name="name">Department Access Employee: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_department_employee"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_department_login_log_owner" model="ir.rule">
+        <field name="name">Department Access Login Log: own departments</field>
+        <field name="model_id" ref="model_zenvio_department_login_log"/>
+        <field name="domain_force">[('access_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_department_login_log_admin" model="ir.rule">
+        <field name="name">Department Access Login Log: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_department_login_log"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_access_profile_owner" model="ir.rule">
+        <field name="name">Department Access Profile: own profiles</field>
+        <field name="model_id" ref="model_zenvio_access_profile"/>
+        <field name="domain_force">[('owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_access_profile_admin" model="ir.rule">
+        <field name="name">Department Access Profile: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_access_profile"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_access_profile_model_owner" model="ir.rule">
+        <field name="name">Department Access Profile Rule: own profiles</field>
+        <field name="model_id" ref="model_zenvio_access_profile_model"/>
+        <field name="domain_force">[('profile_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_access_profile_model_admin" model="ir.rule">
+        <field name="name">Department Access Profile Rule: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_access_profile_model"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_access_profile_field_owner" model="ir.rule">
+        <field name="name">Department Access Profile Field: own profiles</field>
+        <field name="model_id" ref="model_zenvio_access_profile_field"/>
+        <field name="domain_force">[('profile_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_access_profile_field_admin" model="ir.rule">
+        <field name="name">Department Access Profile Field: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_access_profile_field"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_access_profile_domain_owner" model="ir.rule">
+        <field name="name">Department Access Profile Domain: own profiles</field>
+        <field name="model_id" ref="model_zenvio_access_profile_domain"/>
+        <field name="domain_force">[('profile_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_access_profile_domain_admin" model="ir.rule">
+        <field name="name">Department Access Profile Domain: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_access_profile_domain"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_access_profile_button_owner" model="ir.rule">
+        <field name="name">Department Access Profile Button: own profiles</field>
+        <field name="model_id" ref="model_zenvio_access_profile_button"/>
+        <field name="domain_force">[('profile_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_access_profile_button_admin" model="ir.rule">
+        <field name="name">Department Access Profile Button: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_access_profile_button"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_access_profile_filter_owner" model="ir.rule">
+        <field name="name">Department Access Profile Filter: own profiles</field>
+        <field name="model_id" ref="model_zenvio_access_profile_filter"/>
+        <field name="domain_force">[('profile_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_access_profile_filter_admin" model="ir.rule">
+        <field name="name">Department Access Profile Filter: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_access_profile_filter"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_access_profile_chatter_owner" model="ir.rule">
+        <field name="name">Department Access Profile Chatter: own profiles</field>
+        <field name="model_id" ref="model_zenvio_access_profile_chatter"/>
+        <field name="domain_force">[('profile_id.owner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_department_manager'))]"/>
+    </record>
+    <record id="rule_access_profile_chatter_admin" model="ir.rule">
+        <field name="name">Department Access Profile Chatter: administrator sees all</field>
+        <field name="model_id" ref="model_zenvio_access_profile_chatter"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+</odoo>

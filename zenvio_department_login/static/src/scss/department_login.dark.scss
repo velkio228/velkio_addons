@@ -1,0 +1,97 @@
+// Dark mode: the light tints and white panels of department_login.scss,
+// redone as translucent colors so text keeps its contrast.
+
+$zenvio-dark-icons: (#6ea8ff, #ff7b7b, #f5a25d, #e6c34a, #4fc3e8, #b48ae6, #f08d78, #6ea8ff, #8c9bff, #f07ab8, #5fd28f, #b48ae6);
+
+.o_zenvio_top_management {
+    background: rgba(240, 173, 78, 0.12);
+    border: 1px solid rgba(240, 173, 78, 0.35);
+    .fa { background: rgba(240, 173, 78, 0.18); color: #f2b552; }
+    .o_zenvio_tm_title { color: #f2b552; }
+    .o_zenvio_tm_text { color: $o-gray-700; }
+}
+.o_zenvio_department_panel {
+    background: $o-view-background-color;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.o_zenvio_dept_card {
+    color: inherit;
+    border-color: rgba(255, 255, 255, 0.08);
+    .o_zenvio_dept_icon { background: rgba(255, 255, 255, 0.08); }
+    .o_zenvio_dept_count { color: $o-gray-700; }
+    .o_zenvio_dept_actions .btn {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+        &:hover { background: rgba(255, 255, 255, 0.12); }
+    }
+    .o_zenvio_dept_actions .o_zenvio_delete { background: rgba(255, 90, 90, 0.12); }
+}
+@for $i from 0 through 11 {
+    .o_zenvio_dept_card.o_zenvio_tint_#{$i} {
+        background: rgba(nth($zenvio-dark-icons, $i + 1), 0.12);
+        .o_zenvio_dept_icon { color: nth($zenvio-dark-icons, $i + 1); }
+    }
+    .o_zenvio_icon_field.o_zenvio_tint_#{$i} {
+        --zenvio-tint: #{rgba(nth($zenvio-dark-icons, $i + 1), 0.16)};
+        --zenvio-icon: #{nth($zenvio-dark-icons, $i + 1)};
+    }
+}
+.o_zenvio_department_board .o_kanban_record {
+    border-color: rgba(255, 255, 255, 0.08);
+    .o_zenvio_manage { background: rgba(255, 255, 255, 0.08); color: #6ea8ff; }
+}
+.o_zenvio_department_form {
+    .o_zenvio_department_hero {
+        background: linear-gradient(120deg, rgba(110, 168, 255, 0.10), rgba(180, 138, 230, 0.06));
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    .o_zenvio_department_identity label,
+    .o_zenvio_appearance > label { color: $o-gray-700; }
+    .o_zenvio_employee_pill { color: #8fbaff; background: rgba(110, 168, 255, 0.14); }
+    .o_zenvio_appearance { border-color: rgba(255, 255, 255, 0.1); }
+    .o_zenvio_employee_table .o_list_renderer {
+        border-color: rgba(255, 255, 255, 0.08);
+        thead { background: rgba(255, 255, 255, 0.04); }
+        .o_field_x2many_list_row_add { background: rgba(255, 255, 255, 0.03); }
+    }
+    .o_zenvio_role { color: #c7aef5; background: rgba(180, 138, 230, 0.16); }
+}
+.o_zenvio_help_banner {
+    background: rgba(135, 89, 223, 0.14);
+    color: $o-gray-800;
+    > .fa { color: #b48ae6; }
+    strong { color: $o-gray-900; }
+}
+.o_zenvio_icon_option {
+    background: rgba(255, 255, 255, 0.06);
+    color: $o-gray-700;
+    &:hover { background: rgba(255, 255, 255, 0.12); }
+    &.is-selected { color: #8fbaff; background: rgba(110, 168, 255, 0.16); border-color: #6ea8ff; box-shadow: none; }
+}
+.o_zenvio_password_status {
+    &.is-set { color: #5fd28f; background: rgba(95, 210, 143, 0.14); }
+    &.is-missing { color: #f2b552; background: rgba(240, 173, 78, 0.14); }
+}
+@media (max-width: 991.98px) {
+    .o_zenvio_department_form .o_zenvio_appearance { border-top-color: rgba(255, 255, 255, 0.1); }
+}
+
+@for $i from 0 through 11 {
+    .o_zenvio_tint_#{$i} {
+        --zenvio-tint: #{rgba(nth($zenvio-dark-icons, $i + 1), .16)};
+        --zenvio-ink: #{nth($zenvio-dark-icons, $i + 1)};
+    }
+}
+.o_zenvio_chip {
+    border-color: rgba(255, 255, 255, .1) !important;
+    color: #e5e7eb !important;
+    &:hover, &.show { border-color: rgba(255, 255, 255, .2) !important; }
+}
+.o_zenvio_chip_avatar, .o_zenvio_identity_menu .o_zenvio_me_avatar { color: #111827; }
+.o_zenvio_identity_menu {
+    border-color: rgba(255, 255, 255, .08) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .45) !important;
+    .o_zenvio_emp { color: #e5e7eb !important; &:hover, &.focus { background: rgba(255, 255, 255, .06) !important; } }
+    .o_zenvio_dept_count { background: rgba(255, 255, 255, .08); }
+    .o_zenvio_search input { color: #f3f4f6; }
+}

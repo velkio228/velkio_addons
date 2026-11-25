@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_woo_variant_mapping_user,woo.variant.mapping.user,model_woo_variant_mapping,base.group_user,1,1,1,1
+access_woo_tax_mapping_user,woo.tax.mapping.user,model_woo_tax_mapping,base.group_user,1,1,1,1
