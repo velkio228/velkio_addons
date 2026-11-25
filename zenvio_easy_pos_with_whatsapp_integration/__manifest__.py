@@ -12,10 +12,10 @@
                 'Requires Odoo 17 Enterprise WhatsApp, a configured business account and an\n'
                 'approved document template. Payment methods record the tender choice; this\n'
                 'module does not charge cards or create accounting payments/invoices.\n',
- 'author': 'Zenvio',
+ 'author': 'Zenvio - Odoo Solutions',
  'company': 'Zenvio',
- 'maintainer': 'Zenvio',
- 'website': 'https://zenvio.com',
+ 'maintainer': 'Zenvio - Odoo Solutions',
+ 'website': 'https://apps.odoo.com/apps/modules/browse?author=Zenvio%20-%20Odoo%20Solutions',
  'depends': ['base', 'web', 'mail', 'product', 'stock', 'account', 'whatsapp'],
  'data': ['security/pos_screen_security.xml',
           'security/ir.model.access.csv',

@@ -44,9 +44,9 @@ reminder, notification dashboard, reminder calendar, notification templates,
 alert popup, snooze reminder, acknowledge notification, multi device
 notification, system tray notification odoo, bell notification odoo.
 """,
-    'author': 'Zenvio',
-    'maintainer': 'Zenvio',
-    'website': 'https://zenvio.com',
+    'author': 'Zenvio - Odoo Solutions',
+    'maintainer': 'Zenvio - Odoo Solutions',
+    'website': 'https://apps.odoo.com/apps/modules/browse?author=Zenvio%20-%20Odoo%20Solutions',
     'support': 'zenvio.odoosolution@gmail.com',
     'license': 'LGPL-3',
     'price': 29.0,

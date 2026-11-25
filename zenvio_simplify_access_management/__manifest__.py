@@ -61,8 +61,8 @@ menu access, domain access, chatter access, hide filters, hide group by,
 multi company access, Odoo 17 security.
     """,
 
-    'author': 'Zenvio',
-    'maintainer': 'Zenvio',
+    'author': 'Zenvio - Odoo Solutions',
+    'maintainer': 'Zenvio - Odoo Solutions',
     'website': 'https://apps.odoo.com/apps/modules/browse?author=Zenvio%20-%20Odoo%20Solutions',
     'support': 'zenvio.odoosolution@gmail.com',
     'license': 'OPL-1',
