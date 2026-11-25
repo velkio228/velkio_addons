@@ -1,0 +1,617 @@
+// User form → Department Access: "Top Management" badge and department cards.
+
+.o_zenvio_top_management {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    align-self: flex-start;
+    max-width: 22rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(240, 173, 78, 0.45);
+    border-radius: 0.5rem;
+    background: rgba(240, 173, 78, 0.10);
+    .fa {
+        font-size: 1.6rem;
+        color: #e8a33d;
+    }
+    .o_zenvio_tm_title {
+        font-weight: 600;
+        color: #c27c0e;
+    }
+    .o_zenvio_tm_text {
+        font-size: 0.85rem;
+        color: $o-gray-700;
+    }
+}
+
+.o_zenvio_assign_header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0 1rem;
+    .o_zenvio_assign_icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        background: rgba($o-action, 0.10);
+        color: $o-action;
+        font-size: 1.25rem;
+    }
+    h4 {
+        margin: 0;
+    }
+}
+
+// Cards: a soft tint per department color, in the order of Odoo's color picker
+// (0 none, 1 red, 2 orange, 3 yellow, 4 cyan, 5 dark purple, 6 salmon,
+//  7 medium blue, 8 dark blue, 9 fuchsia, 10 green, 11 purple).
+$zenvio-tints: (#e9f1fc, #fde8e8, #fdf0e1, #fdf8dc, #e3f5fb, #efe7f5, #fdeeea, #e5f0fb, #e6e9f7, #fbe6f2, #e6f6ec, #f1e9fb);
+$zenvio-icons: (#2a7bd1, #d14343, #d9822b, #b58b00, #1a91b5, #6b3fa0, #d4624a, #2a7bd1, #2f3f9e, #c2408a, #1f9d55, #8a4fc4);
+
+.o_zenvio_dept_cards .o_kanban_renderer {
+    gap: 1rem;
+    .o_kanban_record {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        min-width: 18rem;
+        max-width: 26rem;
+    }
+}
+
+.o_zenvio_dept_card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: nth($zenvio-tints, 1);
+    color: #1f2937;
+    .o_zenvio_dept_icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.85);
+        color: nth($zenvio-icons, 1);
+        font-size: 1.35rem;
+    }
+    .o_zenvio_dept_name {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    .o_zenvio_dept_count {
+        color: $o-gray-700;
+        font-size: 0.85rem;
+    }
+    .o_zenvio_dept_actions {
+        margin-left: auto;
+        display: flex;
+        gap: 0.35rem;
+        .btn {
+            padding: 0.3rem 0.55rem;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .o_zenvio_delete {
+            color: $danger;
+        }
+        .o_zenvio_edit {
+            color: $o-action;
+        }
+    }
+}
+
+@for $i from 0 through 11 {
+    .o_zenvio_dept_card.o_zenvio_tint_#{$i} {
+        background: nth($zenvio-tints, $i + 1);
+        .o_zenvio_dept_icon {
+            color: nth($zenvio-icons, $i + 1);
+        }
+    }
+}
+
+// Shared department workspace, scoped so other Odoo forms keep their styling.
+.o_zenvio_department_panel {
+    padding: 1.25rem;
+    border: 1px solid #e4e8f0;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(24, 39, 75, .04);
+}
+.o_zenvio_assign_header {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: .35rem; }
+    .btn { flex-shrink: 0; border-radius: .6rem; padding: .65rem 1rem; }
+    .o_zenvio_assign_icon { width: 3rem; height: 3rem; border-radius: .7rem; }
+}
+.o_zenvio_top_management {
+    border: 0;
+    border-radius: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: #fff8e8;
+    .fa { background: #fff0cd; padding: .7rem; border-radius: .7rem; }
+    .o_zenvio_tm_title { margin-bottom: .3rem; }
+    .o_zenvio_tm_text { line-height: 1.6; }
+}
+.o_zenvio_dept_cards .o_kanban_renderer {
+    padding: 0 !important;
+    .o_kanban_record { flex: 1 1 25rem; max-width: 40rem; min-width: 0; }
+}
+.o_zenvio_dept_card {
+    padding: 1rem;
+    min-height: 6.5rem;
+    border-radius: .85rem;
+    gap: 1rem;
+    .o_zenvio_dept_icon { width: 3.75rem; height: 3.75rem; font-size: 2rem; border-radius: .8rem; }
+    .o_zenvio_dept_name { font-size: 1.1rem; font-weight: 700; }
+    .o_zenvio_dept_count { margin-top: .35rem; font-size: .95rem; }
+    .o_zenvio_dept_actions .btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 2.6rem; min-height: 2.6rem; border-radius: .6rem;
+        &:hover { background: #f6f8fc; }
+    }
+    .o_zenvio_dept_actions .o_zenvio_delete { background: #fff4f5; }
+}
+.o_zenvio_department_board .o_kanban_record {
+    border: 1px solid #e4e8f0; border-radius: 1rem; overflow: hidden;
+    .o_zenvio_dept_card { border: 0; border-radius: 0; }
+    .o_zenvio_manage { background: #fff; border-radius: .6rem; color: #276ac5; }
+}
+// Applies to both the Add Department action and the embedded card's edit dialog.
+.modal-dialog:has(.o_zenvio_department_form) {
+    width: calc(100% - 2rem);
+    max-width: 1440px;
+
+    .modal-content { border-radius: 1rem; overflow: hidden; }
+    .modal-header, .modal-footer { padding: 1rem 1.5rem; }
+}
+
+.o_zenvio_department_form {
+    .o_form_sheet { max-width: 1440px; }
+    .o_zenvio_department_hero {
+        display: flex; align-items: center; gap: 1.5rem;
+        padding: 1.5rem; margin: .75rem 0 1.5rem;
+        background: linear-gradient(120deg, #f5f9ff, #fdfcff);
+        border: 1px solid #e5ebf5; border-radius: 1rem;
+    }
+    .o_zenvio_hero_icon { flex: 0 0 auto; width: auto; }
+    .o_zenvio_department_identity {
+        flex: 1; min-width: 12rem;
+        h1 { font-size: clamp(1.5rem, 2.5vw, 2.4rem); margin: .35rem 0 .85rem; }
+        label { color: #54617c; }
+    }
+    .o_zenvio_employee_pill {
+        display: inline-flex; align-items: center; gap: .5rem;
+        color: #1761be; background: #e9f3ff; padding: .5rem .85rem;
+        border-radius: 2rem; font-weight: 600;
+        .o_field_widget { width: auto; margin: 0; }
+    }
+    .o_zenvio_appearance {
+        flex: 0 0 19rem; border-left: 1px solid #dfe5ef; padding-left: 1.5rem;
+        > label { display: block; margin-bottom: .5rem; color: #54617c; }
+        > .o_field_widget { display: block; width: 100%; margin-bottom: .75rem; }
+        .o_colorlist {
+            // The field wrapper otherwise shrinks the auto-fit grid to one column.
+            width: 100%;
+            grid-template-columns: repeat(6, 1.75rem);
+            justify-content: start;
+            gap: .65rem !important;
+
+            > button { width: 1.75rem; height: 1.75rem; }
+        }
+    }
+    > .o_form_sheet_bg .o_notebook > .o_notebook_headers .nav-link {
+        padding: .9rem 1.25rem; font-weight: 600;
+    }
+    .o_zenvio_employee_table .o_list_renderer {
+        border: 1px solid #e4e8f0; border-radius: .8rem; overflow-x: auto;
+        .o_list_table { margin-bottom: 0; }
+        thead { background: #f6f7fb; }
+        th { padding-top: 1rem; padding-bottom: 1rem; }
+        td { vertical-align: middle; padding-top: .85rem; padding-bottom: .85rem; }
+        .o_field_x2many_list_row_add { padding: 1rem; background: #fbfaff; font-weight: 600; }
+    }
+}
+.o_zenvio_help_banner {
+    display: flex; align-items: center; gap: 1rem;
+    background: #f5efff; border-radius: .85rem; padding: 1.25rem;
+    margin: 1rem 0 1.5rem; color: #51416e;
+    > .fa { font-size: 2rem; color: #8759df; }
+    strong { display: block; font-size: 1.05rem; margin-bottom: .35rem; color: #241b38; }
+    p { margin-bottom: .25rem; line-height: 1.6; }
+    .btn { flex-shrink: 0; border-radius: .5rem; }
+}
+.o_zenvio_icon_preview {
+    display: flex; align-items: center; justify-content: center;
+    width: 7rem; height: 7rem; background: var(--zenvio-tint, #e9f1fc);
+    color: var(--zenvio-icon, #2a7bd1); border-radius: 1.1rem; font-size: 3.5rem;
+}
+.o_zenvio_icon_options { display: grid; grid-template-columns: repeat(6, 1fr); gap: .4rem; }
+.o_zenvio_icon_option {
+    border: 1px solid transparent; background: #eaf0f7; color: #53627d;
+    border-radius: .6rem; min-height: 2.6rem; font-size: 1.2rem;
+    &:hover { background: #dfeafb; }
+    &:focus-visible { outline: 3px solid #9978dc; outline-offset: 2px; }
+    &.is-selected { color: #1767db; background: #e0edff; border-color: #2877ee; box-shadow: 0 0 0 2px #dbe9ff; }
+}
+@for $i from 0 through 11 {
+    .o_zenvio_icon_field.o_zenvio_tint_#{$i} {
+        --zenvio-tint: #{nth($zenvio-tints, $i + 1)};
+        --zenvio-icon: #{nth($zenvio-icons, $i + 1)};
+    }
+}
+.o_zenvio_password_status {
+    display: inline-flex; align-items: center; gap: .4rem;
+    border-radius: 2rem; padding: .3rem .65rem; font-weight: 600; white-space: nowrap;
+    &.is-set { color: #16813d; background: #e6f8ec; }
+    &.is-missing { color: #986512; background: #fff4d8; }
+}
+@media (max-width: 991.98px) {
+    .o_zenvio_department_form {
+        .o_zenvio_department_hero { flex-wrap: wrap; padding: 1rem; }
+        .o_zenvio_appearance { flex: 1 1 100%; border-left: 0; border-top: 1px solid #dfe5ef; padding: 1rem 0 0; }
+        .o_zenvio_icon_options { grid-template-columns: repeat(6, minmax(2.6rem, 1fr)); max-width: 28rem; }
+    }
+    .o_zenvio_help_banner { flex-wrap: wrap; }
+}
+@media (max-width: 575.98px) {
+    .modal-dialog:has(.o_zenvio_department_form) {
+        width: 100%; max-width: 100%; margin: 0;
+        .modal-content { border-radius: 0; }
+    }
+    .o_zenvio_department_form .o_zenvio_department_identity { min-width: 0; }
+    .o_zenvio_department_panel { padding: .75rem; }
+    .o_zenvio_assign_header { flex-wrap: wrap; .btn { width: 100%; } }
+    .o_zenvio_dept_card { flex-wrap: wrap; .o_zenvio_dept_actions { margin-left: auto; } }
+    .o_zenvio_icon_preview { width: 4rem; height: 4rem; font-size: 2rem; }
+    .o_zenvio_help_banner .btn { width: 100%; white-space: normal; }
+}
+.o_zenvio_department_form .o_zenvio_role {
+    color: #6742ad;
+    background: #f1eaff;
+    border-radius: .5rem;
+    padding: .25rem .6rem;
+    select { color: inherit; }
+}
+
+// Narrow screens: cards never wider than their column, badge drops under the name.
+.o_zenvio_dept_cards .o_kanban_renderer .o_kanban_record {
+    flex: 1 1 unquote("min(25rem, 100%)");  // unquote: plain CSS min(), Sass cannot mix rem and %
+    max-width: unquote("min(40rem, 100%)");
+}
+@media (max-width: 767.98px) {
+    .o_form_sheet .d-flex:has(> .o_zenvio_top_management) {
+        flex-wrap: wrap;
+    }
+    .o_zenvio_top_management {
+        flex: 1 1 100%;
+        max-width: none;
+    }
+}
+@media (max-width: 575.98px) {
+    .o_zenvio_dept_cards .o_kanban_renderer .o_kanban_record {
+        flex-basis: 100%;
+    }
+    .o_zenvio_dept_card .o_zenvio_dept_actions {
+        flex: 1 1 100%;
+        justify-content: flex-end;
+    }
+}
+
+// Chatter actions switched off by an employee's access (classes set on the form by access_hooks.py).
+.o_zenvio_no_send_message .o-mail-Chatter-sendMessage,
+.o_zenvio_no_log_note .o-mail-Chatter-logNote,
+.o_zenvio_no_activity .o-mail-Chatter-activity {
+    display: none !important;
+}
+
+// Access Rights: Read-Only / Disable Relational Create/Edit above the tabs.
+.o_zenvio_access_top .o_group {
+    margin-bottom: 0;
+}
+.o_zenvio_access_tabs .tab-pane > .text-muted.small {
+    margin-top: .5rem;
+}
+@media (max-width: 767.98px) {
+    // Rule lists have many columns: scroll sideways instead of cutting the headers.
+    .o_zenvio_access_tabs .o_list_renderer {
+        overflow-x: auto;
+        .o_list_table { min-width: 44rem; }
+    }
+}
+
+// Top bar identity chip and its panel (department_systray.xml).
+@for $i from 0 through 11 {
+    .o_zenvio_tint_#{$i} {
+        --zenvio-tint: #{nth($zenvio-tints, $i + 1)};
+        --zenvio-ink: #{nth($zenvio-icons, $i + 1)};
+    }
+}
+
+.o_zenvio_chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    height: 2.1rem !important;  // the navbar shrinks its buttons otherwise
+    margin: 0 .3rem;
+    padding: 0 .55rem 0 .2rem !important;
+    border: 1px solid rgba(0, 0, 0, .07) !important;
+    border-radius: 1rem !important;
+    background: var(--zenvio-tint, #f1f3f6) !important;
+    color: $o-gray-900 !important;
+    font-size: .8rem;
+    line-height: 1.1;
+    transition: box-shadow .15s ease, border-color .15s ease;
+    &:hover, &.show {
+        border-color: rgba(0, 0, 0, .14) !important;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, .1);
+    }
+}
+.o_zenvio_chip_avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--zenvio-ink, #64748b);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+.o_zenvio_chip_text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 10rem;
+    > span { line-height: 1.15 !important; }  // the navbar's tall line-height would push the text out of the chip
+}
+.o_zenvio_chip_name {
+    max-width: 100%;
+    font-size: .78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.o_zenvio_chip_dept {
+    max-width: 100%;
+    font-size: .65rem;
+    color: $o-gray-600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    .fa { color: var(--zenvio-ink); }
+}
+.o_zenvio_chip_caret { color: $o-gray-500; }
+.o_zenvio_chip_switch {
+    gap: .35rem;
+    padding: 0 .7rem !important;
+    border-color: rgba($o-action, .25) !important;
+    background: rgba($o-action, .07) !important;
+    color: $o-action !important;
+    font-weight: 600;
+    &:hover, &.show { background: rgba($o-action, .13) !important; border-color: rgba($o-action, .4) !important; }
+}
+@media (max-width: 767.98px) {
+    .o_zenvio_chip_text, .o_zenvio_chip_caret, .o_zenvio_chip_label { display: none; }
+    .o_zenvio_chip { padding: 0 .2rem !important; }
+    .o_zenvio_chip_switch { padding: 0 .55rem !important; }
+}
+
+.o_zenvio_identity_menu {
+    width: 22.5rem;
+    max-width: calc(100vw - 1rem);
+    // Fit the screen: profile and search stay put, only the employee list scrolls.
+    display: flex !important;
+    flex-direction: column;
+    max-height: calc(100vh - 4.5rem) !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    > .o_zenvio_me, > .o_zenvio_switch_head { flex: 0 0 auto; }
+    border: 1px solid rgba(0, 0, 0, .06) !important;
+    border-radius: .8rem !important;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, .16) !important;
+
+    .o_zenvio_me {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: .2rem .8rem;
+        padding: 1rem 1rem .9rem;
+        border-bottom: 1px solid $border-color;
+    }
+    .o_zenvio_me_avatar {
+        grid-row: span 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        background: var(--zenvio-ink, #64748b);
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 0 0 4px var(--zenvio-tint, #eef2f7);
+    }
+    .o_zenvio_me_text { min-width: 0; }
+    .o_zenvio_me_name {
+        display: flex;
+        align-items: center;
+        gap: .45rem;
+        font-weight: 700;
+        font-size: .95rem;
+    }
+    .o_zenvio_me_meta {
+        margin-top: .15rem;
+        font-size: .78rem;
+        color: $o-gray-600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .o_zenvio_me_action {
+        grid-column: 1 / -1;
+        margin-top: .7rem;
+        border-radius: .5rem;
+    }
+
+    .o_zenvio_switch_head { padding: .8rem 1rem .5rem; }
+    .o_zenvio_label {
+        margin-bottom: .45rem;
+        font-size: .7rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: $o-gray-500;
+    }
+    .o_zenvio_search {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        margin: 0;
+        padding: .4rem .65rem;
+        border: 1px solid $border-color;
+        border-radius: .55rem;
+        color: $o-gray-500;
+        cursor: text;
+        transition: border-color .15s ease, box-shadow .15s ease;
+        &:focus-within {
+            border-color: rgba($o-action, .6);
+            box-shadow: 0 0 0 3px rgba($o-action, .12);
+        }
+        input {
+            flex: 1;
+            min-width: 0;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: $o-gray-900;
+            font-size: .85rem;
+        }
+    }
+    .o_zenvio_switch_list {
+        flex: 1 1 auto;
+        min-height: 4rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 0 .5rem .6rem;
+    }
+    .o_zenvio_empty {
+        padding: 1.25rem .5rem;
+        text-align: center;
+        font-size: .82rem;
+        color: $o-gray-500;
+    }
+    .o_zenvio_dept {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .75rem .5rem .3rem;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        color: $o-gray-700;
+    }
+    .o_zenvio_dept_icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: .35rem;
+        background: var(--zenvio-tint);
+        color: var(--zenvio-ink);
+        font-size: .72rem;
+    }
+    .o_zenvio_dept_count {
+        padding: 0 .38rem;
+        border-radius: 1rem;
+        background: $o-gray-100;
+        color: $o-gray-600;
+        font-size: .66rem;
+    }
+    .o_zenvio_dept_name {
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .o_zenvio_dept_owner {
+        flex-shrink: 0;
+        max-width: 40%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-left: auto;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: none;
+        color: $o-gray-500;
+    }
+    .o_zenvio_emp {
+        display: flex !important;
+        align-items: center;
+        gap: .65rem;
+        padding: .4rem .5rem !important;
+        border-radius: .55rem;
+        color: $o-gray-900 !important;
+        transition: background .12s ease;
+        .o_zenvio_emp_go { opacity: 0; transform: translateX(-3px); transition: opacity .12s ease, transform .12s ease; }
+        &:hover, &.focus {
+            background: $o-gray-100 !important;
+            .o_zenvio_emp_go { opacity: 1; transform: none; }
+        }
+        &.is-current { background: rgba(34, 160, 107, .07) !important; }
+        &.is-disabled { opacity: .5; }
+    }
+    .o_zenvio_emp_avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 50%;
+        background: var(--zenvio-tint);
+        color: var(--zenvio-ink);
+        font-size: .7rem;
+        font-weight: 700;
+    }
+    .o_zenvio_emp_text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        line-height: 1.25;
+    }
+    .o_zenvio_emp_name { font-size: .86rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .o_zenvio_emp_code { font-size: .72rem; color: $o-gray-500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .o_zenvio_role { margin-left: auto; }
+    .o_zenvio_emp_end { width: 1rem; text-align: center; color: $o-action; }
+}
+.o_zenvio_role {
+    flex: 0 0 auto;
+    padding: .08rem .5rem;
+    border-radius: 1rem;
+    border: 1px solid $o-gray-300;
+    color: $o-gray-600;
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    &.is-manager {
+        border-color: rgba($o-action, .35);
+        background: rgba($o-action, .08);
+        color: $o-action;
+    }
+}

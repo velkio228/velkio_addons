@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Settings → Users → user: turn on Top Management, then add departments and their employees. -->
+    <record id="view_users_form_department_login" model="ir.ui.view">
+        <field name="name">res.users.form.department.login</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="after">
+                <div class="o_zenvio_top_management" invisible="not zenvio_is_ceo" groups="base.group_system">
+                    <i class="fa fa-trophy" role="img" title="Top Management"/>
+                    <div>
+                        <div class="o_zenvio_tm_title">Top Management</div>
+                        <div class="o_zenvio_tm_text">This user can access and manage multiple departments.</div>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//notebook/page[@name='access_rights']" position="before">
+                <page string="Department Access" name="zenvio_department_login" invisible="share or zenvio_department_login"
+                      groups="base.group_system">
+                    <field name="zenvio_department_login" invisible="1"/>
+                    <group class="o_zenvio_management_toggle">
+                        <field name="zenvio_is_ceo" string="Top Management" widget="boolean_toggle"/>
+                    </group>
+                    <div invisible="zenvio_is_ceo" class="text-muted">
+                        Turn on <b>Top Management</b> to let this user manage departments: employees of its
+                        departments sign in with their own code and password and work through this user,
+                        with the access you give each department and role.
+                    </div>
+                    <div invisible="not zenvio_is_ceo" class="o_zenvio_department_panel">
+                        <div class="o_zenvio_assign_header">
+                            <span class="o_zenvio_assign_icon"><i class="fa fa-building" role="img" title="Departments"/></span>
+                            <div class="flex-grow-1">
+                                <h4>Assign Departments</h4>
+                                <div class="text-muted">Select existing departments or create a new one to map employees and set access.</div>
+                            </div>
+                            <button name="action_zenvio_move_departments" type="object" class="btn-secondary"
+                                    icon="fa-exchange" string="Move Departments" invisible="not zenvio_owned_department_ids"
+                                    help="Move departments, with their employees and access, to another Top Management user"/>
+                            <button name="action_zenvio_add_department" type="object" class="btn-primary"
+                                    icon="fa-plus" string="Add Department" invisible="not id"/>
+                        </div>
+                        <field name="zenvio_owned_department_ids" mode="kanban" class="o_zenvio_dept_cards"
+                               context="{'zenvio_from_user': True, 'default_owner_id': id}">
+                            <kanban create="0">
+                                <field name="color"/>
+                                <field name="icon"/>
+                                <templates>
+                                    <t t-name="card" class="p-0 border-0 bg-transparent">
+                                        <div t-attf-class="o_zenvio_dept_card o_zenvio_tint_#{(record.color.raw_value || 0) % 12}">
+                                            <span class="o_zenvio_dept_icon">
+                                                <i t-attf-class="fa #{record.icon.raw_value || 'fa-building'}" role="img" title="Department"/>
+                                            </span>
+                                            <div class="min-w-0">
+                                                <div class="o_zenvio_dept_name text-truncate"><field name="department_id"/></div>
+                                                <div class="o_zenvio_dept_count">
+                                                    <field name="employee_count"/>
+                                                    <t t-if="record.employee_count.raw_value == 1"> Employee</t>
+                                                    <t t-else=""> Employees</t>
+                                                </div>
+                                            </div>
+                                            <div class="o_zenvio_dept_actions">
+                                                <button name="action_view_employees" type="object" class="btn btn-sm"
+                                                        title="Employees and login codes">
+                                                    <i class="fa fa-users" role="img" title="Employees"/>
+                                                </button>
+                                                <a type="open" role="button" class="btn btn-sm o_zenvio_edit" title="Edit employees, passwords and access">
+                                                    <i class="fa fa-pencil" role="img" title="Edit"/>
+                                                </a>
+                                                <a type="delete" role="button" class="btn btn-sm o_zenvio_delete" title="Remove department">
+                                                    <i class="fa fa-trash" role="img" title="Delete"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                        <div class="text-muted small" invisible="id">Save the user first, then add its departments.</div>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_zenvio_ceo_users" model="ir.actions.act_window">
+        <field name="name">Top Management</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain" eval="[('group_ids', 'in', [ref('group_department_manager')])]"/>
+        <field name="context">{'default_zenvio_is_ceo': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No Top Management user yet</p>
+            <p>Open a user in Settings → Users, go to the <b>Department Access</b> tab and turn on
+               <b>Top Management</b>. Employees of its departments then sign in through that user.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="zenvio_department_login.DepartmentIcon">
+        <div class="o_zenvio_icon_field" t-attf-class="o_zenvio_tint_#{props.record.data.color || 0}">
+            <span t-if="props.readonly" class="o_zenvio_icon_preview">
+                <i t-att-class="'fa ' + (props.record.data[props.name] || 'fa-building')" aria-hidden="true"/>
+            </span>
+            <div t-else="" class="o_zenvio_icon_options" role="group" aria-label="Department icon">
+                <button t-foreach="options" t-as="option" t-key="option[0]" type="button"
+                        class="o_zenvio_icon_option" t-att-class="{ 'is-selected': props.record.data[props.name] === option[0] }"
+                        t-att-title="option[1]" t-att-aria-label="option[1]"
+                        t-att-aria-pressed="props.record.data[props.name] === option[0] ? 'true' : 'false'"
+                        t-on-click="() => this.select(option[0])">
+                    <i t-att-class="'fa ' + option[0]" aria-hidden="true"/>
+                </button>
+            </div>
+        </div>
+    </t>
+    <t t-name="zenvio_department_login.PasswordStatus">
+        <span class="o_zenvio_password_status" t-att-class="props.record.data[props.name] ? 'is-set' : 'is-missing'">
+            <i t-att-class="props.record.data[props.name] ? 'fa fa-check-circle' : 'fa fa-exclamation-circle'" aria-hidden="true"/>
+            <t t-if="props.record.data[props.name]">Set</t>
+            <t t-else="">Not set</t>
+        </span>
+    </t>
+</templates>

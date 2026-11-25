@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="zenvio_dock_item_own_rule" model="ir.rule">
+        <field name="name">Zenvio Dock: own items only</field>
+        <field name="model_id" ref="model_zenvio_dock_item"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>

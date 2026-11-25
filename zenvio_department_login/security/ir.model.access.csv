@@ -1,0 +1,29 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_zenvio_department_access_manager,zenvio.department.access manager,model_zenvio_department_access,group_department_manager,1,1,1,1
+access_zenvio_department_employee_manager,zenvio.department.employee manager,model_zenvio_department_employee,group_department_manager,1,1,1,1
+access_zenvio_department_login_log_manager,zenvio.department.login.log manager,model_zenvio_department_login_log,group_department_manager,1,0,0,1
+access_zenvio_department_access_admin,zenvio.department.access admin,model_zenvio_department_access,base.group_system,1,1,1,1
+access_zenvio_department_employee_admin,zenvio.department.employee admin,model_zenvio_department_employee,base.group_system,1,1,1,1
+access_zenvio_department_login_log_admin,zenvio.department.login.log admin,model_zenvio_department_login_log,base.group_system,1,0,0,1
+access_zenvio_access_profile_manager,zenvio.access.profile manager,model_zenvio_access_profile,group_department_manager,1,1,1,1
+access_zenvio_access_profile_model_manager,zenvio.access.profile.model manager,model_zenvio_access_profile_model,group_department_manager,1,1,1,1
+access_zenvio_access_view_node_manager,zenvio.access.view.node manager,model_zenvio_access_view_node,group_department_manager,1,0,0,0
+access_zenvio_access_state_value_manager,zenvio.access.state.value manager,model_zenvio_access_state_value,group_department_manager,1,0,0,0
+access_zenvio_access_profile_admin,zenvio.access.profile admin,model_zenvio_access_profile,base.group_system,1,1,1,1
+access_zenvio_access_profile_model_admin,zenvio.access.profile.model admin,model_zenvio_access_profile_model,base.group_system,1,1,1,1
+access_zenvio_access_view_node_admin,zenvio.access.view.node admin,model_zenvio_access_view_node,base.group_system,1,1,1,1
+access_zenvio_access_state_value_admin,zenvio.access.state.value admin,model_zenvio_access_state_value,base.group_system,1,1,1,1
+access_ir_model_department_ceo,ir.model department ceo,base.model_ir_model,group_department_manager,1,0,0,0
+access_ir_model_fields_department_ceo,ir.model.fields department ceo,base.model_ir_model_fields,group_department_manager,1,0,0,0
+access_ir_model_fields_selection_department_ceo,ir.model.fields.selection department ceo,base.model_ir_model_fields_selection,group_department_manager,1,0,0,0
+access_zenvio_department_move_admin,zenvio.department.move admin,model_zenvio_department_move,base.group_system,1,1,1,1
+access_zenvio_access_profile_field_manager,zenvio.access.profile.field manager,model_zenvio_access_profile_field,group_department_manager,1,1,1,1
+access_zenvio_access_profile_field_admin,zenvio.access.profile.field admin,model_zenvio_access_profile_field,base.group_system,1,1,1,1
+access_zenvio_access_profile_domain_manager,zenvio.access.profile.domain manager,model_zenvio_access_profile_domain,group_department_manager,1,1,1,1
+access_zenvio_access_profile_domain_admin,zenvio.access.profile.domain admin,model_zenvio_access_profile_domain,base.group_system,1,1,1,1
+access_zenvio_access_profile_button_manager,zenvio.access.profile.button manager,model_zenvio_access_profile_button,group_department_manager,1,1,1,1
+access_zenvio_access_profile_button_admin,zenvio.access.profile.button admin,model_zenvio_access_profile_button,base.group_system,1,1,1,1
+access_zenvio_access_profile_filter_manager,zenvio.access.profile.filter manager,model_zenvio_access_profile_filter,group_department_manager,1,1,1,1
+access_zenvio_access_profile_filter_admin,zenvio.access.profile.filter admin,model_zenvio_access_profile_filter,base.group_system,1,1,1,1
+access_zenvio_access_profile_chatter_manager,zenvio.access.profile.chatter manager,model_zenvio_access_profile_chatter,group_department_manager,1,1,1,1
+access_zenvio_access_profile_chatter_admin,zenvio.access.profile.chatter admin,model_zenvio_access_profile_chatter,base.group_system,1,1,1,1

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zenvio_department_move_form" model="ir.ui.view">
+        <field name="name">zenvio.department.move.form</field>
+        <field name="model">zenvio.department.move</field>
+        <field name="arch" type="xml">
+            <form string="Move Departments">
+                <sheet>
+                    <div class="alert alert-info" role="status">
+                        Employees, login codes, passwords and access rights move with each department.
+                        Employees keep their codes and passwords, but must sign in again after the move.
+                    </div>
+                    <group>
+                        <group string="Transfer">
+                            <field name="from_user_id" options="{'no_open': True}"/>
+                            <field name="to_user_id" options="{'no_create': True, 'no_open': True}"
+                                   placeholder="Select the new Top Management user"/>
+                        </group>
+                        <group string="Move Summary">
+                            <field name="employee_count" string="Employees" readonly="1"/>
+                            <field name="remove_top_management" string="Remove Top Management from current user"
+                                   invisible="not all_selected"/>
+                            <field name="all_selected" invisible="1"/>
+                        </group>
+                    </group>
+                    <separator string="Departments to Move"/>
+                    <field name="department_ids" nolabel="1" options="{'no_create': True}">
+                        <list>
+                            <field name="department_id" string="Department"/>
+                            <field name="employee_count" string="Employees"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_move" type="object" string="Move Departments" class="btn-primary"
+                            icon="fa-exchange" data-hotkey="q"/>
+                    <button special="cancel" string="Cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zenvio_department_move" model="ir.actions.act_window">
+        <field name="name">Move Departments</field>
+        <field name="res_model">zenvio.department.move</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

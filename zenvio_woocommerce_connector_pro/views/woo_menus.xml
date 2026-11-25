@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_woo_variants" name="Variation Mappings" parent="zenvio_woocommerce_connector.menu_woo_operations"
+              action="action_woo_variant_mapping" sequence="15"/>
+    <menuitem id="menu_woo_taxes" name="Tax Rate Mappings" parent="zenvio_woocommerce_connector.menu_woo_operations"
+              action="action_woo_tax_mapping" sequence="40"/>
+</odoo>

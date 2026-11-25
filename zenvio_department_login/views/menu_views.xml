@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_zenvio_department_root" name="Department Access" sequence="85"
+              web_icon="zenvio_department_login,static/description/icon.png"
+              groups="group_department_manager,base.group_system"/>
+    <menuitem id="menu_zenvio_department_access" name="Departments" parent="menu_zenvio_department_root"
+              action="action_zenvio_department_access" sequence="10"/>
+    <menuitem id="menu_zenvio_department_ceo" name="Top Management" parent="menu_zenvio_department_root"
+              action="action_zenvio_ceo_users" sequence="15" groups="base.group_system"/>
+    <menuitem id="menu_zenvio_department_employee" name="Employees" parent="menu_zenvio_department_root"
+              action="action_zenvio_department_employee" sequence="20"/>
+    <menuitem id="menu_zenvio_access_profile" name="Access Profiles" parent="menu_zenvio_department_root"
+              action="action_zenvio_access_profile" sequence="25"/>
+    <menuitem id="menu_zenvio_department_login_log" name="Login Log" parent="menu_zenvio_department_root"
+              action="action_zenvio_department_login_log" sequence="30"/>
+</odoo>

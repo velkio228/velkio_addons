@@ -1,6 +1,6 @@
 # Odoo Apps presentation handoff
 
-The Precision Velkio logo appears on both banners, index headers/footers and the
+The Precision Zenvio logo appears on both banners, index headers/footers and the
 relevant backend brand area. App icons are module-specific: a storefront and sync
 image for WooCommerce, and an accounting ledger image for TallyPrime. Module code retains
 its synchronization behavior. Versions are 19.0.1.0.1 (WooCommerce) and
@@ -13,7 +13,7 @@ https://apps.odoo.com/apps/modules/20.0/shopify_ept
 
 The reference informed the opening summary cards, capability groups, direction
 coverage cards, documentation area and support hierarchy. Text, images and claims
-remain specific to Velkio; third-party testimonials and commercial promises were
+remain specific to Zenvio; third-party testimonials and commercial promises were
 not imported.
 
 ## Local viewing
@@ -43,8 +43,10 @@ Use Ctrl+0 to reset browser zoom to 100%. Layout is bounded and centered.
 2. **Runtime verification:** these changes passed presentation checks, not full
    module installation or external-system integration testing. Install/upgrade
    both apps on an Odoo 19 test database and confirm views, permissions and sync.
-3. **Pricing:** all modules are free listings (no price set); licenses are
-   unchanged (WooCommerce OPL-1, Dock and TallyPrime LGPL-3).
+3. **Pricing (USD, set in each manifest):** Department Access 49, TallyPrime Connector 49,
+   WooCommerce Connector Pro 39, Odoo Dock 19, State Based Access 15. WooCommerce Connector
+   stays free (Pro depends on it). Licenses are unchanged (WooCommerce, Department and State
+   Based Access OPL-1; Dock and TallyPrime LGPL-3).
 4. **Repository submission:** Tally is currently an untracked symlink in this
    workspace. Do not submit that symlink as module source. Use the generated
    `release/odoo-apps-19.0/` real directories in your release repository's 19.0
@@ -57,9 +59,9 @@ upgrading if the listing must show the latest icon throughout.
 ## Rebuild and check
 
 ```bash
-python3 tools/build_app_presentation.py --module woo --output velkio_woocommerce_connector/static/description
-python3 tools/build_app_presentation.py --module tally --output velkio_tally_integration/static/description
-python3 tools/check_app_presentation.py velkio_woocommerce_connector velkio_tally_integration
+python3 tools/build_app_presentation.py --module woo --output zenvio_woocommerce_connector/static/description
+python3 tools/build_app_presentation.py --module tally --output zenvio_tally_integration/static/description
+python3 tools/check_app_presentation.py zenvio_woocommerce_connector zenvio_tally_integration
 python3 tools/package_apps.py
 ```
 
@@ -77,4 +79,4 @@ builder. Artwork is copied from approved files; it is not regenerated.
 
 Image generation prompts are in `artwork/branding/applied-brand-prompts.md`.
 
-All application display names use the Velkio prefix.
+All application display names use the Zenvio prefix.

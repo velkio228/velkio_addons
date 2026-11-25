@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zenvio_access_profile_form" model="ir.ui.view">
+        <field name="name">zenvio.access.profile.form</field>
+        <field name="model">zenvio.access.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Production - User"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="owner_id" groups="base.group_system" options="{'no_create': True}"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <p class="text-muted">
+                        Employees work through their Top Management user. An access profile only takes rights away
+                        from that user: it can never give an employee more than that user has.
+                    </p>
+                    <div class="o_zenvio_access_top">
+                        <group>
+                            <group>
+                                <field name="readonly" string="Read-Only"/>
+                                <field name="disable_relational_edit" string="Disable Relational Create/Edit"/>
+                            </group>
+                        </group>
+                    </div>
+                    <notebook class="o_zenvio_access_tabs">
+                        <page string="Hide Menu" name="tab_menu">
+                            <field name="hide_menu_ids" nolabel="1" options="{'no_create': True}">
+                                <list>
+                                    <field name="complete_name" string="Menu"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Model Access" name="tab_model">
+                            <field name="model_line_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="perm_read"/>
+                                    <field name="perm_create" readonly="not perm_read"/>
+                                    <field name="perm_write" readonly="not perm_read"/>
+                                    <field name="perm_unlink" readonly="not perm_read"/>
+                                    <field name="hide_archive" string="Archive" optional="show"/>
+                                    <field name="hide_duplicate" string="Duplicate" optional="show"/>
+                                    <field name="hide_import" string="Import" optional="show"/>
+                                    <field name="hide_export" string="Export" optional="show"/>
+                                    <field name="hide_print" string="Reports" optional="show"/>
+                                    <field name="hide_actions" string="Actions" optional="show"/>
+                                </list>
+                            </field>
+                            <div class="text-muted small">Untick Read / Create / Edit / Delete to refuse them. The other columns hide that option on the model's screens.</div>
+                        </page>
+                        <page string="Field Access" name="tab_field">
+                            <field name="field_line_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="field_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="invisible"/>
+                                            <field name="required"/>
+                                    <field name="no_open" string="Remove Link"/>
+                                    <field name="state_field_id" optional="hide" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="state_value_ids" widget="many2many_tags" optional="hide" options="{'no_create': True}"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Domain Access" name="tab_domain">
+                            <field name="domain_line_ids" nolabel="1">
+                                <list>
+                                    <field name="model_id"/>
+                                    <field name="domain" string="Only These Records"/>
+                                </list>
+                                <form string="Domain Access">
+                                    <group>
+                                        <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="model_name" invisible="1"/>
+                                    </group>
+                                    <field name="domain" widget="domain" invisible="not model_name" options="{'model': 'model_name', 'in_dialog': True}"/>
+                                    <div class="text-muted small">In the code editor you can use <code>employee</code> (the logged-in employee), <code>department</code> and <code>user</code>, e.g. <code>[('employee_id', '=', employee.id)]</code>.</div>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Button/Tab Access" name="tab_button">
+                            <field name="button_line_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="hide_button_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="hide_page_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="state_field_id" optional="show" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="state_value_ids" widget="many2many_tags" optional="show" options="{'no_create': True}"/>
+                                </list>
+                            </field>
+                            <div class="text-muted small">Hidden buttons are also refused on the server. With <b>Only In States</b> the rule applies only while the record is in those states.</div>
+                        </page>
+                        <page string="Hide Filter/Group By" name="tab_filter">
+                            <field name="filter_line_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="hide_filter_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="hide_groupby_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Chatter" name="tab_chatter">
+                            <field name="chatter_line_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="hide_chatter"/>
+                                    <field name="hide_send_message"/>
+                                    <field name="hide_log_note"/>
+                                    <field name="hide_activity"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Global" name="tab_global">
+                            <group>
+                                <group string="Chatter">
+                                    <field name="hide_chatter" string="Hide Chatter"/>
+                                    <field name="hide_send_message" string="Hide Send Message"/>
+                                    <field name="hide_log_note" string="Hide Log Notes"/>
+                                    <field name="hide_activity" string="Hide Schedule Activity"/>
+                                </group>
+                                <group string="Import &amp; Export">
+                                    <field name="hide_import" string="Hide Import"/>
+                                    <field name="hide_export" string="Hide Export"/>
+                                    <field name="hide_spreadsheet" string="Hide Spreadsheet"/>
+                                    <field name="hide_add_property" string="Hide Add Property"/>
+                                </group>
+                                <group string="Others">
+                                    <field name="disable_login" string="Disable Login"/>
+                                    <field name="disable_debug" string="Disable Developer Mode"/>
+                                </group>
+                            </group>
+                            <div class="alert alert-info mb-0" role="status">
+                                <i class="fa fa-info-circle me-1" title="Info"/> These switches apply to every model.
+                                Hide chatter, send message, log notes, schedule activities, import and export everywhere with a single tick.
+                            </div>
+                        </page>
+                    </notebook>
+                    <group string="Notes">
+                        <field name="note" nolabel="1" colspan="2" placeholder="What this access is for..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zenvio_access_profile_list" model="ir.ui.view">
+        <field name="name">zenvio.access.profile.list</field>
+        <field name="model">zenvio.access.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="readonly"/>
+                <field name="owner_id" widget="many2one_avatar_user" groups="base.group_system"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_zenvio_access_profile_search" model="ir.ui.view">
+        <field name="name">zenvio.access.profile.search</field>
+        <field name="model">zenvio.access.profile</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="owner_id"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_zenvio_access_profile" model="ir.actions.act_window">
+        <field name="name">Access Profiles</field>
+        <field name="res_model">zenvio.access.profile</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first access profile</p>
+            <p>A profile decides what an employee may do: which menus they see, which records they can
+               read or change, and which buttons, tabs and fields they get. Use it for a department role
+               (User / Manager) or for a single employee.</p>
+        </field>
+    </record>
+</odoo>

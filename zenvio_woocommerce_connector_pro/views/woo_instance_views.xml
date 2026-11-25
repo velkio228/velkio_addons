@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_woo_instance_form_pro" model="ir.ui.view">
+        <field name="name">woo.instance.form.pro</field>
+        <field name="model">woo.instance</field>
+        <field name="inherit_id" ref="zenvio_woocommerce_connector.view_woo_instance_form"/>
+        <field name="arch" type="xml">
+            <button name="action_export_products" position="after">
+                <button name="action_export_stock" string="Export Stock" type="object"/>
+                <button name="action_run_auto_sync" string="Run Incremental Sync" type="object"/>
+            </button>
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" icon="fa-th" type="object" name="action_view_variant_mappings">
+                    <field name="variant_mapping_count" widget="statinfo" string="Variations"/>
+                </button>
+                <button class="oe_stat_button" icon="fa-percent" type="object" name="action_view_tax_mappings">
+                    <field name="tax_mapping_count" widget="statinfo" string="Tax Rates"/>
+                </button>
+            </div>
+            <field name="auto_confirm_orders" position="after">
+                <field name="salesperson_id"/>
+            </field>
+            <xpath expr="//notebook" position="inside">
+                <page string="Automation" name="automation">
+                    <group>
+                        <group string="Scheduled Sync">
+                            <field name="auto_sync"/>
+                            <field name="sync_interval" invisible="not auto_sync"/>
+                            <field name="sync_products" invisible="not auto_sync"/>
+                            <field name="sync_customers" invisible="not auto_sync"/>
+                            <field name="sync_orders" invisible="not auto_sync"/>
+                            <field name="sync_stock" invisible="not auto_sync"/>
+                            <field name="next_auto_sync" invisible="not auto_sync"/>
+                            <field name="last_auto_sync"/>
+                        </group>
+                        <group string="Real-time Webhooks">
+                            <field name="webhook_url" widget="CopyClipboardChar"/>
+                            <field name="webhooks_active"/>
+                            <div colspan="2">
+                                <button name="action_register_webhooks" string="Register Webhooks" type="object"
+                                        class="btn-secondary" icon="fa-bolt"/>
+                                <button name="action_unregister_webhooks" string="Remove Webhooks" type="object"
+                                        class="btn-link" invisible="not webhooks_active"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+                <page string="Catalog &amp; Orders" name="catalog_orders">
+                    <group>
+                        <group string="Catalog">
+                            <field name="import_variations"/>
+                            <field name="import_images"/>
+                        </group>
+                        <group string="Orders">
+                            <field name="order_statuses"/>
+                            <field name="push_order_status"/>
+                            <field name="cancel_on_woo_cancel"/>
+                            <field name="import_shipping"/>
+                            <field name="shipping_product_id" invisible="not import_shipping"/>
+                            <field name="fee_product_id" invisible="not import_shipping"/>
+                        </group>
+                        <group string="Taxes">
+                            <field name="tax_mode"/>
+                            <div colspan="2" invisible="tax_mode != 'mapped'">
+                                <button name="action_import_tax_rates" string="Import Tax Rates" type="object"
+                                        class="btn-secondary" icon="fa-download"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_woo_instance_list_pro" model="ir.ui.view">
+        <field name="name">woo.instance.list.pro</field>
+        <field name="model">woo.instance</field>
+        <field name="inherit_id" ref="zenvio_woocommerce_connector.view_woo_instance_list"/>
+        <field name="arch" type="xml">
+            <field name="last_sync_date" position="after">
+                <field name="auto_sync" widget="boolean_toggle"/>
+                <field name="next_auto_sync" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

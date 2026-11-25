@@ -3,8 +3,8 @@ import base64,struct
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
-out=Path(__file__).resolve().parents[1]/'velkio_odoo_dock/static/description'
-slides=[('banner.png','Velkio Odoo Dock — your apps, your workspace, your way'),('screenshot_workspace_dark.png','Your company logo, live clock and personal greeting'),('screenshot_workspace_light.png','A clear workspace in light and dark mode'),('screenshot_overview.png','Browse apps and recent work from Show Applications'),('screenshot_search.png','Search your accessible apps, menus and recent records'),('screenshot_appearance.png','Choose a position, style, icon size and accent colour'),('screenshot_behaviour.png','Personalise auto-hide, badges, shortcuts and history'),('screenshot_pin_apps.png','Pin your everyday apps — then drag to reorder')]
+out=Path(__file__).resolve().parents[1]/'zenvio_odoo_dock/static/description'
+slides=[('banner.png','Zenvio Odoo Dock — your apps, your workspace, your way'),('screenshot_workspace_dark.png','Your company logo, live clock and personal greeting'),('screenshot_workspace_light.png','A clear workspace in light and dark mode'),('screenshot_overview.png','Browse apps and recent work from Show Applications'),('screenshot_search.png','Search your accessible apps, menus and recent records'),('screenshot_appearance.png','Choose a position, style, icon size and accent colour'),('screenshot_behaviour.png','Personalise auto-hide, badges, shortcuts and history'),('screenshot_pin_apps.png','Pin your everyday apps — then drag to reorder')]
 frames=[{'src':'data:image/png;base64,'+base64.b64encode((out/f).read_bytes()).decode(),'caption':t} for f,t in slides]
 o=Options();o.add_argument('-headless');o.binary_location='/snap/firefox/current/usr/lib/firefox/firefox'
 d=webdriver.Firefox(options=o,service=Service('/snap/firefox/current/usr/lib/firefox/geckodriver',log_output='/tmp/dock-video-gecko.log'));d.set_script_timeout(90)
